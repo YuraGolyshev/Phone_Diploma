@@ -365,3 +365,5 @@ FodyWeavers.xsd
 .claude
 Desktop/
 Phone/
+*.7z
+*.zip
