@@ -104,6 +104,15 @@
                            FontSize="13"
                            VerticalOptions="Center" />
                 </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                    <CheckBox x:Name="H264CheckBox"
+                              CheckedChanged="OnH264CheckedChanged"
+                              Color="White" />
+                    <Label Text="H.264 (60 fps стрим)"
+                           TextColor="White"
+                           FontSize="13"
+                           VerticalOptions="Center" />
+                </HorizontalStackLayout>
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="8">

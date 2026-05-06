@@ -21,6 +21,28 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         CameraPreview.ConfigurationsReady = OnConfigurationsReady;
         CameraPreview.QrCodeDetected = OnQrCodeDetected;
+
+        // H.264 NAL chunks → CameraStreamingService.EnqueueRawBytes (тот же фреймер,
+        // payload — Annex-B). Throttle не нужен: encoder сам пишет в нужном fps.
+        // Gate _streamingActive: пока false, encoder работает но кадры не отправляются.
+        CameraPreview.H264NalReady = (buf, len, isKey) =>
+        {
+            if (_streamingActive && _streaming.IsConnected)
+                _streaming.EnqueueRawBytes(buf, len);
+        };
+    }
+
+    // Управляет отправкой как для JPEG (через FrameReady), так и для H.264 (через H264NalReady).
+    // Stop переводит в false; Start — в true. Connect/Disconnect это поле НЕ трогают.
+    private volatile bool _streamingActive;
+
+    private void OnH264CheckedChanged(object? sender, CheckedChangedEventArgs e)
+    {
+        // Переключатель определяет, какой handshake-байт мы пошлём при следующем Connect
+        // и какой Format выставить на View после успешного подключения.
+        // До нажатия "Подключиться" CameraPreview.Format остаётся JPEG, чтобы QR-сканер
+        // (который требует CameraX YUV-пути) работал в любом случае.
+        System.Diagnostics.Debug.WriteLine($"[PCam][UI] H.264 toggle: {e.Value}");
     }
 
     protected override async void OnAppearing()
@@ -141,6 +163,9 @@ public partial class MainPage : ContentPage
         System.Diagnostics.Debug.WriteLine($"[PCam][UI] {(_isRunning ? "Start" : "Stop")} → config={CameraPreview.SelectedConfig?.DisplayName ?? "none"}");
         if (_isRunning)
         {
+            // Включаем gate — теперь H.264 NAL-чанки и JPEG-кадры пойдут на сервер.
+            _streamingActive = true;
+
             int targetFps = (int)Math.Max(1.0, CameraPreview.SelectedConfig?.MaxFps ?? 30.0);
             long intervalMs = 1000 / targetFps;
             Volatile.Write(ref _lastFrameMs, 0L);
@@ -149,13 +174,27 @@ public partial class MainPage : ContentPage
                 long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 if (now - Volatile.Read(ref _lastFrameMs) < intervalMs) return;
                 Volatile.Write(ref _lastFrameMs, now);
-                if (_streaming.IsConnected)
+                if (_streamingActive && _streaming.IsConnected)
                     _streaming.EnqueueFrame(buf, len);
             };
+
+            // Если подключены и хотим H.264 — переводим Format на H264 (handler перестроит
+            // pipeline на MediaCodec encoder Surface). Если выключатель снят или ещё не
+            // подключены — остаёмся на CameraX (Format=Jpeg).
+            CameraPreview.Format = (_streaming.IsConnected && H264CheckBox.IsChecked)
+                ? StreamFormat.H264
+                : StreamFormat.Jpeg;
         }
         else
         {
+            // Stop: gate выключен → ни JPEG, ни H.264 кадры не идут на сервер.
+            _streamingActive = false;
             CameraPreview.FrameReady = null;
+
+            // Возвращаем Format=Jpeg → handler остановит H.264 pipeline и вернёт CameraX
+            // preview, чтобы продолжать видеть картинку и сканировать QR.
+            CameraPreview.Format = StreamFormat.Jpeg;
+
             if (_isScanning)
             {
                 _isScanning = false;
@@ -164,14 +203,14 @@ public partial class MainPage : ContentPage
             }
         }
 
-        if (_isRunning)
+        if (_isRunning && CameraPreview.Format == StreamFormat.Jpeg)
         {
-            // Рестартуем камеру чтобы DispatchingAnalyzer подхватил новый FrameReady.
+            // Только в JPEG-ветке нужен рестарт CameraX чтобы DispatchingAnalyzer подхватил
+            // новый FrameReady. Для H.264 ветки рестартом ведает MapFormat.
             if (CameraPreview.IsRunning)
                 CameraPreview.IsRunning = false;
             CameraPreview.IsRunning = true;
         }
-        // Stop: FrameReady уже сброшен выше. Камеру НЕ останавливаем — превью продолжает работать.
 
         StartStopBtn.Text = _isRunning ? "Stop" : "Start";
         StatusLabel.Text = _isRunning ? $"Capturing  {CameraPreview.SelectedConfig?.DisplayName}" : "Preview";
@@ -243,15 +282,24 @@ public partial class MainPage : ContentPage
         }
 
         string ip = parts[0];
-        ConnectionLabel.Text = $"Подключение к {ip}:{port}...";
+        bool wantH264 = H264CheckBox.IsChecked;
+        byte handshake = wantH264 ? (byte)0x02 : (byte)0x01;
+        ConnectionLabel.Text = $"Подключение к {ip}:{port} ({(wantH264 ? "H.264" : "JPEG")})...";
 
         Task.Run(async () =>
         {
-            bool ok = await _streaming.ConnectAsync(ip, port);
+            bool ok = await _streaming.ConnectAsync(ip, port, handshake);
             MainThread.BeginInvokeOnMainThread(() =>
+            {
                 ConnectionLabel.Text = ok
-                    ? $"Подключено: {ip}:{port}"
-                    : $"Ошибка подключения к {ip}:{port}");
+                    ? $"Подключено: {ip}:{port} ({(wantH264 ? "H.264" : "JPEG")})"
+                    : $"Ошибка подключения к {ip}:{port}";
+                // Format НЕ переключаем здесь — это произойдёт при Start (OnStartStopClicked),
+                // чтобы стрим начинался строго по нажатию Start, а не сразу после connect.
+                // Если стрим уже активен в момент connect — переключим прямо сейчас.
+                if (ok && _streamingActive && wantH264)
+                    CameraPreview.Format = StreamFormat.H264;
+            });
         });
     }
 }

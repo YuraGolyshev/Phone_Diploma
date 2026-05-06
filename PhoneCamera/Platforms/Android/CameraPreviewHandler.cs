@@ -32,7 +32,12 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         {
             [nameof(CameraPreviewView.IsRunning)] = MapIsRunning,
             [nameof(CameraPreviewView.SelectedConfig)] = MapSelectedConfig,
+            [nameof(CameraPreviewView.Format)] = MapFormat,
         };
+
+    // ── H.264 pipeline (активен только когда VirtualView.Format == StreamFormat.H264) ──
+    private H264EncoderPipeline? _h264;
+    private string? _backCameraId;
 
     public CameraPreviewHandler() : base(Mapper) { }
 
@@ -73,6 +78,8 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
                 var facing = chars.Get(CameraCharacteristics.LensFacing);
                 if (facing == null || ((Java.Lang.Integer)facing).IntValue() != 1)
                     continue;
+
+                _backCameraId = id;
 
                 var streamMap = chars.Get(CameraCharacteristics.ScalerStreamConfigurationMap)
                     as StreamConfigurationMap;
@@ -200,6 +207,17 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
     private void StartCamera()
     {
         var config = VirtualView.SelectedConfig;
+
+        // ── Ветка H.264: МИНУЯ CameraX, прямой Camera2+MediaCodec → 60fps ────────────
+        if (VirtualView.Format == StreamFormat.H264 && !VirtualView.IsScanning)
+        {
+            StopCameraXOnly();
+            StartH264();
+            return;
+        }
+        // ── Ветка JPEG (CameraX ImageAnalysis): сюда же при IsScanning=true ────────
+        StopH264();
+
         int targetRotation = (config != null && config.Width >= config.Height) ? 1 : 0;
         System.Diagnostics.Debug.WriteLine($"[PCam][Android] StartCamera → config={config?.DisplayName ?? "none"}, targetRotation={targetRotation} ({(targetRotation == 1 ? "landscape" : "portrait")})");
 
@@ -298,6 +316,12 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
     private void StopCamera()
     {
         System.Diagnostics.Debug.WriteLine("[PCam][Android] StopCamera");
+        StopCameraXOnly();
+        StopH264();
+    }
+
+    private void StopCameraXOnly()
+    {
         MainThread.BeginInvokeOnMainThread(() =>
         {
             currentAnalysis?.ClearAnalyzer();
@@ -305,6 +329,47 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         });
         _analyzerExecutor?.Shutdown();
         _analyzerExecutor = null;
+    }
+
+    // ── H.264 pipeline (Camera2 → MediaCodec → NAL chunks → CameraStreamingService) ──
+    private void StartH264()
+    {
+        var cfg = VirtualView.SelectedConfig;
+        int w   = cfg != null ? Math.Max(cfg.Width, cfg.Height) : 1920;
+        int h   = cfg != null ? Math.Min(cfg.Width, cfg.Height) : 1080;
+        int fps = cfg != null ? (int)Math.Round(cfg.MaxFps)     : 60;
+
+        if (string.IsNullOrEmpty(_backCameraId))
+        {
+            // QueryConfigs ещё не отработал — подождём, повторим из MapFormat позднее.
+            System.Diagnostics.Debug.WriteLine("[PCam][Android] StartH264: backCameraId not ready, skipping");
+            return;
+        }
+
+        StopH264();
+
+        _h264 = new H264EncoderPipeline();
+        _h264.OnNalChunk = (data, len, isKey) =>
+        {
+            // VirtualView.H264NalReady берётся в момент вызова — MainPage его подвязывает
+            // на _streaming.EnqueueRawBytes. Если ещё не подвязан — кадр выкидывается.
+            try { VirtualView?.H264NalReady?.Invoke(data, len, isKey); } catch { }
+        };
+        _h264.OnError = (msg) =>
+            System.Diagnostics.Debug.WriteLine($"[PCam][Android] H264 pipeline error: {msg}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[PCam][Android] StartH264 → cam={_backCameraId} {w}x{h}@{fps}fps");
+        _h264.Start(_backCameraId!, w, h, fps);
+    }
+
+    private void StopH264()
+    {
+        if (_h264 == null) return;
+        System.Diagnostics.Debug.WriteLine("[PCam][Android] StopH264");
+        try { _h264.Stop(); } catch { }
+        try { _h264.Dispose(); } catch { }
+        _h264 = null;
     }
 
     private static void MapIsRunning(CameraPreviewHandler handler, CameraPreviewView view)
@@ -322,6 +387,18 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         if (view.IsRunning)
         {
             handler.cameraProvider?.UnbindAll();
+            handler.StartCamera();
+        }
+    }
+
+    private static void MapFormat(CameraPreviewHandler handler, CameraPreviewView view)
+    {
+        System.Diagnostics.Debug.WriteLine(
+            $"[PCam][Android] MapFormat → format={view.Format}, scanning={view.IsScanning}, running={view.IsRunning}");
+        if (view.IsRunning)
+        {
+            // Полный рестарт pipeline — StartCamera сам выберет ветку (CameraX или H.264).
+            handler.StopCamera();
             handler.StartCamera();
         }
     }

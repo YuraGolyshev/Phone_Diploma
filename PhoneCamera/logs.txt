@@ -1,174 +1,129 @@
 
-(355):[PCam][UI] OnAppearing — camera permission: Granted
-(408):[PCam][Android] ConnectHandler — handler attached
-(409):[PCam][Android] MapIsRunning → IsRunning=False
-(410):[PCam][Android] StopCamera
-(411):[PCam][Android] MapSelectedConfig → config=none, running=False
-(412):[PCam][Android] QueryConfigs starting...
-(413):[PCam][Android] QueryConfigs AE FPS ranges: [5, 15], [15, 15], [15, 20], [20, 20], [24, 24], [5, 30], [30, 30], [15, 60], [60, 60]
-(414):[PCam][Android] HighSpeed: 2 size(s) advertised:
-(415):[PCam][Android]   HS 1280×720 → ranges: [[30, 120], [120, 120], [30, 240], [240, 240]]
-(416):[PCam][Android]   HS 1920×1080 → ranges: [[30, 120], [120, 120], [30, 240], [240, 240]]
-(417):[PCam][Android] HighSpeed: union FPS ranges: [[120, 120], [240, 240], [30, 240], [30, 120]]
-(418):[PCam][Android] QueryConfigs done: 204 configs, default=1920×1080   30 fps
-(587):[PCam][Android] MapSelectedConfig → config=1920×1080   30 fps, running=False
-(588):[PCam][Android] MapSelectedConfig → config=1080×1920   30 fps, running=False
-(589):[PCam][UI] ConfigurationsReady: 204 configs, landscape=False, initial=1080×1920   30 fps
-(590):[PCam][UI] OnConfigurationsReady — autostart preview
-(591):[PCam][Android] MapIsRunning → IsRunning=True
-(593):[PCam][Android] StartCamera → config=1080×1920   30 fps, targetRotation=0 (portrait)
-(595):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
-(596):[PCam][Android] StartCamera FPS=30 (AE=ON, session lock)
-(597):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(598):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(599):[PCam][Android] StartCamera ✓ camera bound successfully
-(822):[PCam][Android] Combined #30  combinedFPS≈19,7  (2 workers)
-(967):[PCam][Android] Combined #60  combinedFPS≈26,5  (2 workers)
-(1116):[PCam][Android] Frame #30  1920×1080  rot=90°  gap=125ms  copy=10ms  encode=66ms  → workerFPS≈8
-(1117):[PCam][Android] Combined #90  combinedFPS≈26,3  (2 workers)
-(1158):[PCam][Android] Frame #30  1920×1080  rot=90°  gap=100ms  copy=10ms  encode=67ms  → workerFPS≈10
-(1470):[PCam][Android] Combined #150  combinedFPS≈13,2  (2 workers)
-(1764):[PCam][UI] Orientation → Landscape: 1080×1920   30 fps → 1920×1080   30 fps
-(1765):[PCam][Android] MapSelectedConfig → config=1920×1080   30 fps, running=True
-(1766):[PCam][Android] StartCamera → config=1920×1080   30 fps, targetRotation=1 (landscape)
-(1767):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
-(1768):[PCam][Android] StartCamera FPS=30 (AE=ON, session lock)
-(1770):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(1771):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(1772):[PCam][Android] StartCamera ✓ camera bound successfully
-(1773):[PCam][Android] Frame #60  1920×1080  rot=90°  gap=92ms  copy=10ms  encode=67ms  → workerFPS≈10
-(2053):[PCam][Android] Combined #30  combinedFPS≈20,0  (2 workers)
-(2273):[PCam][UI] Orientation → Portrait: 1920×1080   30 fps → 1080×1920   30 fps
-(2274):[PCam][Android] MapSelectedConfig → config=1080×1920   30 fps, running=True
-(2275):[PCam][Android] StartCamera → config=1080×1920   30 fps, targetRotation=0 (portrait)
-(2276):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
-(2277):[PCam][Android] StartCamera FPS=30 (AE=ON, session lock)
-(2278):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(2279):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(2281):[PCam][Android] StartCamera ✓ camera bound successfully
-(2587):[PCam][Android] Combined #30  combinedFPS≈20,0  (2 workers)
-(2588):[PCam][UI] Orientation → Landscape: 1080×1920   30 fps → 1920×1080   30 fps
-(2589):[PCam][Android] MapSelectedConfig → config=1920×1080   30 fps, running=True
-(2590):[PCam][Android] StartCamera → config=1920×1080   30 fps, targetRotation=1 (landscape)
-(2790):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
-(2791):[PCam][Android] StartCamera FPS=30 (AE=ON, session lock)
-(2793):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(2794):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(2795):[PCam][Android] StartCamera ✓ camera bound successfully
-(3074):[PCam][Android] Combined #30  combinedFPS≈20,4  (2 workers)
-(3075):[PCam][UI] Dropdown opened
-(3355):[PCam][Android] Combined #60  combinedFPS≈26,5  (2 workers)
-(3356):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=67ms  copy=8ms  encode=23ms  → workerFPS≈14
-(3357):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=50ms  copy=8ms  encode=20ms  → workerFPS≈20
-(3640):[PCam][Android] Combined #90  combinedFPS≈27,3  (2 workers)
-(3876):[PCam][Android] Combined #120  combinedFPS≈26,1  (2 workers)
-(3929):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=56ms  copy=10ms  encode=27ms  → workerFPS≈17
-(4018):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=67ms  copy=9ms  encode=30ms  → workerFPS≈14
-(4180):[PCam][Android] Combined #150  combinedFPS≈27,0  (2 workers)
-(4466):[PCam][Android] Combined #180  combinedFPS≈28,0  (2 workers)
-(4502):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=166ms  copy=10ms  encode=25ms  → workerFPS≈6
-(4608):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=68ms  copy=9ms  encode=30ms  → workerFPS≈14
-(4733):[PCam][Android] Combined #210  combinedFPS≈24,1  (2 workers)
-(4955):[PCam][Android] Combined #240  combinedFPS≈28,5  (2 workers)
-(5011):[PCam][Android] Frame #120  1920×1080  rot=0°  gap=66ms  copy=9ms  encode=23ms  → workerFPS≈15
-(5115):[PCam][Android] Frame #120  1920×1080  rot=0°  gap=83ms  copy=9ms  encode=25ms  → workerFPS≈12
-(5223):[PCam][Android] Combined #270  combinedFPS≈26,5  (2 workers)
-(5433):[PCam][Android] Combined #300  combinedFPS≈25,0  (2 workers)
-(5483):[PCam][Android] Frame #150  1920×1080  rot=0°  gap=82ms  copy=9ms  encode=25ms  → workerFPS≈12
-(5581):[PCam][UI] Config selected: 1920×1080   60 fps
-(5582):[PCam][Android] MapSelectedConfig → config=1920×1080   60 fps, running=True
-(5583):[PCam][Android] StartCamera → config=1920×1080   60 fps, targetRotation=1 (landscape)
-(5584):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
-(5585):[PCam][Android] StartCamera CONTROL_MODE=OFF, AE=OFF, exposure=16,7ms, frameDuration=16,7ms, ISO=800, forced 60fps
-(5587):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(5588):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(5589):[PCam][Android] StartCamera ✓ camera bound successfully
-(5774):[PCam][UI] Lock: locked
-(5991):[PCam][Android] Combined #30  combinedFPS≈16,5  (2 workers)
-(6012):[PCam][UI] QR detected: cam://192.168.0.103:8888
-(6013):[PCam][UI] QR detected: cam://192.168.0.103:8888
-(6014):[PCam][UI] QR debounced (duplicate within 2s): cam://192.168.0.103:8888
-(6015):[PCam][Stream] Disconnected
-(6068):[PCam][Stream] Connected to 192.168.0.103:8888
-(6183):[PCam][Android] Combined #60  combinedFPS≈13,8  (2 workers)
-(6184):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=66ms  copy=9ms  encode=25ms  → workerFPS≈15
-(6219):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=234ms  copy=9ms  encode=25ms  → workerFPS≈4
-(6336):[PCam][Android] Combined #90  combinedFPS≈24,3  (2 workers)
-(6451):[PCam][UI] Camera permission status: Granted
-(6452):[PCam][UI] Start → config=1920×1080   60 fps
-(6453):[PCam][Android] MapIsRunning → IsRunning=False
-(6454):[PCam][Android] StopCamera
-(6455):[PCam][Android] MapIsRunning → IsRunning=True
-(6456):[PCam][Android] StartCamera → config=1920×1080   60 fps, targetRotation=1 (landscape)
-(6458):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
-(6459):[PCam][Android] StartCamera CONTROL_MODE=OFF, AE=OFF, exposure=16,7ms, frameDuration=16,7ms, ISO=800, forced 60fps
-(6460):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(6461):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(6462):[PCam][Android] StartCamera ✓ camera bound successfully
-(6848):[PCam][Android] Combined #30  combinedFPS≈17,5  (2 workers)
-(7025):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=68ms  copy=9ms  encode=17ms  → workerFPS≈14
-(7076):[PCam][Android] Combined #60  combinedFPS≈25,6  (2 workers)
-(7077):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=69ms  copy=9ms  encode=17ms  → workerFPS≈14
-(7274):[PCam][Android] Combined #90  combinedFPS≈25,7  (2 workers)
-(7453):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=70ms  copy=10ms  encode=18ms  → workerFPS≈14
-(7454):[PCam][Android] Combined #120  combinedFPS≈26,4  (2 workers)
-(7527):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=67ms  copy=10ms  encode=18ms  → workerFPS≈14
-(7712):[PCam][Android] Combined #150  combinedFPS≈24,2  (2 workers)
-(7959):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=65ms  copy=10ms  encode=16ms  → workerFPS≈15
-(7960):[PCam][Android] Combined #180  combinedFPS≈26,0  (2 workers)
-(7961):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=69ms  copy=10ms  encode=16ms  → workerFPS≈14
-(8212):[PCam][Android] Combined #210  combinedFPS≈25,0  (2 workers)
-(8374):[PCam][Android] Combined #240  combinedFPS≈27,3  (2 workers)
-(8375):[PCam][Android] Frame #120  1920×1080  rot=0°  gap=65ms  copy=9ms  encode=18ms  → workerFPS≈15
-(8376):[PCam][Android] Frame #120  1920×1080  rot=0°  gap=67ms  copy=10ms  encode=18ms  → workerFPS≈14
-(8566):[PCam][Android] Combined #270  combinedFPS≈28,1  (2 workers)
-(8781):[PCam][Android] Combined #300  combinedFPS≈25,7  (2 workers)
-(8782):[PCam][Android] Frame #150  1920×1080  rot=0°  gap=66ms  copy=10ms  encode=14ms  → workerFPS≈15
-(8783):[PCam][Android] Frame #150  1920×1080  rot=0°  gap=67ms  copy=10ms  encode=16ms  → workerFPS≈14
-(8970):[PCam][Android] Combined #330  combinedFPS≈26,6  (2 workers)
-(9161):[PCam][Android] Combined #360  combinedFPS≈27,2  (2 workers)
-(9212):[PCam][Android] Frame #180  1920×1080  rot=0°  gap=64ms  copy=10ms  encode=17ms  → workerFPS≈15
-(9213):[PCam][Android] Frame #180  1920×1080  rot=0°  gap=63ms  copy=10ms  encode=17ms  → workerFPS≈15
-(9394):[PCam][Android] Combined #390  combinedFPS≈27,2  (2 workers)
-(9579):[PCam][UI] Dropdown opened
-(9580):[PCam][Android] Combined #420  combinedFPS≈25,9  (2 workers)
-(9649):[PCam][Android] Frame #210  1920×1080  rot=0°  gap=71ms  copy=10ms  encode=18ms  → workerFPS≈14
-(9650):[PCam][Android] Frame #210  1920×1080  rot=0°  gap=65ms  copy=10ms  encode=17ms  → workerFPS≈15
-(9771):[PCam][UI] Config selected: 1920×1080   30 fps
-(9772):[PCam][Android] MapSelectedConfig → config=1920×1080   30 fps, running=True
-(9773):[PCam][Android] StartCamera → config=1920×1080   30 fps, targetRotation=1 (landscape)
-(9774):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
-(9775):[PCam][Android] StartCamera FPS=30 (AE=ON, session lock)
-(9776):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(9777):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(9779):[PCam][Android] StartCamera ✓ camera bound successfully
-(10209):[PCam][Android] Combined #30  combinedFPS≈21,2  (2 workers)
-(10431):[PCam][Android] Combined #60  combinedFPS≈24,9  (2 workers)
-(10432):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=55ms  copy=8ms  encode=17ms  → workerFPS≈18
-(10433):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=66ms  copy=9ms  encode=17ms  → workerFPS≈15
-(10691):[PCam][Android] Combined #90  combinedFPS≈25,7  (2 workers)
-(10861):[PCam][Android] Combined #120  combinedFPS≈26,4  (2 workers)
-(10862):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=66ms  copy=10ms  encode=21ms  → workerFPS≈15
-(10918):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=68ms  copy=10ms  encode=17ms  → workerFPS≈14
-(11107):[PCam][Android] Combined #150  combinedFPS≈26,5  (2 workers)
-(11278):[PCam][Android] Combined #180  combinedFPS≈26,5  (2 workers)
-(11331):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=66ms  copy=11ms  encode=17ms  → workerFPS≈15
-(11332):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=47ms  copy=10ms  encode=19ms  → workerFPS≈21
-(11521):[PCam][Android] Combined #210  combinedFPS≈25,2  (2 workers)
-(11684):[PCam][Android] Combined #240  combinedFPS≈25,7  (2 workers)
-(11745):[PCam][Android] Frame #120  1920×1080  rot=0°  gap=64ms  copy=9ms  encode=20ms  → workerFPS≈15
-(11798):[PCam][Android] Frame #120  1920×1080  rot=0°  gap=68ms  copy=10ms  encode=18ms  → workerFPS≈14
-(11913):[PCam][Android] Combined #270  combinedFPS≈28,8  (2 workers)
-(12126):[PCam][Android] Combined #300  combinedFPS≈24,8  (2 workers)
-(12159):[PCam][Android] Frame #150  1920×1080  rot=0°  gap=173ms  copy=9ms  encode=20ms  → workerFPS≈5
-(12203):[PCam][Android] Frame #150  1920×1080  rot=0°  gap=64ms  copy=10ms  encode=18ms  → workerFPS≈15
-(12357):[PCam][Android] Combined #330  combinedFPS≈25,9  (2 workers)
-(12458):[PCam][UI] Camera permission status: Granted
-(12459):[PCam][UI] Stop → config=1920×1080   30 fps
-(12512):[PCam][Android] Combined #360  combinedFPS≈24,4  (2 workers)
-(12570):[PCam][Android] Frame #180  1920×1080  rot=0°  gap=73ms  copy=10ms  encode=20ms  → workerFPS≈13
-(12667):[PCam][Android] Frame #180  1920×1080  rot=0°  gap=72ms  copy=10ms  encode=21ms  → workerFPS≈13
-(12754):[PCam][Android] Combined #390  combinedFPS≈23,6  (2 workers)
-(13007):[PCam][Android] Combined #420  combinedFPS≈25,8  (2 workers)
-(13040):[PCam][Android] Frame #210  1920×1080  rot=0°  gap=66ms  copy=10ms  encode=20ms  → workerFPS≈15
-(13117):[PCam][Android] Frame #210  1920×1080  rot=0°  gap=60ms  copy=10ms  encode=17ms  → workerFPS≈16
+(355):[PCam][Android] ConnectHandler — handler attached
+(356):[PCam][Android] MapIsRunning → IsRunning=False
+(357):[PCam][Android] StopCamera
+(358):[PCam][Android] MapSelectedConfig → config=none, running=False
+(359):[PCam][Android] MapFormat → format=Jpeg, scanning=False, running=False
+(360):[PCam][Android] QueryConfigs starting...
+(405):[PCam][Android] QueryConfigs AE FPS ranges: [5, 15], [15, 15], [15, 20], [20, 20], [24, 24], [5, 30], [30, 30], [15, 60], [60, 60]
+(406):[PCam][Android] HighSpeed: 2 size(s) advertised:
+(407):[PCam][Android]   HS 1280×720 → ranges: [[30, 120], [120, 120], [30, 240], [240, 240]]
+(408):[PCam][Android]   HS 1920×1080 → ranges: [[30, 120], [120, 120], [30, 240], [240, 240]]
+(409):[PCam][Android] HighSpeed: union FPS ranges: [[120, 120], [240, 240], [30, 240], [30, 120]]
+(410):[PCam][Android] QueryConfigs done: 204 configs, default=1920×1080   30 fps
+(531):[PCam][Android] MapSelectedConfig → config=1920×1080   30 fps, running=False
+(532):[PCam][UI] ConfigurationsReady: 204 configs, landscape=True, initial=1920×1080   30 fps
+(533):[PCam][UI] OnConfigurationsReady — autostart preview
+(534):[PCam][Android] MapIsRunning → IsRunning=True
+(536):[PCam][Android] StartCamera → config=1920×1080   30 fps, targetRotation=1 (landscape)
+(538):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
+(539):[PCam][Android] StartCamera FPS=30 (AE=ON, session lock)
+(540):[PCam][Android] DispatchingAnalyzer created with 2 workers
+(541):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
+(542):[PCam][Android] StartCamera ✓ camera bound successfully
+(568):[PCam][UI] OnAppearing — camera permission: Granted
+(660):[PCam][UI] Lock: locked
+(792):[PCam][UI] H.264 toggle: True
+(915):[PCam][UI] Dropdown opened
+(1139):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=73ms  copy=12ms  encode=40ms  → workerFPS≈13
+(1140):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=58ms  copy=11ms  encode=37ms  → workerFPS≈17
+(1298):[PCam][Android] Combined #90  combinedFPS≈6,2  (2 workers)
+(1605):[PCam][Android] Combined #120  combinedFPS≈24,3  (2 workers)
+(1788):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=123ms  copy=12ms  encode=36ms  → workerFPS≈8
+(1886):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=70ms  copy=11ms  encode=40ms  → workerFPS≈14
+(1887):[PCam][Android] Combined #150  combinedFPS≈24,3  (2 workers)
+(2058):[PCam][Android] Combined #180  combinedFPS≈25,0  (2 workers)
+(2292):[PCam][Android] Combined #210  combinedFPS≈23,7  (2 workers)
+(2401):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=65ms  copy=12ms  encode=30ms  → workerFPS≈15
+(2402):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=80ms  copy=11ms  encode=34ms  → workerFPS≈12
+(2403):[PCam][UI] Config selected: 1920×1080   60 fps
+(2404):[PCam][Android] MapSelectedConfig → config=1920×1080   60 fps, running=True
+(2405):[PCam][Android] StartCamera → config=1920×1080   60 fps, targetRotation=1 (landscape)
+(2406):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
+(2407):[PCam][Android] StartCamera CONTROL_MODE=OFF, AE=OFF, exposure=16,7ms, frameDuration=16,7ms, ISO=800, forced 60fps
+(2409):[PCam][Android] DispatchingAnalyzer created with 2 workers
+(2410):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
+(2411):[PCam][Android] StartCamera ✓ camera bound successfully
+(2661):[PCam][Android] Combined #30  combinedFPS≈18,3  (2 workers)
+(2675):[PCam][UI] QR detected: cam://192.168.0.103:8888
+(2676):[PCam][Stream] Disconnected
+(2677):[PCam][UI] QR detected: cam://192.168.0.103:8888
+(2678):[PCam][UI] QR debounced (duplicate within 2s): cam://192.168.0.103:8888
+(2679):[PCam][Stream] Connected to 192.168.0.103:8888
+(2843):[PCam][Android] Combined #60  combinedFPS≈15,0  (2 workers)
+(2942):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=212ms  copy=12ms  encode=22ms  → workerFPS≈4
+(3249):[PCam][UI] Camera permission status: Granted
+(3250):[PCam][UI] Start → config=1920×1080   60 fps
+(3251):[PCam][Android] MapFormat → format=H264, scanning=False, running=True
+(3252):[PCam][Android] StopCamera
+(3253):[PCam][Android] StartH264 → cam=0 1920x1080@60fps
+(3255):[PCam][H264] Start requested: 1920x1080@60fps
+(3279):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
+(3280):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
+(3281):[PCam][H264] Capture session running @ 60fps (template=PREVIEW, NR/Edge/Tonemap=FAST, EIS/SceneMode=OFF, forced sensor frameDuration=16666666ns / 16,67ms)
+(3360):[PCam][H264] Encoded fps≈13,7  keys=1  bitrate≈4,05 Mbps
+(3367):[PCam][H264] Camera real fps≈18,6  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3368):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3391):[PCam][H264] Encoded fps≈28,5  keys=0  bitrate≈8,62 Mbps
+(3399):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3400):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3424):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈8,47 Mbps
+(3431):[PCam][H264] Camera real fps≈30,3  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3432):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3454):[PCam][H264] Encoded fps≈29,9  keys=0  bitrate≈8,65 Mbps
+(3463):[PCam][H264] Camera real fps≈29,7  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3464):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3501):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈8,60 Mbps
+(3507):[PCam][H264] Camera real fps≈29,0  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3508):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3532):[PCam][H264] Encoded fps≈28,9  keys=0  bitrate≈8,16 Mbps
+(3542):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3543):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3567):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈6,93 Mbps
+(3574):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3575):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3599):[PCam][H264] Encoded fps≈30,0  keys=0  bitrate≈7,93 Mbps
+(3605):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3606):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3630):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈11,83 Mbps
+(3645):[PCam][H264] Camera real fps≈30,3  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3646):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3670):[PCam][H264] Encoded fps≈30,3  keys=0  bitrate≈11,24 Mbps
+(3676):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3677):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3701):[PCam][H264] Encoded fps≈29,7  keys=1  bitrate≈9,99 Mbps
+(3711):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3712):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3736):[PCam][H264] Encoded fps≈30,3  keys=0  bitrate≈11,06 Mbps
+(3743):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3744):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3772):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,38 Mbps
+(3779):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3780):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3806):[PCam][H264] Encoded fps≈29,8  keys=0  bitrate≈7,14 Mbps
+(3817):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3818):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3839):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈9,06 Mbps
+(3847):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3848):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3871):[PCam][H264] Encoded fps≈30,0  keys=0  bitrate≈8,30 Mbps
+(3880):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3881):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3901):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,20 Mbps
+(3909):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3910):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3936):[PCam][H264] Encoded fps≈30,1  keys=0  bitrate≈4,89 Mbps
+(3943):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3944):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(3964):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈1,06 Mbps
+(3971):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[60, 60]
+(3972):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(4000):[PCam][H264] Encoded fps≈30,2  keys=0  bitrate≈0,09 Mbps
+(4007):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[60, 60]
+(4008):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(4029):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈0,23 Mbps
+(4039):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[60, 60]
+(4040):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(4063):[PCam][H264] Encoded fps≈30,0  keys=0  bitrate≈0,05 Mbps
+(4070):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[60, 60]
+(4071):[PCam][H264]   modes: CTRL=0 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0

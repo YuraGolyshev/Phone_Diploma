@@ -35,7 +35,13 @@ public sealed class CameraStreamingService : IDisposable
     public string? ServerIp    { get; private set; }
     public int     ServerPort  { get; private set; }
 
-    public async Task<bool> ConnectAsync(string ip, int port)
+    /// <summary>
+    /// Подключается и отправляет 1 байт handshake:
+    /// 0x01 = JPEG legacy (совпадает с первым байтом FRAME_START_MARKER → совместимо
+    ///        со старым сервером без диспетчера);
+    /// 0x02 = H.264 Annex-B chunks (новый серверный диспетчер выберет H.264-ветку).
+    /// </summary>
+    public async Task<bool> ConnectAsync(string ip, int port, byte handshakeByte = 0x01)
     {
         Disconnect();
         try
@@ -46,6 +52,9 @@ public sealed class CameraStreamingService : IDisposable
             _stream    = _client.GetStream();
             ServerIp   = ip;
             ServerPort = port;
+
+            // Handshake: один байт сразу после connect, отдельно от рамок-кадров.
+            await _stream.WriteAsync(new[] { handshakeByte }, 0, 1).ConfigureAwait(false);
 
             _sendCts = new CancellationTokenSource();
             // capacity=1: не более одного кадра в ожидании (+ один в отправке).
@@ -89,6 +98,14 @@ public sealed class CameraStreamingService : IDisposable
         _client = null;
         Debug.WriteLine("[PCam][Stream] Disconnected");
     }
+
+    /// <summary>
+    /// Ставит произвольные байты (например, H.264 NAL-чанк) в очередь отправки в том же
+    /// фрейм-формате что и JPEG: FRAME_START + size(4) + payload + FRAME_END. Сервер
+    /// в H.264-режиме использует ровно тот же фреймер, payload — Annex-B chunk.
+    /// Данные копируются в рентованный буфер, оригинальный buf можно сразу переиспользовать.
+    /// </summary>
+    public void EnqueueRawBytes(byte[] buf, int len) => EnqueueFrame(buf, len);
 
     /// <summary>
     /// Ставит кадр в очередь отправки. Вызывается из потока CameraX-анализатора.
