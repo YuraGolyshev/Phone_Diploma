@@ -53,8 +53,16 @@ public sealed class CameraStreamingService : IDisposable
             ServerIp   = ip;
             ServerPort = port;
 
-            // Handshake: один байт сразу после connect, отдельно от рамок-кадров.
-            await _stream.WriteAsync(new[] { handshakeByte }, 0, 1).ConfigureAwait(false);
+            // Handshake: один байт сразу после connect.
+            // ВАЖНО: для JPEG (0x01) handshake НЕ шлём — этот байт совпадает с первым
+            // байтом FRAME_START_MARKER (0x01,0x02,0x03,0x04), и сервер именно так его
+            // и ожидает (читает первый байт стрима, узнаёт что это начало маркера, и
+            // через PrefixedStream возвращает обратно в pipeline JPEG-ветки).
+            // Если бы мы отправили лишний 0x01 — сервер увидел бы [01, 01, 02, 03, 04, …]
+            // и не нашёл бы маркер.
+            // Для H.264 (0x02) handshake обязателен — он отделяет H.264-ветку.
+            if (handshakeByte != 0x01)
+                await _stream.WriteAsync(new[] { handshakeByte }, 0, 1).ConfigureAwait(false);
 
             _sendCts = new CancellationTokenSource();
             // capacity=1: не более одного кадра в ожидании (+ один в отправке).

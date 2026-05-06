@@ -5,9 +5,8 @@ namespace PhoneCamera;
 
 public partial class MainPage : ContentPage
 {
-    private bool _isRunning = false;
-    private bool _dropdownOpen = false;
-    private bool _isLocked = false;
+    private bool _isRunning;
+    private bool _isLocked;
     private bool _isCurrentlyLandscape;
 
     private bool _isScanning;
@@ -15,6 +14,27 @@ public partial class MainPage : ContentPage
     private string? _lastQrText;
     private long _lastQrDetectedMs;
     private readonly CameraStreamingService _streaming = new();
+
+    // Источник правды для всех конфигов от QueryConfigs
+    private IReadOnlyList<CameraConfig>? _allConfigs;
+
+    // Текущий выбор хранится в landscape-каноне (W >= H). При portrait
+    // ApplyConfigToCamera сам swap'ает width/height перед публикацией в SelectedConfig.
+    private int _curW = 1920, _curH = 1080;
+    private int _curFps = 30;
+    private StreamFormat _selectedFormat = StreamFormat.H264;
+
+    // Состояние трёх dropdown'ов — открыта может быть только одна шторка одновременно
+    private bool _resDropdownOpen, _fpsDropdownOpen, _fmtDropdownOpen;
+
+    // Управляет отправкой как для JPEG (через FrameReady), так и для H.264 (через H264NalReady).
+    // Stop переводит в false; Start — в true. Connect/Disconnect это поле НЕ трогают.
+    private volatile bool _streamingActive;
+
+    // Формат, с которым последний раз был отправлен handshake серверу.
+    // Если при следующем Start пользователь выбрал другой формат — TCP-сессию надо
+    // переоткрыть с новым handshake-байтом (сервер ветвится по нему один раз).
+    private StreamFormat? _lastConnectedFormat;
 
     public MainPage()
     {
@@ -30,27 +50,14 @@ public partial class MainPage : ContentPage
             if (_streamingActive && _streaming.IsConnected)
                 _streaming.EnqueueRawBytes(buf, len);
         };
-    }
 
-    // Управляет отправкой как для JPEG (через FrameReady), так и для H.264 (через H264NalReady).
-    // Stop переводит в false; Start — в true. Connect/Disconnect это поле НЕ трогают.
-    private volatile bool _streamingActive;
-
-    private void OnH264CheckedChanged(object? sender, CheckedChangedEventArgs e)
-    {
-        // Переключатель определяет, какой handshake-байт мы пошлём при следующем Connect
-        // и какой Format выставить на View после успешного подключения.
-        // До нажатия "Подключиться" CameraPreview.Format остаётся JPEG, чтобы QR-сканер
-        // (который требует CameraX YUV-пути) работал в любом случае.
-        System.Diagnostics.Debug.WriteLine($"[PCam][UI] H.264 toggle: {e.Value}");
+        UpdateLabels();
+        UpdateFormatHeaderEnabled();
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        // Запрашиваем разрешение заранее. Камеру НЕ стартуем здесь —
-        // SurfaceView ещё не нарисован, LockCanvas() вернёт null и превью не появится.
-        // Камера запустится из OnConfigurationsReady, когда layout готов и конфиг известен.
         var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
         if (status != PermissionStatus.Granted)
             status = await Permissions.RequestAsync<Permissions.Camera>();
@@ -64,38 +71,102 @@ public partial class MainPage : ContentPage
         base.OnSizeAllocated(width, height);
         var orientation = DeviceDisplay.Current.MainDisplayInfo.Orientation;
         if (orientation == DisplayOrientation.Unknown) return;
-        if (_isLocked) return;
         bool nowLandscape = orientation == DisplayOrientation.Landscape;
+
+        // Переключаем layout верхних шторок: в landscape — три колонки в ряд,
+        // в portrait — три строки друг под другом. Делаем это даже при _isLocked,
+        // чтобы UI всегда соответствовал реальной ориентации экрана.
+        ApplyTopOverlayLayout(nowLandscape);
+
+        if (_isLocked) return;
         if (nowLandscape == _isCurrentlyLandscape) return;
         _isCurrentlyLandscape = nowLandscape;
-        var cfg = CameraPreview.SelectedConfig;
-        if (cfg == null) return;
-        bool isConfigLandscape = cfg.Width >= cfg.Height;
-        if (nowLandscape == isConfigLandscape) return;
-        var newCfg = cfg with { Width = cfg.Height, Height = cfg.Width };
-        System.Diagnostics.Debug.WriteLine($"[PCam][UI] Orientation → {(nowLandscape ? "Landscape" : "Portrait")}: {cfg.DisplayName} → {newCfg.DisplayName}");
-        CameraPreview.SelectedConfig = newCfg;
-        ConfigLabel.Text = newCfg.DisplayName;
+        if (_allConfigs == null) return;
+
+        // _curW/_curH хранятся в landscape canon — менять их не нужно. ApplyConfigToCamera
+        // сам разместит W/H в текущей ориентации перед публикацией в SelectedConfig.
+        ApplyConfigToCamera();
         if (_isRunning)
-            StatusLabel.Text = $"Capturing  {newCfg.DisplayName}";
+            StatusLabel.Text = $"Capturing  {_curW}×{_curH}, {_curFps} fps";
+    }
+
+    // Текущая раскладка — чтобы не пересобирать Grid каждый OnSizeAllocated впустую.
+    private bool? _overlayLayoutLandscape;
+
+    private void ApplyTopOverlayLayout(bool landscape)
+    {
+        if (_overlayLayoutLandscape == landscape) return;
+        _overlayLayoutLandscape = landscape;
+
+        TopOverlayLayout.RowDefinitions.Clear();
+        TopOverlayLayout.ColumnDefinitions.Clear();
+
+        if (landscape)
+        {
+            // 3 колонки одинаковой ширины, 1 строка
+            TopOverlayLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            for (int i = 0; i < 3; i++)
+                TopOverlayLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+
+            Grid.SetRow(ResolutionSlot, 0); Grid.SetColumn(ResolutionSlot, 0);
+            Grid.SetRow(FpsSlot,        0); Grid.SetColumn(FpsSlot,        1);
+            Grid.SetRow(FormatSlot,     0); Grid.SetColumn(FormatSlot,     2);
+        }
+        else
+        {
+            // 1 колонка, 3 строки — каждая высотой по содержимому
+            for (int i = 0; i < 3; i++)
+                TopOverlayLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            TopOverlayLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+
+            Grid.SetRow(ResolutionSlot, 0); Grid.SetColumn(ResolutionSlot, 0);
+            Grid.SetRow(FpsSlot,        1); Grid.SetColumn(FpsSlot,        0);
+            Grid.SetRow(FormatSlot,     2); Grid.SetColumn(FormatSlot,     0);
+        }
     }
 
     private void OnConfigurationsReady(IReadOnlyList<CameraConfig> configs)
     {
-        bool isDeviceLandscape = DeviceDisplay.Current.MainDisplayInfo.Orientation == DisplayOrientation.Landscape;
-        _isCurrentlyLandscape = isDeviceLandscape;
-        var cfg = CameraPreview.SelectedConfig;
-        if (cfg != null)
-        {
-            bool isConfigLandscape = cfg.Width >= cfg.Height;
-            if (isDeviceLandscape != isConfigLandscape)
-                CameraPreview.SelectedConfig = cfg with { Width = cfg.Height, Height = cfg.Width };
-        }
-        System.Diagnostics.Debug.WriteLine($"[PCam][UI] ConfigurationsReady: {configs.Count} configs, landscape={isDeviceLandscape}, initial={CameraPreview.SelectedConfig?.DisplayName ?? "none"}");
-        ConfigList.ItemsSource = configs;
-        ConfigLabel.Text = CameraPreview.SelectedConfig?.DisplayName ?? "—";
+        _allConfigs = configs;
+        _isCurrentlyLandscape =
+            DeviceDisplay.Current.MainDisplayInfo.Orientation == DisplayOrientation.Landscape;
 
-        // Стартуем превью здесь: layout уже нарисован, конфиг известен.
+        // Уникальные разрешения (landscape canon: max×min), отсортированные по убыванию площади.
+        var resolutions = configs
+            .Select(c => new ResolutionOption(Math.Max(c.Width, c.Height), Math.Min(c.Width, c.Height)))
+            .Distinct()
+            .OrderByDescending(r => (long)r.Width * r.Height)
+            .ToList();
+        ResolutionList.ItemsSource = resolutions;
+
+        // Дефолт — 1920×1080 если есть, иначе ближайший по площади
+        var defRes = resolutions.FirstOrDefault(r => r.Width == 1920 && r.Height == 1080)
+                  ?? resolutions.FirstOrDefault();
+        if (defRes != null) { _curW = defRes.Width; _curH = defRes.Height; }
+
+        // Заполняем FPS-список для текущего разрешения. Дефолт fps — 30 если есть.
+        RefreshFpsList();
+        var fpsOptions = AvailableFpsFor(_curW, _curH);
+        _curFps = fpsOptions.Contains(30) ? 30
+                : fpsOptions.Count > 0    ? fpsOptions[0]
+                : 30;
+
+        // Список форматов фиксирован — два варианта. Дефолт — H.264.
+        FormatList.ItemsSource = new List<FormatOption>
+        {
+            new FormatOption(StreamFormat.H264),
+            new FormatOption(StreamFormat.Jpeg),
+        };
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[PCam][UI] ConfigurationsReady: {configs.Count} configs, " +
+            $"resolutions={resolutions.Count}, default={_curW}×{_curH} @ {_curFps} fps, format={_selectedFormat}");
+
+        UpdateLabels();
+        ApplyConfigToCamera();
+
+        // Стартуем превью. CameraPreview.Format остаётся Jpeg (default) — для CameraX preview;
+        // переключение на H.264 произойдёт только при Start (если выбран H.264 в шторке).
         if (!CameraPreview.IsRunning)
         {
             System.Diagnostics.Debug.WriteLine("[PCam][UI] OnConfigurationsReady — autostart preview");
@@ -103,27 +174,142 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void OnConfigHeaderTapped(object? sender, TappedEventArgs e)
+    // ── Обработчики шторок ──────────────────────────────────────────────────
+
+    private void OnResolutionHeaderTapped(object? sender, TappedEventArgs e)
     {
-        if (ConfigList.ItemsSource == null) return;
-        _dropdownOpen = !_dropdownOpen;
-        ConfigList.IsVisible = _dropdownOpen;
-        ConfigArrow.Text = _dropdownOpen ? "\u25b2" : "\u25bc";
-        System.Diagnostics.Debug.WriteLine($"[PCam][UI] Dropdown {(_dropdownOpen ? "opened" : "closed")}");
+        if (ResolutionList.ItemsSource == null) return;
+        SetDropdownOpen(res: !_resDropdownOpen, fps: false, fmt: false);
     }
 
-    private void OnConfigSelected(object? sender, SelectionChangedEventArgs e)
+    private void OnFpsHeaderTapped(object? sender, TappedEventArgs e)
     {
-        if (e.CurrentSelection.FirstOrDefault() is CameraConfig cfg)
-        {
-            System.Diagnostics.Debug.WriteLine($"[PCam][UI] Config selected: {cfg.DisplayName}");
-            CameraPreview.SelectedConfig = cfg;
-            ConfigLabel.Text = cfg.DisplayName;
-        }
-        _dropdownOpen = false;
-        ConfigList.IsVisible = false;
-        ConfigArrow.Text = "\u25bc";
+        if (FpsList.ItemsSource == null) return;
+        SetDropdownOpen(res: false, fps: !_fpsDropdownOpen, fmt: false);
     }
+
+    private void OnFormatHeaderTapped(object? sender, TappedEventArgs e)
+    {
+        if (_streamingActive)
+        {
+            // Заблокировано на время стрима — игнорируем тап.
+            System.Diagnostics.Debug.WriteLine("[PCam][UI] Format dropdown blocked (streaming active)");
+            return;
+        }
+        if (FormatList.ItemsSource == null) return;
+        SetDropdownOpen(res: false, fps: false, fmt: !_fmtDropdownOpen);
+    }
+
+    private void SetDropdownOpen(bool res, bool fps, bool fmt)
+    {
+        _resDropdownOpen = res;
+        _fpsDropdownOpen = fps;
+        _fmtDropdownOpen = fmt;
+        ResolutionList.IsVisible = res;
+        FpsList.IsVisible = fps;
+        FormatList.IsVisible = fmt;
+        ResolutionArrow.Text = res ? "▲" : "▼";
+        FpsArrow.Text        = fps ? "▲" : "▼";
+        FormatArrow.Text     = fmt ? "▲" : "▼";
+    }
+
+    private void OnResolutionSelected(object? sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is not ResolutionOption r) return;
+        System.Diagnostics.Debug.WriteLine($"[PCam][UI] Resolution selected: {r.DisplayName}");
+        _curW = r.Width;
+        _curH = r.Height;
+
+        // Если текущий FPS не доступен на новом разрешении — выбираем ближайший.
+        var avail = AvailableFpsFor(_curW, _curH);
+        if (!avail.Contains(_curFps))
+            _curFps = avail.Contains(30) ? 30 : (avail.Count > 0 ? avail[0] : 30);
+
+        RefreshFpsList();
+        UpdateLabels();
+        ApplyConfigToCamera();
+        SetDropdownOpen(false, false, false);
+    }
+
+    private void OnFpsSelected(object? sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is not FpsOption f) return;
+        System.Diagnostics.Debug.WriteLine($"[PCam][UI] FPS selected: {f.Fps}");
+        _curFps = f.Fps;
+        UpdateLabels();
+        ApplyConfigToCamera();
+        SetDropdownOpen(false, false, false);
+    }
+
+    private void OnFormatSelected(object? sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is not FormatOption f) return;
+        if (_streamingActive) return; // safety
+
+        System.Diagnostics.Debug.WriteLine($"[PCam][UI] Format selected: {f.Format}");
+        _selectedFormat = f.Format;
+        UpdateLabels();
+        SetDropdownOpen(false, false, false);
+        // CameraPreview.Format переключается только при Start — здесь только запоминаем выбор.
+    }
+
+    // ── Helpers ─────────────────────────────────────────────────────────────
+
+    private List<int> AvailableFpsFor(int w, int h)
+    {
+        if (_allConfigs == null) return new();
+        int bigSide   = Math.Max(w, h);
+        int smallSide = Math.Min(w, h);
+        return _allConfigs
+            .Where(c => Math.Max(c.Width, c.Height) == bigSide
+                     && Math.Min(c.Width, c.Height) == smallSide)
+            .Select(c => (int)Math.Round(c.MaxFps))
+            .Distinct()
+            .OrderByDescending(x => x)
+            .ToList();
+    }
+
+    private void RefreshFpsList()
+    {
+        var fps = AvailableFpsFor(_curW, _curH).Select(f => new FpsOption(f)).ToList();
+        FpsList.ItemsSource = fps;
+    }
+
+    private void ApplyConfigToCamera()
+    {
+        // Учитываем текущую ориентацию: portrait → swap W и H.
+        int w = _isCurrentlyLandscape ? _curW : _curH;
+        int h = _isCurrentlyLandscape ? _curH : _curW;
+
+        var cfg = _allConfigs?.FirstOrDefault(c =>
+                       c.Width == w && c.Height == h && (int)Math.Round(c.MaxFps) == _curFps)
+                  ?? new CameraConfig(w, h, _curFps, _curFps);
+
+        // BindableProperty с record-типом сравнивается structurally — если значения те же
+        // (например, после ротации UI обновился, а конфиг тот же), MAUI не триггерит MapSelectedConfig.
+        CameraPreview.SelectedConfig = cfg;
+    }
+
+    private void UpdateLabels()
+    {
+        ResolutionLabel.Text = $"Разрешение: {_curW}×{_curH}";
+        FpsLabel.Text        = $"FPS: {_curFps}";
+        FormatLabel.Text     = $"Формат: {(_selectedFormat == StreamFormat.H264 ? "H.264" : "JPEG")}";
+    }
+
+    private void UpdateFormatHeaderEnabled()
+    {
+        // Визуально «затемняем» шторку формата на время стрима.
+        FormatHeader.Opacity = _streamingActive ? 0.4 : 1.0;
+        FormatLabel.Text =
+            $"Формат: {(_selectedFormat == StreamFormat.H264 ? "H.264" : "JPEG")}" +
+            (_streamingActive ? "  (заблокировано)" : "");
+        // Если на момент блокировки шторка была открыта — закрываем её.
+        if (_streamingActive && _fmtDropdownOpen)
+            SetDropdownOpen(_resDropdownOpen, _fpsDropdownOpen, false);
+    }
+
+    // ── Кнопки ──────────────────────────────────────────────────────────────
 
     private void OnLockCheckedChanged(object? sender, CheckedChangedEventArgs e)
     {
@@ -140,12 +326,7 @@ public partial class MainPage : ContentPage
 
     private async void OnStartStopClicked(object? sender, EventArgs e)
     {
-        if (_dropdownOpen)
-        {
-            _dropdownOpen = false;
-            ConfigList.IsVisible = false;
-            ConfigArrow.Text = "\u25bc";
-        }
+        SetDropdownOpen(false, false, false);
 
         var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
         if (status != PermissionStatus.Granted)
@@ -160,13 +341,16 @@ public partial class MainPage : ContentPage
         }
 
         _isRunning = !_isRunning;
-        System.Diagnostics.Debug.WriteLine($"[PCam][UI] {(_isRunning ? "Start" : "Stop")} → config={CameraPreview.SelectedConfig?.DisplayName ?? "none"}");
+        System.Diagnostics.Debug.WriteLine(
+            $"[PCam][UI] {(_isRunning ? "Start" : "Stop")} → {_curW}×{_curH} @ {_curFps} fps, format={_selectedFormat}");
+
         if (_isRunning)
         {
-            // Включаем gate — теперь H.264 NAL-чанки и JPEG-кадры пойдут на сервер.
+            // Включаем gate — JPEG-кадры и H.264 NAL-чанки пойдут на сервер.
             _streamingActive = true;
+            UpdateFormatHeaderEnabled();
 
-            int targetFps = (int)Math.Max(1.0, CameraPreview.SelectedConfig?.MaxFps ?? 30.0);
+            int targetFps = Math.Max(1, _curFps);
             long intervalMs = 1000 / targetFps;
             Volatile.Write(ref _lastFrameMs, 0L);
             CameraPreview.FrameReady = (buf, len) =>
@@ -178,22 +362,52 @@ public partial class MainPage : ContentPage
                     _streaming.EnqueueFrame(buf, len);
             };
 
-            // Если подключены и хотим H.264 — переводим Format на H264 (handler перестроит
-            // pipeline на MediaCodec encoder Surface). Если выключатель снят или ещё не
-            // подключены — остаёмся на CameraX (Format=Jpeg).
-            CameraPreview.Format = (_streaming.IsConnected && H264CheckBox.IsChecked)
+            // Если формат изменился с момента последнего connect — переподключаемся,
+            // чтобы серверный диспетчер прочитал новый handshake-байт и встал
+            // в нужную ветку (JPEG/H.264). Без этого сервер бы остался в старой ветке
+            // и не смог разобрать новые данные.
+            if (_streaming.IsConnected
+                && _lastConnectedFormat.HasValue
+                && _lastConnectedFormat.Value != _selectedFormat)
+            {
+                string? ip   = _streaming.ServerIp;
+                int     port = _streaming.ServerPort;
+                if (ip != null)
+                {
+                    System.Diagnostics.Debug.WriteLine(
+                        $"[PCam][UI] Format changed {_lastConnectedFormat.Value} → {_selectedFormat}, reconnecting to {ip}:{port}");
+                    _streaming.Disconnect();
+                    byte newHandshake = _selectedFormat == StreamFormat.H264 ? (byte)0x02 : (byte)0x01;
+                    ConnectionLabel.Text = $"Переподключение к {ip}:{port} ({_selectedFormat})...";
+                    bool ok = await _streaming.ConnectAsync(ip, port, newHandshake);
+                    if (ok)
+                    {
+                        _lastConnectedFormat = _selectedFormat;
+                        ConnectionLabel.Text = $"Подключено: {ip}:{port} ({_selectedFormat})";
+                    }
+                    else
+                    {
+                        ConnectionLabel.Text = $"Ошибка переподключения к {ip}:{port}";
+                    }
+                }
+            }
+
+            // Если уже подключены и выбран H.264 — переключаем pipeline на H.264.
+            // Иначе остаёмся на CameraX (Format=Jpeg) — стрим всё равно будет JPEG.
+            CameraPreview.Format = (_streaming.IsConnected && _selectedFormat == StreamFormat.H264)
                 ? StreamFormat.H264
                 : StreamFormat.Jpeg;
         }
         else
         {
-            // Stop: gate выключен → ни JPEG, ни H.264 кадры не идут на сервер.
+            // Stop: gate выключен → ничего не идёт на сервер.
             _streamingActive = false;
             CameraPreview.FrameReady = null;
 
-            // Возвращаем Format=Jpeg → handler остановит H.264 pipeline и вернёт CameraX
-            // preview, чтобы продолжать видеть картинку и сканировать QR.
+            // Возвращаем Format=Jpeg → handler переключит pipeline на CameraX preview.
             CameraPreview.Format = StreamFormat.Jpeg;
+
+            UpdateFormatHeaderEnabled();
 
             if (_isScanning)
             {
@@ -205,7 +419,7 @@ public partial class MainPage : ContentPage
 
         if (_isRunning && CameraPreview.Format == StreamFormat.Jpeg)
         {
-            // Только в JPEG-ветке нужен рестарт CameraX чтобы DispatchingAnalyzer подхватил
+            // В JPEG-ветке нужен рестарт CameraX, чтобы DispatchingAnalyzer подхватил
             // новый FrameReady. Для H.264 ветки рестартом ведает MapFormat.
             if (CameraPreview.IsRunning)
                 CameraPreview.IsRunning = false;
@@ -213,7 +427,9 @@ public partial class MainPage : ContentPage
         }
 
         StartStopBtn.Text = _isRunning ? "Stop" : "Start";
-        StatusLabel.Text = _isRunning ? $"Capturing  {CameraPreview.SelectedConfig?.DisplayName}" : "Preview";
+        StatusLabel.Text  = _isRunning
+            ? $"Capturing  {_curW}×{_curH}, {_curFps} fps"
+            : "Preview";
     }
 
     private async void OnConnectClicked(object? sender, EventArgs e)
@@ -223,7 +439,9 @@ public partial class MainPage : ContentPage
             _isScanning = false;
             CameraPreview.IsScanning = false;
             ConnectBtn.Text = "Подключиться";
-            StatusLabel.Text = _isRunning ? $"Capturing  {CameraPreview.SelectedConfig?.DisplayName}" : "Press Start";
+            StatusLabel.Text = _isRunning
+                ? $"Capturing  {_curW}×{_curH}, {_curFps} fps"
+                : "Press Start";
             return;
         }
 
@@ -251,8 +469,6 @@ public partial class MainPage : ContentPage
     {
         System.Diagnostics.Debug.WriteLine($"[PCam][UI] QR detected: {qrText}");
 
-        // Debounce: CAS-логика в FrameAnalyzer уже не пустит второй вызов за 200ms,
-        // но на случай edge-race добавляем дополнительный барьер на уровне UI (2s).
         long nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         if (qrText == _lastQrText && nowMs - _lastQrDetectedMs < 2000)
         {
@@ -265,7 +481,9 @@ public partial class MainPage : ContentPage
         _isScanning = false;
         CameraPreview.IsScanning = false;
         ConnectBtn.Text = "Подключиться";
-        StatusLabel.Text = _isRunning ? $"Capturing  {CameraPreview.SelectedConfig?.DisplayName}" : "Press Start";
+        StatusLabel.Text = _isRunning
+            ? $"Capturing  {_curW}×{_curH}, {_curFps} fps"
+            : "Press Start";
 
         if (!qrText.StartsWith("cam://"))
         {
@@ -282,7 +500,7 @@ public partial class MainPage : ContentPage
         }
 
         string ip = parts[0];
-        bool wantH264 = H264CheckBox.IsChecked;
+        bool wantH264 = _selectedFormat == StreamFormat.H264;
         byte handshake = wantH264 ? (byte)0x02 : (byte)0x01;
         ConnectionLabel.Text = $"Подключение к {ip}:{port} ({(wantH264 ? "H.264" : "JPEG")})...";
 
@@ -294,12 +512,32 @@ public partial class MainPage : ContentPage
                 ConnectionLabel.Text = ok
                     ? $"Подключено: {ip}:{port} ({(wantH264 ? "H.264" : "JPEG")})"
                     : $"Ошибка подключения к {ip}:{port}";
-                // Format НЕ переключаем здесь — это произойдёт при Start (OnStartStopClicked),
-                // чтобы стрим начинался строго по нажатию Start, а не сразу после connect.
-                // Если стрим уже активен в момент connect — переключим прямо сейчас.
-                if (ok && _streamingActive && wantH264)
-                    CameraPreview.Format = StreamFormat.H264;
+                if (ok)
+                {
+                    _lastConnectedFormat = _selectedFormat;
+                    // Format переключается при Start; если стрим уже активен в момент
+                    // подключения — переключаем сразу.
+                    if (_streamingActive && wantH264)
+                        CameraPreview.Format = StreamFormat.H264;
+                }
             });
         });
     }
+}
+
+// ── Записи для шторок ────────────────────────────────────────────────────────
+
+public record ResolutionOption(int Width, int Height)
+{
+    public string DisplayName => $"{Width}×{Height}";
+}
+
+public record FpsOption(int Fps)
+{
+    public string DisplayName => $"{Fps} fps";
+}
+
+public record FormatOption(StreamFormat Format)
+{
+    public string DisplayName => Format == StreamFormat.H264 ? "H.264" : "JPEG";
 }

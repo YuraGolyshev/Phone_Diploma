@@ -252,42 +252,16 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
                 targetFps = (int)Math.Round(config.MaxFps);
                 if (targetFps > 0)
                 {
-                    var fpsRange = new global::Android.Util.Range(
-                        Java.Lang.Integer.ValueOf(targetFps),
-                        Java.Lang.Integer.ValueOf(targetFps));
-
+                    // Все Camera2-настройки (3A, EIS, image-processing, sensor manual,
+                    // AE FPS range) применяются единообразно через общий CameraSettings.
+                    // Тыкать настройки → Platforms/Android/CameraSettings.cs.
                     var extender = new Camera2Interop.Extender(analysisBuilder);
-                    extender.SetCaptureRequestOption(CaptureRequest.ControlAeTargetFpsRange, fpsRange);
-
-                    if (targetFps >= 60)
-                    {
-                        // CONTROL_MODE=OFF: отключает весь 3A-блок (AE, AF, AWB),
-                        // позволяя сенсору работать строго в ручном режиме.
-                        // SENSOR_FRAME_DURATION: явно фиксирует период кадра — без него
-                        // HAL может выбрать ближайший «удобный» шаг (обычно 33ms→30fps).
-                        long exposureNs      = 1_000_000_000L / (long)targetFps; // 16.7ms при 60fps
-                        long frameDurationNs = 1_000_000_000L / (long)targetFps;
-                        extender
-                            .SetCaptureRequestOption(CaptureRequest.ControlMode,
-                                Java.Lang.Integer.ValueOf(0))         // CONTROL_MODE_OFF
-                            .SetCaptureRequestOption(CaptureRequest.ControlAeMode,
-                                Java.Lang.Integer.ValueOf(0))         // CONTROL_AE_MODE_OFF
-                            .SetCaptureRequestOption(CaptureRequest.SensorExposureTime,
-                                Java.Lang.Long.ValueOf(exposureNs))
-                            .SetCaptureRequestOption(CaptureRequest.SensorFrameDuration,
-                                Java.Lang.Long.ValueOf(frameDurationNs))
-                            .SetCaptureRequestOption(CaptureRequest.SensorSensitivity,
-                                Java.Lang.Integer.ValueOf(800));      // ISO 800
-                        System.Diagnostics.Debug.WriteLine(
-                            $"[PCam][Android] StartCamera CONTROL_MODE=OFF, AE=OFF," +
-                            $" exposure={exposureNs / 1_000_000.0:F1}ms," +
-                            $" frameDuration={frameDurationNs / 1_000_000.0:F1}ms, ISO=800, forced {targetFps}fps");
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine(
-                            $"[PCam][Android] StartCamera FPS={targetFps} (AE=ON, session lock)");
-                    }
+                    CameraSettings.ApplyToExtender(extender, targetFps);
+                    System.Diagnostics.Debug.WriteLine(
+                        $"[PCam][Android] StartCamera fps={targetFps} " +
+                        $"(3A={(CameraSettings.ENABLE_3A ? "AUTO" : "OFF")}, " +
+                        $"EIS={(CameraSettings.ENABLE_VIDEO_STABILIZATION ? "ON" : "OFF")}, " +
+                        $"NR={CameraSettings.NOISE_REDUCTION_MODE}/Edge={CameraSettings.EDGE_MODE}/TM={CameraSettings.TONEMAP_MODE})");
                 }
             }
 
@@ -522,7 +496,7 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
                     try
                     {
                         bool isStreaming = cb != null;
-                        int quality      = isStreaming ? 20 : 80;
+                        int quality      = isStreaming ? 50 : 50;
                         int effectiveRot = isStreaming ? 0 : imgRot;
                         long t1 = _diagSw.ElapsedMilliseconds;
                         bool ok = EncodeNv21ToJpeg(imgW, imgH, effectiveRot, quality);

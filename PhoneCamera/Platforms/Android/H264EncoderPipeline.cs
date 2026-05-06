@@ -27,6 +27,11 @@ namespace PhoneCamera.Platforms.Android;
 /// </summary>
 public sealed class H264EncoderPipeline : Java.Lang.Object
 {
+    // Все настройки (3A, EIS, image-processing, шаблон CaptureRequest, ручные
+    // значения сенсора, H.264 I-frame interval) вынесены в общий статический
+    // класс CameraSettings — он делится между этим pipeline'ом и JPEG-веткой
+    // (CameraPreviewHandler). Тыкать настройки → CameraSettings.cs.
+
     // Callback вызывается на отдельном output thread; не блокировать!
     public System.Action<byte[], int, bool>? OnNalChunk;
     public System.Action<string>?            OnError;
@@ -123,7 +128,7 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
         fmt.SetInteger(MediaFormat.KeyColorFormat, (int)MediaCodecCapabilities.Formatsurface);
         fmt.SetInteger(MediaFormat.KeyBitRate,        ChooseBitrate(w, h, fps));
         fmt.SetInteger(MediaFormat.KeyFrameRate,      fps);
-        fmt.SetInteger(MediaFormat.KeyIFrameInterval, 1); // ключевые кадры раз в секунду
+        fmt.SetInteger(MediaFormat.KeyIFrameInterval, CameraSettings.H264_I_FRAME_INTERVAL_SECONDS);
         fmt.SetInteger(MediaFormat.KeyProfile,        (int)MediaCodecProfileType.Avcprofilebaseline);
 
         // Hint'ы на low-latency и 60fps operating rate (новые API)
@@ -343,12 +348,30 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
                 executor,
                 new SessionCb(_o));
 
-            var sessionParams = camera.CreateCaptureRequest(CameraTemplate.Preview);
-            sessionParams.Set(CaptureRequest.ControlAeTargetFpsRange,
-                new global::Android.Util.Range(Integer.ValueOf(60), Integer.ValueOf(60)));
-            sessionParams.Set(CaptureRequest.SensorFrameDuration,
-                Java.Lang.Long.ValueOf(16_666_666L));
-            sessionCfg.SessionParameters = sessionParams.Build();
+            // ── Session parameters ───────────────────────────────────────────────
+            // Передаются HAL на этапе configure_streams (до setRepeatingRequest).
+            // Ключевое отличие от request-параметров: HAL читает их при ВЫБОРЕ
+            // sensor mode. Per-frame значения в repeating request HAL уже использует
+            // только для подкрутки экспозиции/гейна внутри выбранного sensor mode.
+            // Поэтому ставим ровно тот же набор настроек, что и в repeating request,
+            // через общий CameraSettings.ApplyToBuilder — иначе кадры будут отбрасываться
+            // (требование Camera2: ключи в session parameters и request должны совпадать).
+            try
+            {
+                var sessionParams = camera.CreateCaptureRequest(CameraSettings.CAPTURE_TEMPLATE);
+                CameraSettings.ApplyToBuilder(sessionParams, _o._fps);
+                sessionCfg.SessionParameters = sessionParams.Build();
+                System.Diagnostics.Debug.WriteLine(
+                    $"[PCam][H264] Session parameters set (template={CameraSettings.CAPTURE_TEMPLATE}, " +
+                    $"3A={(CameraSettings.ENABLE_3A ? "AUTO" : "OFF")}, AE_RANGE=[{_o._fps},{_o._fps}])");
+            }
+            catch (System.Exception ex)
+            {
+                // Если HAL не объявляет эти ключи в getAvailableSessionKeys(), set может
+                // бросить. Это не фатально — просто продолжим без session parameters.
+                System.Diagnostics.Debug.WriteLine(
+                    $"[PCam][H264] Session parameters set failed (continuing without): {ex.Message}");
+            }
 
             camera.CreateCaptureSession(sessionCfg);
             System.Diagnostics.Debug.WriteLine(
@@ -380,57 +403,22 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
             _o._session = session;
             try
             {
-                // ВАЖНО: используем PREVIEW шаблон, а не RECORD. На многих HAL'ах RECORD
-                // включает по умолчанию HDR/EIS/heavy-NR pipeline, который физически
-                // ограничивает sensor 30fps. PREVIEW даёт минимум обработки.
-                var b = _o._device.CreateCaptureRequest(CameraTemplate.Preview)!;
+                // CaptureRequest строится по шаблону из CameraSettings. Здесь же мы
+                // переопределяем значения через CameraSettings.ApplyToBuilder.
+                // То же самое дублируется в session parameters (выбор sensor mode
+                // при configure_streams).
+                var b = _o._device.CreateCaptureRequest(CameraSettings.CAPTURE_TEMPLATE)!;
                 b.AddTarget(_o._inputSurface!);
 
-                // ── Все 3A — выключены ────────────────────────────────────────────────
-                b.Set(CaptureRequest.ControlMode,    Integer.ValueOf(0));   // CONTROL_MODE_OFF
-                b.Set(CaptureRequest.ControlAeMode,  Integer.ValueOf(0));   // AE_OFF
-                b.Set(CaptureRequest.ControlAwbMode, Integer.ValueOf(0));   // AWB_OFF
-                b.Set(CaptureRequest.ControlAfMode,  Integer.ValueOf(0));   // AF_OFF
-                b.Set(CaptureRequest.ControlSceneMode,
-                      Integer.ValueOf(0));                                  // SCENE_DISABLED
-                b.Set(CaptureRequest.ControlVideoStabilizationMode,
-                      Integer.ValueOf(0));                                  // STAB_OFF (EIS убираем)
-
-                // ── Sensor — ручной режим, frame duration фиксирован под целевой fps ──
-                long frameDurationNs = 1_000_000_000L / _o._fps;
-                long exposureNs      = frameDurationNs; // не больше периода кадра
-                b.Set(CaptureRequest.SensorExposureTime,
-                      Java.Lang.Long.ValueOf(exposureNs));
-                b.Set(CaptureRequest.SensorFrameDuration,
-                      Java.Lang.Long.ValueOf(frameDurationNs));
-                b.Set(CaptureRequest.SensorSensitivity,
-                      Integer.ValueOf(800));
-
-                // ── Image-processing pipeline — на FAST/OFF, чтобы HAL не делал HQ-прогон ──
-                // На многих HAL'ах HIGH_QUALITY-режим NR/Edge/Tonemap физически работает
-                // только на 30fps (двухпроходная обработка). FAST разблокирует 60fps.
-                b.Set(CaptureRequest.NoiseReductionMode,            Integer.ValueOf(1)); // FAST
-                b.Set(CaptureRequest.EdgeMode,                      Integer.ValueOf(1)); // FAST
-                b.Set(CaptureRequest.TonemapMode,                   Integer.ValueOf(1)); // FAST
-                b.Set(CaptureRequest.ColorCorrectionAberrationMode, Integer.ValueOf(1)); // FAST
-                b.Set(CaptureRequest.HotPixelMode,                  Integer.ValueOf(1)); // FAST
-                b.Set(CaptureRequest.StatisticsFaceDetectMode,      Integer.ValueOf(0)); // OFF
-                b.Set(CaptureRequest.StatisticsHotPixelMapMode,     Java.Lang.Boolean.False);
-                b.Set(CaptureRequest.StatisticsLensShadingMapMode,  Integer.ValueOf(0)); // OFF
-                b.Set(CaptureRequest.BlackLevelLock,                Java.Lang.Boolean.False);
-
-                // AE FPS range — на всякий случай (даже при AE_OFF некоторые HAL читают это
-                // как hint для sensor mode selection).
-                b.Set(CaptureRequest.ControlAeTargetFpsRange,
-                      new global::Android.Util.Range(
-                          Integer.ValueOf(_o._fps),
-                          Integer.ValueOf(_o._fps)));
+                CameraSettings.ApplyToBuilder(b, _o._fps);
 
                 session.SetRepeatingRequest(b.Build(), new FpsCaptureCb(_o), _o._cameraHandler);
                 System.Diagnostics.Debug.WriteLine(
-                    $"[PCam][H264] Capture session running @ {_o._fps}fps " +
-                    $"(template=PREVIEW, NR/Edge/Tonemap=FAST, EIS/SceneMode=OFF, " +
-                    $"forced sensor frameDuration={frameDurationNs}ns / {frameDurationNs / 1_000_000.0:F2}ms)");
+                    $"[PCam][H264] Capture session running @ {_o._fps}fps  " +
+                    $"(template={CameraSettings.CAPTURE_TEMPLATE}, " +
+                    $"3A={(CameraSettings.ENABLE_3A ? "AUTO" : "OFF")}, " +
+                    $"EIS={(CameraSettings.ENABLE_VIDEO_STABILIZATION ? "ON" : "OFF")}, " +
+                    $"NR={CameraSettings.NOISE_REDUCTION_MODE}/Edge={CameraSettings.EDGE_MODE}/TM={CameraSettings.TONEMAP_MODE})");
             }
             catch (System.Exception ex) { _o.ReportError($"OnConfigured: {ex.Message}"); }
         }
