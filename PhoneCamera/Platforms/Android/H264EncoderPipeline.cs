@@ -1,3 +1,4 @@
+using Android.Graphics;
 using Android.Hardware.Camera2;
 using Android.Hardware.Camera2.Params;
 using Android.Media;
@@ -36,7 +37,23 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
     public System.Action<byte[], int, bool>? OnNalChunk;
     public System.Action<string>?            OnError;
 
+    // Превью-кадр в виде ARGB Bitmap (~10 fps). Вызывается из preview-thread,
+    // получатель должен Post() в UI thread сам. Bitmap собственность вызывающего —
+    // потребитель должен .Recycle() после использования (или передавать в другой
+    // bitmap pool).
+    public System.Action<Bitmap>?            OnPreviewBitmap;
+
     public bool IsRunning => _running;
+
+    // Размер preview-стрима. Full HD 1920×1080 — для красивой картинки в UI.
+    // Внимание: на ряде HAL комбинация PRIV (encoder) + YUV (preview) при таких
+    // размерах ограничивает fps до 30 для обоих стримов (известный 30fps cap).
+    // На Pixel/iPhone обычно работает 60. CPU нагрузка на YUV→ARGB ~20-30 ms на
+    // 1080p — за счёт throttle '1 из 2' получаем плавные ~15 fps превью даже на
+    // 30fps source, что приятно глазу. Если хочется ещё больше fps — снизить
+    // throttle до '1 из 1' (но CPU-bound).
+    private const int PREVIEW_W = 1920;
+    private const int PREVIEW_H = 1080;
 
     private MediaCodec?            _encoder;
     private Surface?               _inputSurface;
@@ -45,6 +62,7 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
     private HandlerThread?         _cameraThread;
     private global::Android.OS.Handler? _cameraHandler;
     private System.Threading.Thread? _outputThread;
+    private ImageReader?           _previewReader; // YUV_420_888 для preview
     private volatile bool          _running;
 
     private int _w, _h, _fps;
@@ -66,6 +84,26 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
             _cameraThread = new HandlerThread("PCamH264-Cam");
             _cameraThread.Start();
             _cameraHandler = new global::Android.OS.Handler(_cameraThread.Looper!);
+
+            // Preview surface: YUV_420_888 ImageReader, маленький (640×480),
+            // listener получает изображения и шлёт ARGB-Bitmap в OnPreviewBitmap.
+            // На многих HAL добавление этого surface рядом с encoder (PRIV+YUV)
+            // может ограничить fps до 30. Если это критично — закомментируй
+            // блок ниже, и будет работать как раньше, без превью.
+            try
+            {
+                _previewReader = ImageReader.NewInstance(
+                    PREVIEW_W, PREVIEW_H,
+                    global::Android.Graphics.ImageFormatType.Yuv420888, 2);
+                _previewReader.SetOnImageAvailableListener(
+                    new PreviewListener(this), _cameraHandler);
+            }
+            catch (System.Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    $"[PCam][H264] Preview reader init failed: {ex.Message} (продолжаем без превью)");
+                _previewReader = null;
+            }
 
             ConfigureEncoder(width, height, fps);
 
@@ -113,6 +151,9 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
 
         try { _inputSurface?.Release(); } catch { }
         _inputSurface = null;
+
+        try { _previewReader?.Close(); } catch { }
+        _previewReader = null;
 
         try { _cameraThread?.QuitSafely(); } catch { }
         _cameraThread  = null;
@@ -248,6 +289,8 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
             try
             {
                 var surfaces = new System.Collections.Generic.List<Surface> { _o._inputSurface! };
+                if (_o._previewReader?.Surface != null)
+                    surfaces.Add(_o._previewReader.Surface);
 
                 // На Android 13+ пробуем новый SessionConfiguration API с
                 // STREAM_USE_CASE_VIDEO_RECORD. Это даёт HAL явный hint «эта сессия
@@ -328,18 +371,25 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
                 return false;
             }
 
-            // Создаём OutputConfiguration с STREAM_USE_CASE_VIDEO_RECORD = 0x3
-            var outputCfg = new global::Android.Hardware.Camera2.Params.OutputConfiguration(_o._inputSurface!);
+            // OutputConfiguration: encoder = VIDEO_RECORD, preview = PREVIEW.
+            const long STREAM_USE_CASE_PREVIEW      = 0x1L;
             const long STREAM_USE_CASE_VIDEO_RECORD = 0x3L;
-            try
-            {
-                outputCfg.StreamUseCase = STREAM_USE_CASE_VIDEO_RECORD;
-            }
+
+            var encCfg = new global::Android.Hardware.Camera2.Params.OutputConfiguration(_o._inputSurface!);
+            try { encCfg.StreamUseCase = STREAM_USE_CASE_VIDEO_RECORD; }
             catch (System.Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(
-                    $"[PCam][H264] Setting StreamUseCase failed: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[PCam][H264] StreamUseCase encoder failed: {ex.Message}");
                 return false;
+            }
+
+            var configs = new System.Collections.Generic.List<global::Android.Hardware.Camera2.Params.OutputConfiguration> { encCfg };
+
+            if (_o._previewReader?.Surface != null)
+            {
+                var prevCfg = new global::Android.Hardware.Camera2.Params.OutputConfiguration(_o._previewReader.Surface);
+                try { prevCfg.StreamUseCase = STREAM_USE_CASE_PREVIEW; } catch { /* не критично */ }
+                configs.Add(prevCfg);
             }
 
             // SessionConfiguration требует executor. Используем простой адаптер на наш Handler,
@@ -347,7 +397,7 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
             var executor = new HandlerExecutor(_o._cameraHandler!);
             var sessionCfg = new global::Android.Hardware.Camera2.Params.SessionConfiguration(
                 (int)global::Android.Hardware.Camera2.Params.SessionType.Regular,
-                new System.Collections.Generic.List<global::Android.Hardware.Camera2.Params.OutputConfiguration> { outputCfg },
+                configs,
                 executor,
                 new SessionCb(_o));
 
@@ -412,6 +462,8 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
                 // при configure_streams).
                 var b = _o._device.CreateCaptureRequest(CameraSettings.CAPTURE_TEMPLATE)!;
                 b.AddTarget(_o._inputSurface!);
+                if (_o._previewReader?.Surface != null)
+                    b.AddTarget(_o._previewReader.Surface);
 
                 CameraSettings.ApplyToBuilder(b, _o._fps);
 
@@ -429,6 +481,105 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
         public override void OnConfigureFailed(CameraCaptureSession session)
         {
             _o.ReportError("Capture session configure failed");
+        }
+    }
+
+    // ── ImageReader listener для preview (YUV_420_888 → ARGB Bitmap) ────────
+    // Throttle: один из трёх кадров — для UI на телефоне 10 fps хватает с
+    // запасом, и снимаем нагрузку с CPU (preview-конверсия ~3-5 ms на 640×480,
+    // умножаем на reduced rate).
+    private sealed class PreviewListener : Java.Lang.Object, ImageReader.IOnImageAvailableListener
+    {
+        private readonly H264EncoderPipeline _o;
+        public PreviewListener(H264EncoderPipeline o) { _o = o; }
+
+        public void OnImageAvailable(ImageReader? reader)
+        {
+            if (reader == null) return;
+
+            // Без throttle: AcquireLatestImage сам пропустит устаревшие кадры,
+            // если YUV→ARGB не успевает за HAL fps. Естественный backpressure.
+            global::Android.Media.Image? image = null;
+            try
+            {
+                image = reader.AcquireLatestImage();
+                if (image == null) return;
+
+                var bmp = YuvToArgbBitmap(image);
+                if (bmp != null)
+                {
+                    try { _o.OnPreviewBitmap?.Invoke(bmp); }
+                    catch (System.Exception ex) { _o.ReportError($"OnPreviewBitmap threw: {ex.Message}"); }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[PCam][H264] Preview decode error: {ex.Message}");
+            }
+            finally
+            {
+                try { image?.Close(); } catch { }
+            }
+        }
+
+        // Конверсия YUV_420_888 → ARGB Bitmap. BT.601 формула, без SIMD.
+        // Достаточно быстро для 640×480 @10fps (~3-5 ms на кадр).
+        private static Bitmap? YuvToArgbBitmap(global::Android.Media.Image img)
+        {
+            int w = img.Width;
+            int h = img.Height;
+            var planes = img.GetPlanes();
+            if (planes == null || planes.Length < 3) return null;
+
+            var yPlane = planes[0];
+            var uPlane = planes[1];
+            var vPlane = planes[2];
+
+            int yStride       = yPlane.RowStride;
+            int uvStride      = uPlane.RowStride;
+            int uvPixelStride = uPlane.PixelStride;
+
+            // Копируем буферы планов в байт-массивы — внутренний цикл по
+            // ByteBuffer'у был бы медленнее.
+            var yBuf = yPlane.Buffer; var uBuf = uPlane.Buffer; var vBuf = vPlane.Buffer;
+            if (yBuf == null || uBuf == null || vBuf == null) return null;
+
+            yBuf.Rewind();
+            byte[] yData = new byte[yBuf.Remaining()]; yBuf.Get(yData);
+            uBuf.Rewind();
+            byte[] uData = new byte[uBuf.Remaining()]; uBuf.Get(uData);
+            vBuf.Rewind();
+            byte[] vData = new byte[vBuf.Remaining()]; vBuf.Get(vData);
+
+            int[] argb = new int[w * h];
+            int idx = 0;
+
+            for (int row = 0; row < h; row++)
+            {
+                int yLine = row * yStride;
+                int uvLine = (row >> 1) * uvStride;
+                for (int col = 0; col < w; col++)
+                {
+                    int Y  = yData[yLine + col] & 0xFF;
+                    int uvOff = uvLine + (col >> 1) * uvPixelStride;
+                    int U  = uData[uvOff] & 0xFF;
+                    int V  = vData[uvOff] & 0xFF;
+
+                    int Yc = Y - 16;
+                    int Uc = U - 128;
+                    int Vc = V - 128;
+                    int R  = (1192 * Yc + 1634 * Vc) >> 10;
+                    int G  = (1192 * Yc -  833 * Vc -  400 * Uc) >> 10;
+                    int B  = (1192 * Yc + 2066 * Uc) >> 10;
+                    if (R < 0) R = 0; else if (R > 255) R = 255;
+                    if (G < 0) G = 0; else if (G > 255) G = 255;
+                    if (B < 0) B = 0; else if (B > 255) B = 255;
+
+                    argb[idx++] = unchecked((int)0xFF000000) | (R << 16) | (G << 8) | B;
+                }
+            }
+
+            return Bitmap.CreateBitmap(argb, w, h, Bitmap.Config.Argb8888!);
         }
     }
 

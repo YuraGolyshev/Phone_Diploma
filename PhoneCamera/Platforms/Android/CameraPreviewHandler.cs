@@ -38,6 +38,8 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
     // ── H.264 pipeline (активен только когда VirtualView.Format == StreamFormat.H264) ──
     private H264EncoderPipeline? _h264;
     private string? _backCameraId;
+    // Текущий показанный preview-Bitmap для H.264 ветки. Recycle'ится при замене.
+    private global::Android.Graphics.Bitmap? _h264PrevBitmap;
 
     public CameraPreviewHandler() : base(Mapper) { }
 
@@ -332,6 +334,24 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         _h264.OnError = (msg) =>
             System.Diagnostics.Debug.WriteLine($"[PCam][Android] H264 pipeline error: {msg}");
 
+        // Preview: рисуем 640×480 ARGB Bitmap прямо в наш ImageView через Post().
+        // Вызывается с camera-thread'а; Post переводит в UI-thread.
+        var preview = PlatformView;
+        _h264.OnPreviewBitmap = bmp =>
+        {
+            try
+            {
+                preview.Post(() =>
+                {
+                    var prev = _h264PrevBitmap;
+                    _h264PrevBitmap = bmp;
+                    preview.SetImageBitmap(bmp);
+                    prev?.Recycle();
+                });
+            }
+            catch { try { bmp?.Recycle(); } catch { } }
+        };
+
         System.Diagnostics.Debug.WriteLine(
             $"[PCam][Android] StartH264 → cam={_backCameraId} {w}x{h}@{fps}fps");
         _h264.Start(_backCameraId!, w, h, fps);
@@ -344,6 +364,15 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         try { _h264.Stop(); } catch { }
         try { _h264.Dispose(); } catch { }
         _h264 = null;
+
+        // Удаляем последний preview Bitmap — он живёт на ImageView, после Stop
+        // он там и остаётся «зависнувшим». Через Post переключим на CameraX-поток
+        // (он сам перезапишет ImageView когда стартует), а наш Bitmap recycle'нем.
+        var iv = PlatformView;
+        var bmp = _h264PrevBitmap;
+        _h264PrevBitmap = null;
+        if (bmp != null)
+            iv.Post(() => { try { bmp.Recycle(); } catch { } });
     }
 
     private static void MapIsRunning(CameraPreviewHandler handler, CameraPreviewView view)
@@ -496,7 +525,7 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
                     try
                     {
                         bool isStreaming = cb != null;
-                        int quality      = isStreaming ? 50 : 50;
+                        int quality      = isStreaming ? 25 : 25;
                         int effectiveRot = isStreaming ? 0 : imgRot;
                         long t1 = _diagSw.ElapsedMilliseconds;
                         bool ok = EncodeNv21ToJpeg(imgW, imgH, effectiveRot, quality);
