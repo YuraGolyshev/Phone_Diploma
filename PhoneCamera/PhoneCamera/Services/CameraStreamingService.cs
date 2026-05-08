@@ -30,6 +30,7 @@ public sealed class CameraStreamingService : IDisposable
     private Task?          _sendTask;
     private CancellationTokenSource? _sendCts;
     private bool _disposed;
+    private bool _isH264;   // выбран H.264-протокол → запрещаем drop-oldest, делаем backpressure
 
     public bool    IsConnected => _client?.Connected == true && _stream != null;
     public string? ServerIp    { get; private set; }
@@ -64,13 +65,26 @@ public sealed class CameraStreamingService : IDisposable
             if (handshakeByte != 0x01)
                 await _stream.WriteAsync(new[] { handshakeByte }, 0, 1).ConfigureAwait(false);
 
+            _isH264 = (handshakeByte == 0x02);
+
             _sendCts = new CancellationTokenSource();
-            // capacity=1: не более одного кадра в ожидании (+ один в отправке).
-            // DropWrite позволяет TryWrite возвращать false — DropOldest реализуем вручную,
-            // чтобы корректно вернуть рентованный буфер в ArrayPool при вытеснении.
-            _channel = Channel.CreateBounded<(byte[], int)>(new BoundedChannelOptions(1)
+            // Разная стратегия по формату:
+            //   JPEG  — кадр самодостаточен, потеря не ломает декодер. Capacity=1 +
+            //           drop-oldest (вытесняем старый кадр свежим), сеть никогда
+            //           не отстаёт от текущего момента.
+            //   H.264 — chunks являются последовательностью NAL-юнитов, потеря любого
+            //           => мусор на стороне декодера до следующего IDR (~секунда).
+            //           Capacity=8 + FullMode=Wait: при отставании сети encoder сам
+            //           заблокируется на EnqueueRawBytes → MediaCodec упрётся в свой
+            //           output-queue → Camera2 sensor сбавит темп. Естественный
+            //           backpressure через всю цепочку, без потерь.
+            int capacity = _isH264 ? 8 : 1;
+            var fullMode = _isH264
+                ? BoundedChannelFullMode.Wait
+                : BoundedChannelFullMode.DropWrite;
+            _channel = Channel.CreateBounded<(byte[], int)>(new BoundedChannelOptions(capacity)
             {
-                FullMode                     = BoundedChannelFullMode.DropWrite,
+                FullMode                     = fullMode,
                 SingleReader                 = true,
                 SingleWriter                 = true,
                 AllowSynchronousContinuations = false,
@@ -145,15 +159,43 @@ public sealed class CameraStreamingService : IDisposable
         packet[8 + len + 2] = E2;
         packet[8 + len + 3] = E3;
 
-        // Drop-oldest вручную: если TryWrite вернул false (канал полон),
-        // вычитываем старый кадр, возвращаем его буфер в пул и пишем новый.
-        if (!ch.Writer.TryWrite((packet, packetLen)))
+        if (_isH264)
         {
-            if (ch.Reader.TryRead(out var old))
-                ArrayPool<byte>.Shared.Return(old.Packet);
-
+            // H.264: НЕ дропаем — потеря NAL-юнита ломает поток до следующего IDR.
+            // FullMode=Wait, capacity=8 → нормальный backpressure до MediaCodec.
+            // ВАЖНО: с таймаутом 500ms. Без него output-thread может застрять навсегда
+            // на большом 4K-кадре + slow Wi-Fi, и при Stop приложение упадёт
+            // (NRE через JNI после release encoder'а). С таймаутом: если сеть совсем
+            // встала на 500ms — drop'аем NAL chunk и продолжаем, output-thread
+            // может корректно выйти на Stop.
+            const int writeTimeoutMs = 500;
+            try
+            {
+                if (!ch.Writer.TryWrite((packet, packetLen)))
+                {
+                    using var ctsTimeout = new CancellationTokenSource(writeTimeoutMs);
+                    ch.Writer.WriteAsync((packet, packetLen), ctsTimeout.Token).AsTask().Wait();
+                }
+            }
+            catch
+            {
+                // OperationCanceled / ChannelClosed — возвращаем буфер в пул.
+                ArrayPool<byte>.Shared.Return(packet);
+            }
+        }
+        else
+        {
+            // JPEG: drop-oldest вручную — если TryWrite вернул false (канал полон),
+            // вычитываем старый кадр, возвращаем его буфер в пул и пишем новый.
+            // Кадры самодостаточны — потеря не ломает декодер.
             if (!ch.Writer.TryWrite((packet, packetLen)))
-                ArrayPool<byte>.Shared.Return(packet); // канал завершён — выбрасываем
+            {
+                if (ch.Reader.TryRead(out var old))
+                    ArrayPool<byte>.Shared.Return(old.Packet);
+
+                if (!ch.Writer.TryWrite((packet, packetLen)))
+                    ArrayPool<byte>.Shared.Return(packet); // канал завершён — выбрасываем
+            }
         }
     }
 

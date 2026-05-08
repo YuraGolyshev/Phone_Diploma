@@ -100,8 +100,11 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
         // SignalEndOfInputStream завершает encoder корректно (нужно перед Stop()).
         try { _encoder?.SignalEndOfInputStream(); } catch { }
 
-        // Дождёмся выхода output thread (он сам остановится по EOS или _running=false)
-        try { _outputThread?.Join(500); } catch { }
+        // Ждём выход output-thread. На 4K он может быть в WriteAsync.Wait() в Channel
+        // CameraStreamingService — там стоит таймаут 500ms, плюс DequeueOutputBuffer'у
+        // дать дренировать оставшиеся NAL'ы. Берём 2000ms с запасом, чтобы Stop был
+        // надёжный без шанса на NRE через JNI после release encoder'а.
+        try { _outputThread?.Join(2000); } catch { }
         _outputThread = null;
 
         try { _encoder?.Stop();    } catch { }
