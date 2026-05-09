@@ -324,6 +324,12 @@ public partial class MainPage : ContentPage
         System.Diagnostics.Debug.WriteLine($"[PCam][UI] Lock: {(_isLocked ? "locked" : "unlocked")}");
     }
 
+    private void OnPreviewCheckedChanged(object? sender, CheckedChangedEventArgs e)
+    {
+        System.Diagnostics.Debug.WriteLine($"[PCam][UI] Preview: {(e.Value ? "enabled" : "disabled")}");
+        CameraPreview.PreviewEnabled = e.Value;
+    }
+
     private async void OnStartStopClicked(object? sender, EventArgs e)
     {
         SetDropdownOpen(false, false, false);

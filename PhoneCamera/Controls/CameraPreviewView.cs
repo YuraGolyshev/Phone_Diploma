@@ -26,6 +26,11 @@ public class CameraPreviewView : View
         BindableProperty.Create(nameof(IsScanning), typeof(bool), typeof(CameraPreviewView), false,
             propertyChanged: (b, o, n) => ((CameraPreviewView)b)._isScanning = (bool)n);
 
+    /// <summary>Включение/отключение превью. Когда false, камера не отправляет превью-кадры,
+    /// но стрим (H.264/JPEG) и QR-сканирование продолжают работать.</summary>
+    public static readonly BindableProperty PreviewEnabledProperty =
+        BindableProperty.Create(nameof(PreviewEnabled), typeof(bool), typeof(CameraPreviewView), true);
+
     public bool IsRunning
     {
         get => (bool)GetValue(IsRunningProperty);
@@ -42,6 +47,12 @@ public class CameraPreviewView : View
     {
         get => (StreamFormat)GetValue(FormatProperty);
         set => SetValue(FormatProperty, value);
+    }
+
+    public bool PreviewEnabled
+    {
+        get => (bool)GetValue(PreviewEnabledProperty);
+        set => SetValue(PreviewEnabledProperty, value);
     }
 
     /// <summary>

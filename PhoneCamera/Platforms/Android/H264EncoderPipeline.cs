@@ -43,7 +43,16 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
     // bitmap pool).
     public System.Action<Bitmap>?            OnPreviewBitmap;
 
+    // Когда false — OnPreviewBitmap не будет вызываться и превью-reader не создаётся
+    private volatile bool                    _previewEnabled = true;
+
     public bool IsRunning => _running;
+
+    public bool PreviewEnabled
+    {
+        get => _previewEnabled;
+        set => _previewEnabled = value;
+    }
 
     // Размер preview-стрима. Full HD 1920×1080 — для красивой картинки в UI.
     // Внимание: на ряде HAL комбинация PRIV (encoder) + YUV (preview) при таких
@@ -90,19 +99,22 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
             // На многих HAL добавление этого surface рядом с encoder (PRIV+YUV)
             // может ограничить fps до 30. Если это критично — закомментируй
             // блок ниже, и будет работать как раньше, без превью.
-            try
+            if (_previewEnabled)
             {
-                _previewReader = ImageReader.NewInstance(
-                    PREVIEW_W, PREVIEW_H,
-                    global::Android.Graphics.ImageFormatType.Yuv420888, 2);
-                _previewReader.SetOnImageAvailableListener(
-                    new PreviewListener(this), _cameraHandler);
-            }
-            catch (System.Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(
-                    $"[PCam][H264] Preview reader init failed: {ex.Message} (продолжаем без превью)");
-                _previewReader = null;
+                try
+                {
+                    _previewReader = ImageReader.NewInstance(
+                        PREVIEW_W, PREVIEW_H,
+                        global::Android.Graphics.ImageFormatType.Yuv420888, 2);
+                    _previewReader.SetOnImageAvailableListener(
+                        new PreviewListener(this), _cameraHandler);
+                }
+                catch (System.Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(
+                        $"[PCam][H264] Preview reader init failed: {ex.Message} (продолжаем без превью)");
+                    _previewReader = null;
+                }
             }
 
             ConfigureEncoder(width, height, fps);

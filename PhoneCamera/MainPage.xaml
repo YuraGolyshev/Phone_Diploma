@@ -176,14 +176,27 @@
                        Text="Press Start"
                        TextColor="#CCFFFFFF"
                        FontSize="13" />
-                <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
-                    <CheckBox x:Name="LockCheckBox"
-                              CheckedChanged="OnLockCheckedChanged"
-                              Color="White" />
-                    <Label Text="Зафиксировать"
-                           TextColor="White"
-                           FontSize="13"
-                           VerticalOptions="Center" />
+                <!-- Чекбоксы -->
+                <HorizontalStackLayout Spacing="20">
+                    <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                        <CheckBox x:Name="LockCheckBox"
+                      CheckedChanged="OnLockCheckedChanged"
+                      Color="White" />
+                        <Label Text="Зафиксировать"
+                   TextColor="White"
+                   FontSize="13"
+                   VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                        <CheckBox x:Name="PreviewCheckBox"
+                      IsChecked="True"
+                      CheckedChanged="OnPreviewCheckedChanged"
+                      Color="White" />
+                        <Label Text="Показать превью"
+                   TextColor="White"
+                   FontSize="13"
+                   VerticalOptions="Center" />
+                    </HorizontalStackLayout>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
 

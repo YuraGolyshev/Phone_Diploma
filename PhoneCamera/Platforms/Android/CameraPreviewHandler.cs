@@ -26,6 +26,7 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
     private ProcessCameraProvider? cameraProvider;
     private ImageAnalysis? currentAnalysis;
     private Java.Util.Concurrent.IExecutorService? _analyzerExecutor;
+    private int _previewGeneration;
 
     public static PropertyMapper<CameraPreviewView, CameraPreviewHandler> Mapper =
         new PropertyMapper<CameraPreviewView, CameraPreviewHandler>(ViewMapper)
@@ -33,6 +34,7 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
             [nameof(CameraPreviewView.IsRunning)] = MapIsRunning,
             [nameof(CameraPreviewView.SelectedConfig)] = MapSelectedConfig,
             [nameof(CameraPreviewView.Format)] = MapFormat,
+            [nameof(CameraPreviewView.PreviewEnabled)] = MapPreviewEnabled,
         };
 
     // ── H.264 pipeline (активен только когда VirtualView.Format == StreamFormat.H264) ──
@@ -40,6 +42,9 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
     private string? _backCameraId;
     // Текущий показанный preview-Bitmap для H.264 ветки. Recycle'ится при замене.
     private global::Android.Graphics.Bitmap? _h264PrevBitmap;
+    // Состояние превью
+    private bool _previewEnabled = true;
+    private global::Android.Graphics.Paint? _previewDisabledPaint;
 
     public CameraPreviewHandler() : base(Mapper) { }
 
@@ -271,7 +276,7 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
             _analyzerExecutor = Java.Util.Concurrent.Executors.NewSingleThreadExecutor();
 
             currentAnalysis = analysisBuilder.Build();
-            currentAnalysis.SetAnalyzer(_analyzerExecutor, new DispatchingAnalyzer(VirtualView, imageView, 2));
+            currentAnalysis.SetAnalyzer(_analyzerExecutor, new DispatchingAnalyzer(VirtualView, imageView, 2, this));
             System.Diagnostics.Debug.WriteLine("[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer");
 
             try
@@ -325,6 +330,7 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         StopH264();
 
         _h264 = new H264EncoderPipeline();
+        _h264.PreviewEnabled = _previewEnabled;
         _h264.OnNalChunk = (data, len, isKey) =>
         {
             // VirtualView.H264NalReady берётся в момент вызова — MainPage его подвязывает
@@ -337,19 +343,39 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         // Preview: рисуем 640×480 ARGB Bitmap прямо в наш ImageView через Post().
         // Вызывается с camera-thread'а; Post переводит в UI-thread.
         var preview = PlatformView;
+        if (_previewGeneration == 0)
+            _previewGeneration = 1; // первый запуск
+        int gen = _previewGeneration; // захватываем текущее поколение
+
         _h264.OnPreviewBitmap = bmp =>
         {
+            // Если поколение сменилось (произошёл перезапуск), игнорируем битмап
+            if (gen != _previewGeneration)
+            {
+                bmp?.Recycle();
+                return;
+            }
             try
             {
+                var preview = PlatformView;
                 preview.Post(() =>
                 {
+                    // Дополнительная проверка внутри Post на случай, если за время ожидания поколение опять сменилось
+                    if (gen != _previewGeneration)
+                    {
+                        bmp?.Recycle();
+                        return;
+                    }
                     var prev = _h264PrevBitmap;
                     _h264PrevBitmap = bmp;
                     preview.SetImageBitmap(bmp);
                     prev?.Recycle();
                 });
             }
-            catch { try { bmp?.Recycle(); } catch { } }
+            catch
+            {
+                try { bmp?.Recycle(); } catch { }
+            }
         };
 
         System.Diagnostics.Debug.WriteLine(
@@ -372,7 +398,57 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         var bmp = _h264PrevBitmap;
         _h264PrevBitmap = null;
         if (bmp != null)
+        {
             iv.Post(() => { try { bmp.Recycle(); } catch { } });
+        }
+
+    }
+
+    private void DisplayPreviewDisabledMessage()
+    {
+        var iv = PlatformView;
+        const int width = 960;
+        const int height = 540;
+
+        iv.Post(() =>
+        {
+            try
+            {
+                // Создаём чёрный Bitmap с белым текстом "Превью отключено"
+                var bmp = global::Android.Graphics.Bitmap.CreateBitmap(width, height, global::Android.Graphics.Bitmap.Config.Argb8888!);
+                if (bmp == null) return;
+
+                var canvas = new global::Android.Graphics.Canvas(bmp);
+                canvas.DrawColor(global::Android.Graphics.Color.Black);
+
+                if (_previewDisabledPaint == null)
+                {
+                    _previewDisabledPaint = new global::Android.Graphics.Paint
+                    {
+                        Color = global::Android.Graphics.Color.White,
+                        TextSize = 48f,
+                        TextAlign = global::Android.Graphics.Paint.Align.Center
+                    };
+                    _previewDisabledPaint.SetTypeface(global::Android.Graphics.Typeface.Create("sans-serif", global::Android.Graphics.TypefaceStyle.Bold));
+                }
+
+                string text = "Превью отключено";
+                canvas.DrawText(text, width / 2f, height / 2f, _previewDisabledPaint);
+
+                iv.SetImageBitmap(bmp);
+
+                // Recycle старый Bitmap
+                if (_h264PrevBitmap != null)
+                {
+                    try { _h264PrevBitmap.Recycle(); } catch { }
+                    _h264PrevBitmap = null;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[PCam][Android] DisplayPreviewDisabledMessage error: {ex.Message}");
+            }
+        });
     }
 
     private static void MapIsRunning(CameraPreviewHandler handler, CameraPreviewView view)
@@ -406,6 +482,29 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         }
     }
 
+    private static void MapPreviewEnabled(CameraPreviewHandler handler, CameraPreviewView view)
+    {
+        System.Diagnostics.Debug.WriteLine(
+            $"[PCam][Android] MapPreviewEnabled → PreviewEnabled={view.PreviewEnabled}");
+
+        handler._previewEnabled = view.PreviewEnabled;
+
+        if (view.IsRunning && view.Format == StreamFormat.H264)
+        {
+            // Увеличиваем поколение ДО остановки, чтобы старые колбэки начали игнорироваться
+            Interlocked.Increment(ref handler._previewGeneration);
+            handler.StopCamera();
+            handler.StartCamera();
+
+            if (!view.PreviewEnabled)
+                handler.DisplayPreviewDisabledMessage();
+        }
+        else if (!view.PreviewEnabled)
+        {
+            handler.DisplayPreviewDisabledMessage();
+        }
+    }
+
     // ─────────────────────────────────────────────────────────────────────────
     // FrameAnalyzer: YUV→JPEG для стриминга, Gray8→ZXing для сканирования QR.
     // Превью: кадры декодируются из JPEG прямо в Bitmap и выставляются на
@@ -416,6 +515,7 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         private readonly CameraPreviewView _view;
         private readonly ImageView         _imageView;
         private readonly OrderedDelivery   _delivery;
+        private readonly CameraPreviewHandler _handler;
         private int  _count;
 
         // Shared across all workers so that only one fires QR callback per 200ms window.
@@ -459,11 +559,12 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
 
         public FrameAnalyzer(CameraPreviewView view, ImageView imageView,
                              OrderedDelivery delivery,
-                             long[] sharedLastQrMs, long[] sharedLastDisplayMs)
+                             long[] sharedLastQrMs, long[] sharedLastDisplayMs, CameraPreviewHandler handler)
         {
             _view                = view;
             _imageView           = imageView;
             _delivery            = delivery;
+            _handler             = handler;
             _sharedLastQrMs      = sharedLastQrMs;
             _sharedLastDisplayMs = sharedLastDisplayMs;
             EnsureJniIds();
@@ -536,7 +637,7 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
                         // SetImageBitmap() заменяет картинку без промежуточного чёрного кадра
                         // (в отличие от ImageSource.FromStream, который сбрасывает старый Source).
                         // _prevDisplayBitmap — только UI-поток, рецикл после замены.
-                        if (ok)
+                        if (ok && _handler._previewEnabled)
                         {
                             long prevDisp = Volatile.Read(ref _sharedLastDisplayMs[0]);
                             bool doDisp = nowMs - prevDisp >= 33   // ≤30fps per window
@@ -856,6 +957,7 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
     {
         private readonly FrameAnalyzer[] _workers;
         private readonly OrderedDelivery _delivery;
+        private readonly CameraPreviewHandler _handler;
         private long _seqCounter = -1;
 
         private readonly long[] _sharedLastQrMs      = new long[1];
@@ -864,13 +966,14 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         private readonly System.Diagnostics.Stopwatch _sw = System.Diagnostics.Stopwatch.StartNew();
         private long _lastLogMs;
 
-        public DispatchingAnalyzer(CameraPreviewView view, ImageView imageView, int workerCount)
+        public DispatchingAnalyzer(CameraPreviewView view, ImageView imageView, int workerCount, CameraPreviewHandler handler)
         {
+            _handler  = handler;
             _delivery = new OrderedDelivery(workerCount);
             _workers  = new FrameAnalyzer[workerCount];
             for (int i = 0; i < workerCount; i++)
                 _workers[i] = new FrameAnalyzer(view, imageView, _delivery,
-                                                 _sharedLastQrMs, _sharedLastDisplayMs);
+                                                 _sharedLastQrMs, _sharedLastDisplayMs, _handler);
             System.Diagnostics.Debug.WriteLine($"[PCam][Android] DispatchingAnalyzer created with {workerCount} workers");
         }
 
