@@ -546,7 +546,7 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         // bitmap 2MB вместо 8MB → меньше нагрузки на GC и UI thread,
         // на экране всё равно scale CenterCrop, разница не видна.
         private readonly BitmapFactory.Options _displayDecodeOpts =
-            new() { InSampleSize = 2 };
+            new() { InSampleSize = 1 };
 
         // Шаг 5: переиспользуемый Java byte[] для YuvImage (устраняет ~3MB LOS-аллокацию per frame)
         private IntPtr _jNv21Ref;

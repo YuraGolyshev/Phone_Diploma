@@ -61,8 +61,8 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
     // 1080p — за счёт throttle '1 из 2' получаем плавные ~15 fps превью даже на
     // 30fps source, что приятно глазу. Если хочется ещё больше fps — снизить
     // throttle до '1 из 1' (но CPU-bound).
-    private const int PREVIEW_W = 1920;
-    private const int PREVIEW_H = 1080;
+    private const int PREVIEW_W = 960;
+    private const int PREVIEW_H = 540;
 
     private MediaCodec?            _encoder;
     private Surface?               _inputSurface;
