@@ -215,8 +215,11 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
     {
         var config = VirtualView.SelectedConfig;
 
-        // ── Ветка H.264: МИНУЯ CameraX, прямой Camera2+MediaCodec → 60fps ────────────
-        if (VirtualView.Format == StreamFormat.H264 && !VirtualView.IsScanning)
+        // ── Ветка H.264 / H.265: МИНУЯ CameraX, прямой Camera2+MediaCodec → 60fps ──
+        // Обе ветки используют один и тот же H264EncoderPipeline (отличается только
+        // MIME-тип у MediaCodec и handshake-байт у сервера).
+        if ((VirtualView.Format == StreamFormat.H264 || VirtualView.Format == StreamFormat.H265)
+            && !VirtualView.IsScanning)
         {
             StopCameraXOnly();
             StartH264();
@@ -331,10 +334,12 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
 
         _h264 = new H264EncoderPipeline();
         _h264.PreviewEnabled = _previewEnabled;
+        _h264.UseHevc = (VirtualView.Format == StreamFormat.H265);
         _h264.OnNalChunk = (data, len, isKey) =>
         {
             // VirtualView.H264NalReady берётся в момент вызова — MainPage его подвязывает
             // на _streaming.EnqueueRawBytes. Если ещё не подвязан — кадр выкидывается.
+            // (Для H.265 идут HEVC NAL units, фреймер на сервере одинаковый.)
             try { VirtualView?.H264NalReady?.Invoke(data, len, isKey); } catch { }
         };
         _h264.OnError = (msg) =>
@@ -379,7 +384,8 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         };
 
         System.Diagnostics.Debug.WriteLine(
-            $"[PCam][Android] StartH264 → cam={_backCameraId} {w}x{h}@{fps}fps");
+            $"[PCam][Android] StartH264 → cam={_backCameraId} {w}x{h}@{fps}fps " +
+            $"codec={(_h264.UseHevc ? "HEVC" : "AVC")}");
         _h264.Start(_backCameraId!, w, h, fps);
     }
 
@@ -489,7 +495,7 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
 
         handler._previewEnabled = view.PreviewEnabled;
 
-        if (view.IsRunning && view.Format == StreamFormat.H264)
+        if (view.IsRunning && (view.Format == StreamFormat.H264 || view.Format == StreamFormat.H265))
         {
             // Увеличиваем поколение ДО остановки, чтобы старые колбэки начали игнорироваться
             Interlocked.Increment(ref handler._previewGeneration);

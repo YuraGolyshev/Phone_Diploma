@@ -46,12 +46,24 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
     // Когда false — OnPreviewBitmap не будет вызываться и превью-reader не создаётся
     private volatile bool                    _previewEnabled = true;
 
+    // Кодек: false = H.264 (AVC, по умолчанию), true = H.265 (HEVC).
+    // Меняется ДО Start() — внутри Start() читается один раз для ConfigureEncoder.
+    private volatile bool                    _useHevc;
+
     public bool IsRunning => _running;
 
     public bool PreviewEnabled
     {
         get => _previewEnabled;
         set => _previewEnabled = value;
+    }
+
+    /// <summary>true → MediaCodec открывается на video/hevc вместо video/avc.
+    /// NAL-стрим всё равно идёт в Annex-B, фреймер CameraStreamingService не различает.</summary>
+    public bool UseHevc
+    {
+        get => _useHevc;
+        set => _useHevc = value;
     }
 
     // Размер preview-стрима. Full HD 1920×1080 — для красивой картинки в UI.
@@ -175,17 +187,27 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
     // ── Encoder setup ───────────────────────────────────────────────────────
     private void ConfigureEncoder(int w, int h, int fps)
     {
-        _encoder = MediaCodec.CreateEncoderByType(MediaFormat.MimetypeVideoAvc!)
-                   ?? throw new System.InvalidOperationException("AVC encoder not available");
+        // Выбор MIME и профиля по флагу _useHevc. NAL-формат на выходе один и тот же
+        // (Annex-B chunks через MediaCodec output buffers), отличается только
+        // содержимое внутри chunk'ов — AVC NAL units vs HEVC NAL units. Серверная
+        // ветка различает по handshake-байту в TCP, а не по контенту.
+        string mime = _useHevc ? MediaFormat.MimetypeVideoHevc! : MediaFormat.MimetypeVideoAvc!;
+        int    profile = _useHevc
+            ? (int)MediaCodecProfileType.Hevcprofilemain
+            : (int)MediaCodecProfileType.Avcprofilebaseline;
+        string codecLabel = _useHevc ? "HEVC" : "AVC";
 
-        var fmt = MediaFormat.CreateVideoFormat(MediaFormat.MimetypeVideoAvc!, w, h)!;
+        _encoder = MediaCodec.CreateEncoderByType(mime)
+                   ?? throw new System.InvalidOperationException($"{codecLabel} encoder not available");
+
+        var fmt = MediaFormat.CreateVideoFormat(mime, w, h)!;
         // COLOR_FormatSurface = 0x7F000789 (= 2130708361). Используем числовую константу,
         // т.к. enum Xamarin может различаться по именам между релизами.
         fmt.SetInteger(MediaFormat.KeyColorFormat, (int)MediaCodecCapabilities.Formatsurface);
         fmt.SetInteger(MediaFormat.KeyBitRate,        ChooseBitrate(w, h, fps));
         fmt.SetInteger(MediaFormat.KeyFrameRate,      fps);
         fmt.SetInteger(MediaFormat.KeyIFrameInterval, CameraSettings.H264_I_FRAME_INTERVAL_SECONDS);
-        fmt.SetInteger(MediaFormat.KeyProfile,        (int)MediaCodecProfileType.Avcprofilebaseline);
+        fmt.SetInteger(MediaFormat.KeyProfile,        profile);
 
         // Hint'ы на low-latency и 60fps operating rate (новые API)
         if (AOS.Build.VERSION.SdkInt >= AOS.BuildVersionCodes.Q)
@@ -205,6 +227,9 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
         _encoder.Configure(fmt, null, null, MediaCodecConfigFlags.Encode);
         _inputSurface = _encoder.CreateInputSurface();
         _encoder.Start();
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[PCam][H264] Encoder configured: codec={codecLabel} ({mime}) {w}x{h}@{fps}fps");
     }
 
     private static int ChooseBitrate(int w, int h, int fps)

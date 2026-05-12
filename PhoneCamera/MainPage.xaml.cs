@@ -151,10 +151,11 @@ public partial class MainPage : ContentPage
                 : fpsOptions.Count > 0    ? fpsOptions[0]
                 : 30;
 
-        // Список форматов фиксирован — два варианта. Дефолт — H.264.
+        // Список форматов фиксирован — три варианта. Дефолт — H.264.
         FormatList.ItemsSource = new List<FormatOption>
         {
             new FormatOption(StreamFormat.H264),
+            new FormatOption(StreamFormat.H265),
             new FormatOption(StreamFormat.Jpeg),
         };
 
@@ -290,11 +291,25 @@ public partial class MainPage : ContentPage
         CameraPreview.SelectedConfig = cfg;
     }
 
+    private static string FormatName(StreamFormat f) => f switch
+    {
+        StreamFormat.H264 => "H.264",
+        StreamFormat.H265 => "H.265",
+        _                 => "JPEG",
+    };
+
+    private static byte HandshakeByteFor(StreamFormat f) => f switch
+    {
+        StreamFormat.H264 => 0x02,
+        StreamFormat.H265 => 0x03,
+        _                 => 0x01, // JPEG legacy — handshake-байт совпадает с первым байтом FRAME_START
+    };
+
     private void UpdateLabels()
     {
         ResolutionLabel.Text = $"Разрешение: {_curW}×{_curH}";
         FpsLabel.Text        = $"FPS: {_curFps}";
-        FormatLabel.Text     = $"Формат: {(_selectedFormat == StreamFormat.H264 ? "H.264" : "JPEG")}";
+        FormatLabel.Text     = $"Формат: {FormatName(_selectedFormat)}";
     }
 
     private void UpdateFormatHeaderEnabled()
@@ -302,7 +317,7 @@ public partial class MainPage : ContentPage
         // Визуально «затемняем» шторку формата на время стрима.
         FormatHeader.Opacity = _streamingActive ? 0.4 : 1.0;
         FormatLabel.Text =
-            $"Формат: {(_selectedFormat == StreamFormat.H264 ? "H.264" : "JPEG")}" +
+            $"Формат: {FormatName(_selectedFormat)}" +
             (_streamingActive ? "  (заблокировано)" : "");
         // Если на момент блокировки шторка была открыта — закрываем её.
         if (_streamingActive && _fmtDropdownOpen)
@@ -383,13 +398,13 @@ public partial class MainPage : ContentPage
                     System.Diagnostics.Debug.WriteLine(
                         $"[PCam][UI] Format changed {_lastConnectedFormat.Value} → {_selectedFormat}, reconnecting to {ip}:{port}");
                     _streaming.Disconnect();
-                    byte newHandshake = _selectedFormat == StreamFormat.H264 ? (byte)0x02 : (byte)0x01;
-                    ConnectionLabel.Text = $"Переподключение к {ip}:{port} ({_selectedFormat})...";
+                    byte newHandshake = HandshakeByteFor(_selectedFormat);
+                    ConnectionLabel.Text = $"Переподключение к {ip}:{port} ({FormatName(_selectedFormat)})...";
                     bool ok = await _streaming.ConnectAsync(ip, port, newHandshake);
                     if (ok)
                     {
                         _lastConnectedFormat = _selectedFormat;
-                        ConnectionLabel.Text = $"Подключено: {ip}:{port} ({_selectedFormat})";
+                        ConnectionLabel.Text = $"Подключено: {ip}:{port} ({FormatName(_selectedFormat)})";
                     }
                     else
                     {
@@ -398,10 +413,11 @@ public partial class MainPage : ContentPage
                 }
             }
 
-            // Если уже подключены и выбран H.264 — переключаем pipeline на H.264.
+            // Если уже подключены и выбран H.264/H.265 — переключаем pipeline на encoder-ветку.
             // Иначе остаёмся на CameraX (Format=Jpeg) — стрим всё равно будет JPEG.
-            CameraPreview.Format = (_streaming.IsConnected && _selectedFormat == StreamFormat.H264)
-                ? StreamFormat.H264
+            bool encoderFormat = _selectedFormat == StreamFormat.H264 || _selectedFormat == StreamFormat.H265;
+            CameraPreview.Format = (_streaming.IsConnected && encoderFormat)
+                ? _selectedFormat
                 : StreamFormat.Jpeg;
         }
         else
@@ -506,9 +522,10 @@ public partial class MainPage : ContentPage
         }
 
         string ip = parts[0];
-        bool wantH264 = _selectedFormat == StreamFormat.H264;
-        byte handshake = wantH264 ? (byte)0x02 : (byte)0x01;
-        ConnectionLabel.Text = $"Подключение к {ip}:{port} ({(wantH264 ? "H.264" : "JPEG")})...";
+        bool wantEncoder = _selectedFormat == StreamFormat.H264 || _selectedFormat == StreamFormat.H265;
+        byte handshake = HandshakeByteFor(_selectedFormat);
+        string fmtName = FormatName(_selectedFormat);
+        ConnectionLabel.Text = $"Подключение к {ip}:{port} ({fmtName})...";
 
         Task.Run(async () =>
         {
@@ -516,15 +533,15 @@ public partial class MainPage : ContentPage
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 ConnectionLabel.Text = ok
-                    ? $"Подключено: {ip}:{port} ({(wantH264 ? "H.264" : "JPEG")})"
+                    ? $"Подключено: {ip}:{port} ({fmtName})"
                     : $"Ошибка подключения к {ip}:{port}";
                 if (ok)
                 {
                     _lastConnectedFormat = _selectedFormat;
                     // Format переключается при Start; если стрим уже активен в момент
                     // подключения — переключаем сразу.
-                    if (_streamingActive && wantH264)
-                        CameraPreview.Format = StreamFormat.H264;
+                    if (_streamingActive && wantEncoder)
+                        CameraPreview.Format = _selectedFormat;
                 }
             });
         });
@@ -545,5 +562,10 @@ public record FpsOption(int Fps)
 
 public record FormatOption(StreamFormat Format)
 {
-    public string DisplayName => Format == StreamFormat.H264 ? "H.264" : "JPEG";
+    public string DisplayName => Format switch
+    {
+        StreamFormat.H264 => "H.264",
+        StreamFormat.H265 => "H.265",
+        _                 => "JPEG",
+    };
 }

@@ -6,6 +6,10 @@ public enum StreamFormat
     Jpeg,
     /// <summary>H.264 NAL-чанки через MediaCodec encoder Surface (60 fps на 1080p).</summary>
     H264,
+    /// <summary>H.265 (HEVC) NAL-чанки через MediaCodec encoder Surface. То же что H.264,
+    /// но более компактный battlerate (~30-50% меньше при том же качестве). Не все устройства
+    /// поддерживают аппаратный HEVC encoder — в этом случае Start упадёт с ошибкой.</summary>
+    H265,
 }
 
 public class CameraPreviewView : View
