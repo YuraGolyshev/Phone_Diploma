@@ -45,6 +45,9 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
     // Состояние превью
     private bool _previewEnabled = true;
     private global::Android.Graphics.Paint? _previewDisabledPaint;
+    // Сейчас на ImageView показан "stub" (заглушка "Превью отключено") — при следующем
+    // настоящем кадре нужно вернуть ScaleType с FitCenter обратно на CenterCrop.
+    private volatile bool _isPreviewDisabledShown;
 
     public CameraPreviewHandler() : base(Mapper) { }
 
@@ -262,16 +265,15 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
                 targetFps = (int)Math.Round(config.MaxFps);
                 if (targetFps > 0)
                 {
-                    // Все Camera2-настройки (3A, EIS, image-processing, sensor manual,
-                    // AE FPS range) применяются единообразно через общий CameraSettings.
-                    // Тыкать настройки → Platforms/Android/CameraSettings.cs.
+                    // JPEG / CameraX path: только AE target FPS range через Camera2Interop.
+                    // Полный CameraSettings.ApplyToExtender (как в H.264) на этом пути
+                    // ломает 30 fps на 1080p — CameraX выбирает sensor mode под use case
+                    // ImageAnalysis, а навязанные image-processing/AF ключи конфликтуют
+                    // и HAL фоллбэчит на меньший fps. См. CameraSettings.ApplyJpegMinimal.
                     var extender = new Camera2Interop.Extender(analysisBuilder);
-                    CameraSettings.ApplyToExtender(extender, targetFps);
+                    CameraSettings.ApplyJpegMinimal(extender, targetFps);
                     System.Diagnostics.Debug.WriteLine(
-                        $"[PCam][Android] StartCamera fps={targetFps} " +
-                        $"(3A={(CameraSettings.ENABLE_3A ? "AUTO" : "OFF")}, " +
-                        $"EIS={(CameraSettings.ENABLE_VIDEO_STABILIZATION ? "ON" : "OFF")}, " +
-                        $"NR={CameraSettings.NOISE_REDUCTION_MODE}/Edge={CameraSettings.EDGE_MODE}/TM={CameraSettings.TONEMAP_MODE})");
+                        $"[PCam][Android] StartCamera fps={targetFps} (JPEG path: minimal extender — AE FPS only)");
                 }
             }
 
@@ -371,6 +373,7 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
                         bmp?.Recycle();
                         return;
                     }
+                    RestoreScaleTypeIfNeeded(preview);
                     var prev = _h264PrevBitmap;
                     _h264PrevBitmap = bmp;
                     preview.SetImageBitmap(bmp);
@@ -420,7 +423,14 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         {
             try
             {
-                // Создаём чёрный Bitmap с белым текстом "Превью отключено"
+                // FitCenter вместо CenterCrop — иначе в портретной ориентации экрана
+                // bitmap 960×540 в CenterCrop'е масштабируется по высоте экрана и
+                // обрезает ширину так, что текст уходит за края. FitCenter вписывает
+                // картинку целиком (по бокам — фон ImageView, который мы и так
+                // закрашиваем чёрным в bitmap'е).
+                iv.SetScaleType(ImageView.ScaleType.FitCenter);
+                _isPreviewDisabledShown = true;
+
                 var bmp = global::Android.Graphics.Bitmap.CreateBitmap(width, height, global::Android.Graphics.Bitmap.Config.Argb8888!);
                 if (bmp == null) return;
 
@@ -439,7 +449,11 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
                 }
 
                 string text = "Превью отключено";
-                canvas.DrawText(text, width / 2f, height / 2f, _previewDisabledPaint);
+                // Вертикальный центр с учётом baseline шрифта (Paint.DrawText рисует
+                // относительно baseline, поэтому без поправки текст съезжает вниз).
+                var fm = _previewDisabledPaint.GetFontMetrics();
+                float yBaseline = height / 2f - (fm.Ascent + fm.Descent) / 2f;
+                canvas.DrawText(text, width / 2f, yBaseline, _previewDisabledPaint);
 
                 iv.SetImageBitmap(bmp);
 
@@ -455,6 +469,15 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
                 System.Diagnostics.Debug.WriteLine($"[PCam][Android] DisplayPreviewDisabledMessage error: {ex.Message}");
             }
         });
+    }
+
+    // Возвращает ImageView.ScaleType на CenterCrop после показа заглушки "Превью отключено".
+    // Вызывать ПЕРЕД SetImageBitmap для реального кадра камеры. Только UI-поток.
+    private void RestoreScaleTypeIfNeeded(ImageView iv)
+    {
+        if (!_isPreviewDisabledShown) return;
+        _isPreviewDisabledShown = false;
+        try { iv.SetScaleType(ImageView.ScaleType.CenterCrop); } catch { }
     }
 
     private static void MapIsRunning(CameraPreviewHandler handler, CameraPreviewView view)
@@ -591,106 +614,130 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
             int imgH   = image.Height;
             int imgRot = image.ImageInfo?.RotationDegrees ?? 0;
 
-            if (_view.IsScanning)
+            // ── Решаем что нужно сделать на этом кадре ──────────────────────────
+            // QR scan и display path имеют разные throttle (200ms vs 33ms), поэтому
+            // во время QR-сканирования превью продолжает обновляться на ~30fps,
+            // а QR-декодер тыкается только ~5 раз/сек. Стрим (cb != null) идёт
+            // вообще каждый кадр.
+            bool scanning    = _view.IsScanning;
+            var  cb          = _view.FrameReady;
+            bool wantPreview = _handler._previewEnabled;
+            bool wantStream  = cb != null;
+
+            bool doQr = false;
+            if (scanning)
             {
                 long prevQrMs = Volatile.Read(ref _sharedLastQrMs[0]);
-                bool doScan = nowMs - prevQrMs >= 200
+                doQr = nowMs - prevQrMs >= 200
                     && Interlocked.CompareExchange(ref _sharedLastQrMs[0], nowMs, prevQrMs) == prevQrMs;
-                if (doScan)
-                    CopyYFromProxy(image, imgW, imgH);
+            }
+
+            // Совсем ничего делать не надо — закрываем кадр и выходим.
+            if (!wantStream && !wantPreview && !doQr)
+            {
                 image.Close();
-                if (!doScan)
+                _delivery.Post(seq, null, 0, null);
+                Interlocked.Exchange(ref _busy, 0);
+                return true;
+            }
+
+            // NV21 нужен для JPEG-encoding (стрим и/или превью). Для QR достаточно
+            // только Y-плоскости — но если NV21 уже копируем, первые w*h байт = Y,
+            // отдельный CopyYFromProxy не нужен.
+            bool needNv21 = wantStream || wantPreview;
+
+            long t0 = _diagSw.ElapsedMilliseconds;
+            if (needNv21)
+                CopyNv21FromProxy(image, imgW, imgH);
+            else
+                CopyYFromProxy(image, imgW, imgH); // doQr == true в этой ветке
+            long copyMs = _diagSw.ElapsedMilliseconds - t0;
+            image.Close();
+
+            // Захватываем флаги для лямбды — IsScanning/PreviewEnabled могут
+            // переключиться к моменту запуска Task.Run.
+            bool doQrLocal      = doQr;
+            bool doPreviewLocal = wantPreview;
+            bool needNv21Local  = needNv21;
+
+            Task.Run(() =>
+            {
+                try
                 {
-                    _delivery.Post(seq, null, 0, null);
-                    Interlocked.Exchange(ref _busy, 0);
-                    return true;
-                }
-                Task.Run(() =>
-                {
-                    try
+                    // QR decode. При needNv21 первые w*h байт _nv21 = Y-плоскость
+                    // (NV21 layout: Y[w*h] потом VU interleaved). Никаких лишних копий.
+                    if (doQrLocal)
                     {
-                        var qr = DecodeQrFromBuffer(imgW, imgH);
+                        byte[] yData = needNv21Local ? _nv21! : _yDataQr!;
+                        var qr = DecodeQrFromBuffer(yData, imgW, imgH);
                         if (qr != null)
                             MainThread.BeginInvokeOnMainThread(() => _view.QrCodeDetected?.Invoke(qr));
                     }
-                    finally
-                    {
-                        _delivery.Post(seq, null, 0, null);
-                        Interlocked.Exchange(ref _busy, 0);
-                    }
-                });
-            }
-            else
-            {
-                var cb = _view.FrameReady;
-                long t0 = _diagSw.ElapsedMilliseconds;
-                CopyNv21FromProxy(image, imgW, imgH);
-                long copyMs = _diagSw.ElapsedMilliseconds - t0;
-                image.Close();
-                Task.Run(() =>
-                {
-                    try
-                    {
-                        bool isStreaming = cb != null;
-                        int quality      = isStreaming ? 25 : 25;
-                        int effectiveRot = isStreaming ? 0 : imgRot;
-                        long t1 = _diagSw.ElapsedMilliseconds;
-                        bool ok = EncodeNv21ToJpeg(imgW, imgH, effectiveRot, quality);
-                        long encMs = _diagSw.ElapsedMilliseconds - t1;
 
-                        // ── Превью: декодируем JPEG в Bitmap и ставим на ImageView ──────────
-                        // Throttle: ~30fps max across all workers (shared CAS timestamp).
-                        // SetImageBitmap() заменяет картинку без промежуточного чёрного кадра
-                        // (в отличие от ImageSource.FromStream, который сбрасывает старый Source).
-                        // _prevDisplayBitmap — только UI-поток, рецикл после замены.
-                        if (ok && _handler._previewEnabled)
+                    if (!needNv21Local)
+                    {
+                        // QR-only путь: NV21 не копировали, encoding не нужен.
+                        _delivery.Post(seq, null, 0, null);
+                        return;
+                    }
+
+                    int quality      = 25;
+                    int effectiveRot = wantStream ? 0 : imgRot;
+                    long t1 = _diagSw.ElapsedMilliseconds;
+                    bool ok = EncodeNv21ToJpeg(imgW, imgH, effectiveRot, quality);
+                    long encMs = _diagSw.ElapsedMilliseconds - t1;
+
+                    // ── Превью: декодируем JPEG в Bitmap и ставим на ImageView ──────────
+                    // Throttle: ~30fps max across all workers (shared CAS timestamp).
+                    // SetImageBitmap() заменяет картинку без промежуточного чёрного кадра.
+                    // _prevDisplayBitmap — только UI-поток, рецикл после замены.
+                    // Работает В ТОМ ЧИСЛЕ во время QR-сканирования — display path
+                    // независим от scanning, только от _previewEnabled.
+                    if (ok && doPreviewLocal)
+                    {
+                        long prevDisp = Volatile.Read(ref _sharedLastDisplayMs[0]);
+                        bool doDisp = nowMs - prevDisp >= 33   // ≤30fps per window
+                            && Interlocked.CompareExchange(ref _sharedLastDisplayMs[0], nowMs, prevDisp) == prevDisp;
+                        if (doDisp)
                         {
-                            long prevDisp = Volatile.Read(ref _sharedLastDisplayMs[0]);
-                            bool doDisp = nowMs - prevDisp >= 33   // ≤30fps per window
-                                && Interlocked.CompareExchange(ref _sharedLastDisplayMs[0], nowMs, prevDisp) == prevDisp;
-                            if (doDisp)
+                            int dLen = (int)_jpegMs.Length;
+                            var bmp  = BitmapFactory.DecodeByteArray(
+                                _jpegMs.GetBuffer(), 0, dLen, _displayDecodeOpts);
+                            if (bmp != null)
                             {
-                                // Decode прямо из _jpegMs — мы на worker thread, в этой же лямбде
-                                // ниже происходит _delivery.Post, который при out-of-order сам копирует
-                                // буфер. Аллокация промежуточного byte[] не нужна.
-                                int dLen = (int)_jpegMs.Length;
-                                var bmp  = BitmapFactory.DecodeByteArray(
-                                    _jpegMs.GetBuffer(), 0, dLen, _displayDecodeOpts);
-                                if (bmp != null)
+                                _imageView.Post(() =>
                                 {
-                                    _imageView.Post(() =>
-                                    {
-                                        var prev = _prevDisplayBitmap;
-                                        _prevDisplayBitmap = bmp;
-                                        _imageView.SetImageBitmap(bmp);
-                                        prev?.Recycle();
-                                    });
-                                }
+                                    _handler.RestoreScaleTypeIfNeeded(_imageView);
+                                    var prev = _prevDisplayBitmap;
+                                    _prevDisplayBitmap = bmp;
+                                    _imageView.SetImageBitmap(bmp);
+                                    prev?.Recycle();
+                                });
                             }
                         }
+                    }
 
-                        _delivery.Post(seq, ok ? _jpegMs.GetBuffer() : null, (int)_jpegMs.Length, cb);
-                        _totalCopyMs += copyMs;
-                        _totalJpegMs += encMs;
-                        _jpegSamples++;
-                        if (count % 30 == 0)
-                        {
-                            long avgCopy   = _jpegSamples > 0 ? _totalCopyMs / _jpegSamples : -1;
-                            long avgEncode = _jpegSamples > 0 ? _totalJpegMs / _jpegSamples : -1;
-                            System.Diagnostics.Debug.WriteLine(
-                                $"[PCam][Android] Frame #{count}  {imgW}×{imgH}  rot={imgRot}°" +
-                                $"  gap={gapMs}ms  copy={avgCopy}ms  encode={avgEncode}ms  → workerFPS≈{(gapMs > 0 ? 1000 / gapMs : 0)}");
-                            _totalCopyMs = 0;
-                            _totalJpegMs = 0;
-                            _jpegSamples = 0;
-                        }
-                    }
-                    finally
+                    _delivery.Post(seq, ok ? _jpegMs.GetBuffer() : null, (int)_jpegMs.Length, cb);
+                    _totalCopyMs += copyMs;
+                    _totalJpegMs += encMs;
+                    _jpegSamples++;
+                    if (count % 30 == 0)
                     {
-                        Interlocked.Exchange(ref _busy, 0);
+                        long avgCopy   = _jpegSamples > 0 ? _totalCopyMs / _jpegSamples : -1;
+                        long avgEncode = _jpegSamples > 0 ? _totalJpegMs / _jpegSamples : -1;
+                        System.Diagnostics.Debug.WriteLine(
+                            $"[PCam][Android] Frame #{count}  {imgW}×{imgH}  rot={imgRot}°" +
+                            $"  gap={gapMs}ms  copy={avgCopy}ms  encode={avgEncode}ms  → workerFPS≈{(gapMs > 0 ? 1000 / gapMs : 0)}");
+                        _totalCopyMs = 0;
+                        _totalJpegMs = 0;
+                        _jpegSamples = 0;
                     }
-                });
-            }
+                }
+                finally
+                {
+                    Interlocked.Exchange(ref _busy, 0);
+                }
+            });
             return true;
         }
 
@@ -899,11 +946,14 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
                     Marshal.Copy((nint)yPtr + r * yStride, _yDataQr, r * w, w);
         }
 
-        private string? DecodeQrFromBuffer(int w, int h)
+        // yData может быть как _yDataQr (буфер ровно w*h), так и _nv21 (буфер w*h*3/2,
+        // где первые w*h байт = Y-плоскость). RGBLuminanceSource в режиме Gray8
+        // обращается только к [0..w*h-1], так что лишний хвост NV21 безопасен.
+        private string? DecodeQrFromBuffer(byte[] yData, int w, int h)
         {
             try
             {
-                var source    = new RGBLuminanceSource(_yDataQr!, w, h, RGBLuminanceSource.BitmapFormat.Gray8);
+                var source    = new RGBLuminanceSource(yData, w, h, RGBLuminanceSource.BitmapFormat.Gray8);
                 var binarizer = new HybridBinarizer(source);
                 var bitmap    = new BinaryBitmap(binarizer);
                 var hints     = new Dictionary<DecodeHintType, object>

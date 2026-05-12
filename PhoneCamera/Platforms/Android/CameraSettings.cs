@@ -199,4 +199,18 @@ public static class CameraSettings
         extender.SetCaptureRequestOption(CaptureRequest.ControlAeTargetFpsRange,
             new global::Android.Util.Range(Integer.ValueOf(fps), Integer.ValueOf(fps)));
     }
+
+    // ── Минимальный набор для CameraX / JPEG-ветки ────────────────────────
+    // Выставляет ТОЛЬКО AE target FPS range. Всё остальное — image-processing,
+    // AF mode, scene mode, статистика — оставляем CameraX'у и HAL'у дефолтным.
+    // ApplyToExtender (полный) корректен для прямого Camera2, но при подаче в
+    // CameraX через Camera2Interop часть ключей конфликтует с CameraX'овым
+    // выбором sensor mode для use case ImageAnalysis → HAL фоллбэчит на
+    // меньший fps (на 1080p мы теряли честные 30 fps). Минимальный набор
+    // фиксирует только частоту, и HAL свободно выбирает оптимальный pipeline.
+    public static void ApplyJpegMinimal(Camera2Interop.Extender extender, int fps)
+    {
+        extender.SetCaptureRequestOption(CaptureRequest.ControlAeTargetFpsRange,
+            new global::Android.Util.Range(Integer.ValueOf(fps), Integer.ValueOf(fps)));
+    }
 }
