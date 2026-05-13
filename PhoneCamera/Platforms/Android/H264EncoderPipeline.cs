@@ -89,6 +89,15 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
     private int _w, _h, _fps;
     private string? _cameraId;
 
+    // ── Состояние AIMD-контроллера битрейта ─────────────────────────────────
+    // _bitrateCeiling — формульный потолок (то, что выдала ChooseBitrate при
+    //   ConfigureEncoder). AIMD может опускать ниже потолка, но не поднимать выше.
+    // _currentBitrate — текущее значение, переданное в MediaCodec.
+    // _clearWindowsCount — счётчик «чистых» окон подряд для подъёма обратно.
+    private int _bitrateCeiling;
+    private int _currentBitrate;
+    private int _clearWindowsCount;
+
     // ── Public API ──────────────────────────────────────────────────────────
     public void Start(string cameraId, int width, int height, int fps)
     {
@@ -200,11 +209,17 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
         _encoder = MediaCodec.CreateEncoderByType(mime)
                    ?? throw new System.InvalidOperationException($"{codecLabel} encoder not available");
 
+        // Считаем формульный потолок один раз и запоминаем — AIMD будет с ним
+        // сравнивать при попытках поднять битрейт обратно.
+        _bitrateCeiling   = ChooseBitrate(w, h, fps);
+        _currentBitrate   = _bitrateCeiling;
+        _clearWindowsCount = 0;
+
         var fmt = MediaFormat.CreateVideoFormat(mime, w, h)!;
         // COLOR_FormatSurface = 0x7F000789 (= 2130708361). Используем числовую константу,
         // т.к. enum Xamarin может различаться по именам между релизами.
         fmt.SetInteger(MediaFormat.KeyColorFormat, (int)MediaCodecCapabilities.Formatsurface);
-        fmt.SetInteger(MediaFormat.KeyBitRate,        ChooseBitrate(w, h, fps));
+        fmt.SetInteger(MediaFormat.KeyBitRate,        _bitrateCeiling);
         fmt.SetInteger(MediaFormat.KeyFrameRate,      fps);
         fmt.SetInteger(MediaFormat.KeyIFrameInterval, CameraSettings.H264_I_FRAME_INTERVAL_SECONDS);
         fmt.SetInteger(MediaFormat.KeyProfile,        profile);
@@ -229,18 +244,103 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
         _encoder.Start();
 
         System.Diagnostics.Debug.WriteLine(
-            $"[PCam][H264] Encoder configured: codec={codecLabel} ({mime}) {w}x{h}@{fps}fps");
+            $"[PCam][H264] Encoder configured: codec={codecLabel} ({mime}) {w}x{h}@{fps}fps " +
+            $"bitrate={_bitrateCeiling / 1e6:F2} Mbps (ceiling, adaptive={CameraSettings.ADAPTIVE_BITRATE_ENABLED})");
     }
 
-    private static int ChooseBitrate(int w, int h, int fps)
+    // Формульный «потолок качества» для разрешения/fps. Берём константы из
+    // CameraSettings — туда же ходить если хочется подкрутить.
+    // AIMD-контроллер ниже стартует с этого значения и может его опускать
+    // (если сеть не тянет) и обратно поднимать, но НЕ выше этого потолка.
+    private int ChooseBitrate(int w, int h, int fps)
     {
-        // Очень грубая эмпирика: 0.1 bit/pixel при 30fps, +50% при 60fps.
-        // 1920×1080@30  → ~6 Mbps;  1920×1080@60 → ~9 Mbps;  3840×2160@30 → ~25 Mbps
+        double bpp = _useHevc ? CameraSettings.H265_BITS_PER_PIXEL
+                              : CameraSettings.H264_BITS_PER_PIXEL;
         long pixels = (long)w * h * fps;
-        long bps = pixels / 12; // ≈ 0.083 bpp
-        if (bps < 2_000_000) bps = 2_000_000;
-        if (bps > 25_000_000) bps = 25_000_000;
+        long bps = (long)(pixels * bpp);
+        if (bps < CameraSettings.BITRATE_MIN_BPS) bps = CameraSettings.BITRATE_MIN_BPS;
+        if (bps > CameraSettings.BITRATE_CAP_BPS) bps = CameraSettings.BITRATE_CAP_BPS;
         return (int)bps;
+    }
+
+    // Меняет битрейт энкодера на лету через MediaCodec.SetParameters
+    // (PARAMETER_KEY_VIDEO_BITRATE = "video-bitrate"). Поддерживается с API 19.
+    // Сессия НЕ перезапускается — encoder подхватит следующий же кадр с новым
+    // bitrate (через 1-2 фрейма для VBR-балансировки).
+    private void SetTargetBitrate(int bps)
+    {
+        var enc = _encoder;
+        if (enc == null) return;
+        if (bps == _currentBitrate) return;
+        try
+        {
+            var bundle = new global::Android.OS.Bundle();
+            bundle.PutInt("video-bitrate", bps);
+            enc.SetParameters(bundle);
+            System.Diagnostics.Debug.WriteLine(
+                $"[PCam][H264] Bitrate adjust: {_currentBitrate / 1e6:F2} → {bps / 1e6:F2} Mbps " +
+                $"(ceiling {_bitrateCeiling / 1e6:F2} Mbps)");
+            _currentBitrate = bps;
+        }
+        catch (System.Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[PCam][H264] SetTargetBitrate failed: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// AIMD-контроллер: получает раз в окно статистику blocked/total от
+    /// CameraStreamingService. Решает менять ли битрейт.
+    ///   blocked/total > BACKPRESSURE_THRESHOLD →  битрейт × DECREASE_FACTOR
+    ///   blocked/total < CLEAR_THRESHOLD (N окон подряд) → × INCREASE_FACTOR
+    ///   не выше _bitrateCeiling, не ниже BITRATE_MIN_BPS.
+    /// </summary>
+    public void ObserveBackpressure(int blocked, int total)
+    {
+        if (!CameraSettings.ADAPTIVE_BITRATE_ENABLED) return;
+        if (!_running) return;
+        if (total <= 0) return;
+
+        double rate = (double)blocked / total;
+
+        if (rate >= CameraSettings.ADAPTIVE_BACKPRESSURE_THRESHOLD)
+        {
+            // Затор — быстро вниз.
+            _clearWindowsCount = 0;
+            int newBps = (int)(_currentBitrate * CameraSettings.ADAPTIVE_DECREASE_FACTOR);
+            if (newBps < CameraSettings.BITRATE_MIN_BPS) newBps = CameraSettings.BITRATE_MIN_BPS;
+            if (newBps != _currentBitrate)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    $"[PCam][H264] AIMD ↓ backpressure {rate * 100:F1}% ({blocked}/{total})");
+                SetTargetBitrate(newBps);
+            }
+        }
+        else if (rate < CameraSettings.ADAPTIVE_CLEAR_THRESHOLD)
+        {
+            // Чисто — копим окна, потом аккуратно вверх.
+            _clearWindowsCount++;
+            if (_clearWindowsCount >= CameraSettings.ADAPTIVE_CLEAR_WINDOWS_TO_RAISE
+                && _currentBitrate < _bitrateCeiling)
+            {
+                _clearWindowsCount = 0;
+                int newBps = (int)(_currentBitrate * CameraSettings.ADAPTIVE_INCREASE_FACTOR);
+                if (newBps > _bitrateCeiling) newBps = _bitrateCeiling;
+                if (newBps != _currentBitrate)
+                {
+                    System.Diagnostics.Debug.WriteLine(
+                        $"[PCam][H264] AIMD ↑ clear {CameraSettings.ADAPTIVE_CLEAR_WINDOWS_TO_RAISE} windows " +
+                        $"(last {rate * 100:F2}%, {blocked}/{total})");
+                    SetTargetBitrate(newBps);
+                }
+            }
+        }
+        else
+        {
+            // Серединка — не вниз, не вверх. Серию «чистых» сбрасываем,
+            // чтобы не подняться раньше времени.
+            _clearWindowsCount = 0;
+        }
     }
 
     // ── Output loop (отдельный thread) ──────────────────────────────────────

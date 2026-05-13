@@ -10,7 +10,6 @@ public partial class MainPage : ContentPage
     private bool _isCurrentlyLandscape;
 
     private bool _isScanning;
-    private long _lastFrameMs;
     private string? _lastQrText;
     private long _lastQrDetectedMs;
     private readonly CameraStreamingService _streaming = new();
@@ -49,6 +48,14 @@ public partial class MainPage : ContentPage
         {
             if (_streamingActive && _streaming.IsConnected)
                 _streaming.EnqueueRawBytes(buf, len);
+        };
+
+        // Прокидываем статистику backpressure от сервиса → во view → подписчикам
+        // (H.264 pipeline через handler). Сервис тикает раз в ~2 сек, AIMD-контроллер
+        // в pipeline'е сам решает менять ли битрейт.
+        _streaming.OnBackpressureWindow = (blocked, total) =>
+        {
+            try { CameraPreview.BackpressureWindowReady?.Invoke(blocked, total); } catch { }
         };
 
         UpdateLabels();
@@ -371,14 +378,12 @@ public partial class MainPage : ContentPage
             _streamingActive = true;
             UpdateFormatHeaderEnabled();
 
-            int targetFps = Math.Max(1, _curFps);
-            long intervalMs = 1000 / targetFps;
-            Volatile.Write(ref _lastFrameMs, 0L);
+            // Без software-throttle: камера сама задаёт fps через AE FPS range.
+            // Раньше тут стоял "if now - last < 1000/fps return", но при реальных
+            // 28fps камеры с jitter ±5ms и intervalMs=33 каждый второй кадр выпадал
+            // (см. логи: workerFPS≈15 при combinedFPS≈28 — это и была эта дырка).
             CameraPreview.FrameReady = (buf, len) =>
             {
-                long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                if (now - Volatile.Read(ref _lastFrameMs) < intervalMs) return;
-                Volatile.Write(ref _lastFrameMs, now);
                 if (_streamingActive && _streaming.IsConnected)
                     _streaming.EnqueueFrame(buf, len);
             };

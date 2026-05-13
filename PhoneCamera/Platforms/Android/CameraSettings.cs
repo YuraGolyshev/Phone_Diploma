@@ -68,17 +68,51 @@ public static class CameraSettings
     public const int COLOR_ABERRATION_MODE = 1;    // FAST
     public const int HOT_PIXEL_MODE        = 1;    // FAST
 
-    // ── H.264 кодирование (используется только в H.264 ветке) ──────────────
+    // ── H.264 / H.265 кодирование (используется только в encoder-ветке) ────
     // KEY_I_FRAME_INTERVAL — как часто encoder вставляет ключевой кадр (IDR).
     // Меньше = быстрее восстановление при потерях, больше = меньше bitrate.
     //   1 сек  = быстрая reconnection (РЕКОМЕНДУЕТСЯ для live-стрима)
     //   2-5    = меньше bitrate, дольше «приход в себя» при потере пакета
     public const int H264_I_FRAME_INTERVAL_SECONDS = 1;
 
-    // KEY_BIT_RATE считается автоматически по ширине×высоте×fps в
-    // H264EncoderPipeline.ChooseBitrate. Для своего значения — поправь
-    // прямо там. KEY_OPERATING_RATE / KEY_LOW_LATENCY включаем всегда —
-    // это hint энкодеру «работай быстро», на качество не влияет.
+    // ── Стартовый битрейт (формула) ─────────────────────────────────────────
+    // bps = width × height × fps × BITS_PER_PIXEL, ограничено [MIN, CAP].
+    // Получившееся значение — это «потолок качества» для текущих разрешения и
+    // fps. AIMD-контроллер ниже может его опускать (если сеть не тянет) и
+    // обратно поднимать вплоть до этого потолка, но НЕ выше.
+    //
+    // По умолчанию формула общая для AVC и HEVC. Хочешь чтобы H.265 экономил
+    // сеть — опусти H265_BITS_PER_PIXEL до 0.05 (при том же качестве HEVC
+    // даёт ~55-60% битрейта от H.264).
+    public const double H264_BITS_PER_PIXEL = 0.083;        // ≈ 0.1 bit/pixel
+    public const double H265_BITS_PER_PIXEL = 0.083;        // то же, можно понизить
+    public const int    BITRATE_CAP_BPS     = 25_000_000;   // верхняя граница формулы
+    public const int    BITRATE_MIN_BPS     = 2_000_000;    // нижняя граница (и пол AIMD)
+
+    // ── Адаптивная подстройка под фактическую пропускную сети (AIMD) ───────
+    // Service считает: blocked = сколько раз отправка в Channel заблокировалась
+    // за окно ADAPTIVE_WINDOW_MS, total = всего попыток. rate = blocked / total.
+    //
+    //   rate > BACKPRESSURE_THRESHOLD  →  битрейт × DECREASE_FACTOR  (быстро вниз)
+    //   rate < CLEAR_THRESHOLD         →  считаем «чистое» окно
+    //   после N подряд чистых окон     →  битрейт × INCREASE_FACTOR  (медленно вверх)
+    //                                     но не выше потолка из формулы.
+    //
+    // Цель — попасть на верхнюю границу того, что сеть реально вытягивает,
+    // и держаться там, давая максимум возможного качества.
+    //
+    // Хочешь полностью фиксированный битрейт (как было до этой правки) —
+    // поставь ADAPTIVE_BITRATE_ENABLED = false.
+    public const bool   ADAPTIVE_BITRATE_ENABLED        = true;
+    public const int    ADAPTIVE_WINDOW_MS              = 2000;   // период замера
+    public const double ADAPTIVE_BACKPRESSURE_THRESHOLD = 0.05;   // ≥5% blocked → ↓
+    public const double ADAPTIVE_CLEAR_THRESHOLD        = 0.01;   // <1% blocked = clean
+    public const int    ADAPTIVE_CLEAR_WINDOWS_TO_RAISE = 3;      // 3 окна ≈ 6 сек
+    public const double ADAPTIVE_DECREASE_FACTOR        = 0.85;
+    public const double ADAPTIVE_INCREASE_FACTOR        = 1.10;
+
+    // KEY_OPERATING_RATE / KEY_LOW_LATENCY включаем всегда — hint энкодеру
+    // «работай быстро», на качество не влияет.
 
     // ╚═════════════════════ конец полей-настроек ══════════════════════════╝
 

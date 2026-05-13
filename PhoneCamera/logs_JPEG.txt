@@ -1,0 +1,142 @@
+
+(365):[PCam][UI] OnAppearing — camera permission: Granted
+(366):[PCam][Android] ConnectHandler — handler attached
+(367):[PCam][Android] MapIsRunning → IsRunning=False
+(368):[PCam][Android] StopCamera
+(369):[PCam][Android] QueryConfigs starting...
+(370):[PCam][Android] MapSelectedConfig → config=none, running=False
+(371):[PCam][Android] MapFormat → format=Jpeg, scanning=False, running=False
+(372):[PCam][Android] MapPreviewEnabled → PreviewEnabled=True
+(436):[PCam][Android] QueryConfigs AE FPS ranges: [5, 15], [15, 15], [15, 20], [20, 20], [24, 24], [5, 30], [30, 30], [15, 60], [60, 60]
+(437):[PCam][Android] HighSpeed: 2 size(s) advertised:
+(438):[PCam][Android]   HS 1280×720 → ranges: [[30, 120], [120, 120], [30, 240], [240, 240]]
+(439):[PCam][Android]   HS 1920×1080 → ranges: [[30, 120], [120, 120], [30, 240], [240, 240]]
+(440):[PCam][Android] HighSpeed: union FPS ranges: [[120, 120], [240, 240], [30, 240], [30, 120]]
+(441):[PCam][Android] QueryConfigs done: 204 configs, default=1920×1080   30 fps
+(442):[PCam][Android] MapSelectedConfig → config=1920×1080   30 fps, running=False
+(443):[PCam][UI] ConfigurationsReady: 204 configs, resolutions=67, default=1920×1080 @ 30 fps, format=H264
+(444):[PCam][UI] OnConfigurationsReady — autostart preview
+(445):[PCam][Android] MapIsRunning → IsRunning=True
+(447):[PCam][Android] StartCamera → config=1920×1080   30 fps, targetRotation=1 (landscape)
+(449):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
+(450):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
+(451):[PCam][Android] DispatchingAnalyzer created with 2 workers
+(452):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
+(587):[PCam][Android] StartCamera ✓ camera bound successfully
+(864):[PCam][Android] Combined #30  combinedFPS≈19,4  (2 workers)
+(1041):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=67ms  copy=8ms  encode=15ms  → workerFPS≈14
+(1042):[PCam][Android] Combined #60  combinedFPS≈27,3  (2 workers)
+(1043):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=67ms  copy=9ms  encode=15ms  → workerFPS≈14
+(1154):[PCam][UI] Format selected: Jpeg
+(1187):[PCam][Android] Combined #90  combinedFPS≈26,5  (2 workers)
+(1405):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=59ms  copy=10ms  encode=16ms  → workerFPS≈16
+(1406):[PCam][Android] Combined #120  combinedFPS≈26,4  (2 workers)
+(1449):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=70ms  copy=10ms  encode=15ms  → workerFPS≈14
+(1758):[PCam][UI] QR detected: cam://192.168.0.106:8888
+(1759):[PCam][Stream] Disconnected
+(1760):[PCam][Stream] Connected to 192.168.0.106:8888
+(1801):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=67ms  copy=9ms  encode=15ms  → workerFPS≈14
+(1802):[PCam][Android] Combined #180  combinedFPS≈10,6  (2 workers)
+(1911):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=54ms  copy=10ms  encode=16ms  → workerFPS≈18
+(1912):[PCam][UI] Preview: disabled
+(1913):[PCam][Android] MapPreviewEnabled → PreviewEnabled=False
+(1914):[PCam][Android] Combined #210  combinedFPS≈25,1  (2 workers)
+(1917):[PCam][Android] Combined #240  combinedFPS≈27,1  (2 workers)
+(1918):[PCam][Android] Combined #270  combinedFPS≈27,2  (2 workers)
+(1923):[PCam][Android] Combined #300  combinedFPS≈29,2  (2 workers)
+(1956):[PCam][UI] Camera permission status: Granted
+(1957):[PCam][UI] Start → 1920×1080 @ 30 fps, format=Jpeg
+(1958):[PCam][Android] MapIsRunning → IsRunning=False
+(1959):[PCam][Android] StopCamera
+(1960):[PCam][Android] MapIsRunning → IsRunning=True
+(1961):[PCam][Android] StartCamera → config=1920×1080   30 fps, targetRotation=1 (landscape)
+(1963):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
+(1964):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
+(1965):[PCam][Android] DispatchingAnalyzer created with 2 workers
+(1966):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
+(1967):[PCam][Android] StartCamera ✓ camera bound successfully
+(2138):[PCam][Android] Combined #30  combinedFPS≈22,6  (2 workers)
+(2147):[PCam][Android] Combined #60  combinedFPS≈27,1  (2 workers)
+(2148):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=68ms  copy=8ms  encode=17ms  → workerFPS≈14
+(2149):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=68ms  copy=10ms  encode=19ms  → workerFPS≈14
+(2154):[PCam][Android] Combined #90  combinedFPS≈28,1  (2 workers)
+(2163):[PCam][Android] Combined #120  combinedFPS≈27,4  (2 workers)
+(2164):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=63ms  copy=10ms  encode=19ms  → workerFPS≈15
+(2165):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=67ms  copy=11ms  encode=19ms  → workerFPS≈14
+(2172):[PCam][Android] Combined #150  combinedFPS≈27,2  (2 workers)
+(2179):[PCam][Android] Combined #180  combinedFPS≈28,9  (2 workers)
+(2180):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=51ms  copy=10ms  encode=20ms  → workerFPS≈19
+(2181):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=113ms  copy=10ms  encode=17ms  → workerFPS≈8
+(2188):[PCam][Android] Combined #210  combinedFPS≈28,1  (2 workers)
+(2195):[PCam][Android] Combined #240  combinedFPS≈27,3  (2 workers)
+(2198):[PCam][Android] Frame #120  1920×1080  rot=0°  gap=64ms  copy=10ms  encode=18ms  → workerFPS≈15
+(2199):[PCam][Android] Frame #120  1920×1080  rot=0°  gap=70ms  copy=10ms  encode=18ms  → workerFPS≈14
+(2204):[PCam][Android] Combined #270  combinedFPS≈28,0  (2 workers)
+(2213):[PCam][Android] Combined #300  combinedFPS≈28,2  (2 workers)
+(2214):[PCam][Android] Frame #150  1920×1080  rot=0°  gap=68ms  copy=10ms  encode=19ms  → workerFPS≈14
+(2215):[PCam][Android] Frame #150  1920×1080  rot=0°  gap=66ms  copy=10ms  encode=17ms  → workerFPS≈15
+(2222):[PCam][Android] Combined #330  combinedFPS≈26,4  (2 workers)
+(2229):[PCam][Android] Combined #360  combinedFPS≈28,2  (2 workers)
+(2230):[PCam][UI] Camera permission status: Granted
+(2231):[PCam][UI] Stop → 1920×1080 @ 30 fps, format=Jpeg
+(2234):[PCam][Android] Combined #390  combinedFPS≈27,6  (2 workers)
+(2235):[PCam][UI] FPS selected: 60
+(2236):[PCam][Android] MapSelectedConfig → config=1920×1080   60 fps, running=True
+(2237):[PCam][Android] StartCamera → config=1920×1080   60 fps, targetRotation=1 (landscape)
+(2238):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
+(2239):[PCam][Android] StartCamera fps=60 (JPEG path: minimal extender — AE FPS only)
+(2241):[PCam][Android] DispatchingAnalyzer created with 2 workers
+(2242):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
+(2243):[PCam][Android] StartCamera ✓ camera bound successfully
+(2478):[PCam][UI] Camera permission status: Granted
+(2479):[PCam][UI] Start → 1920×1080 @ 60 fps, format=Jpeg
+(2480):[PCam][Android] MapIsRunning → IsRunning=False
+(2481):[PCam][Android] StopCamera
+(2482):[PCam][Android] MapIsRunning → IsRunning=True
+(2483):[PCam][Android] StartCamera → config=1920×1080   60 fps, targetRotation=1 (landscape)
+(2485):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
+(2486):[PCam][Android] StartCamera fps=60 (JPEG path: minimal extender — AE FPS only)
+(2487):[PCam][Android] DispatchingAnalyzer created with 2 workers
+(2488):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
+(2489):[PCam][Android] StartCamera ✓ camera bound successfully
+(2640):[PCam][Android] Combined #30  combinedFPS≈21,1  (2 workers)
+(2649):[PCam][Android] Combined #60  combinedFPS≈28,1  (2 workers)
+(2650):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=63ms  copy=9ms  encode=17ms  → workerFPS≈15
+(2651):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=68ms  copy=9ms  encode=18ms  → workerFPS≈14
+(2657):[PCam][Android] Combined #90  combinedFPS≈28,0  (2 workers)
+(2665):[PCam][Android] Combined #120  combinedFPS≈28,2  (2 workers)
+(2668):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=66ms  copy=10ms  encode=19ms  → workerFPS≈15
+(2669):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=69ms  copy=10ms  encode=19ms  → workerFPS≈14
+(2674):[PCam][Android] Combined #150  combinedFPS≈27,1  (2 workers)
+(2681):[PCam][Android] Combined #180  combinedFPS≈30,2  (2 workers)
+(2682):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=121ms  copy=10ms  encode=20ms  → workerFPS≈8
+(2683):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=99ms  copy=11ms  encode=18ms  → workerFPS≈10
+(2688):[PCam][Android] Combined #210  combinedFPS≈28,1  (2 workers)
+(2695):[PCam][Android] Combined #240  combinedFPS≈27,0  (2 workers)
+(2696):[PCam][Android] Frame #120  1920×1080  rot=0°  gap=69ms  copy=10ms  encode=17ms  → workerFPS≈14
+(2697):[PCam][Android] Frame #120  1920×1080  rot=0°  gap=58ms  copy=10ms  encode=18ms  → workerFPS≈17
+(2704):[PCam][Android] Combined #270  combinedFPS≈28,4  (2 workers)
+(2717):[PCam][Android] Combined #300  combinedFPS≈27,2  (2 workers)
+(2718):[PCam][Android] Frame #150  1920×1080  rot=0°  gap=79ms  copy=11ms  encode=20ms  → workerFPS≈12
+(2719):[PCam][Android] Frame #150  1920×1080  rot=0°  gap=64ms  copy=11ms  encode=21ms  → workerFPS≈15
+(2726):[PCam][Android] Combined #330  combinedFPS≈28,1  (2 workers)
+(2733):[PCam][Android] Combined #360  combinedFPS≈28,2  (2 workers)
+(2736):[PCam][Android] Frame #180  1920×1080  rot=0°  gap=80ms  copy=11ms  encode=20ms  → workerFPS≈12
+(2737):[PCam][Android] Frame #180  1920×1080  rot=0°  gap=68ms  copy=11ms  encode=22ms  → workerFPS≈14
+(2742):[PCam][Android] Combined #390  combinedFPS≈26,4  (2 workers)
+(2751):[PCam][Android] Combined #420  combinedFPS≈27,5  (2 workers)
+(2752):[PCam][Android] Frame #210  1920×1080  rot=0°  gap=67ms  copy=10ms  encode=17ms  → workerFPS≈14
+(2753):[PCam][Android] Frame #210  1920×1080  rot=0°  gap=67ms  copy=10ms  encode=19ms  → workerFPS≈14
+(2762):[PCam][Android] Combined #450  combinedFPS≈28,8  (2 workers)
+(2765):[PCam][UI] Camera permission status: Granted
+(2766):[PCam][UI] Stop → 1920×1080 @ 60 fps, format=Jpeg
+(2768):[PCam][Android] Combined #480  combinedFPS≈28,4  (2 workers)
+(2771):[PCam][Android] Combined #510  combinedFPS≈25,7  (2 workers)
+(2772):[PCam][Android] Combined #540  combinedFPS≈28,0  (2 workers)
+(2773):[PCam][Android] Combined #570  combinedFPS≈28,2  (2 workers)
+(2776):[PCam][Android] Combined #600  combinedFPS≈27,2  (2 workers)
+(2777):[PCam][Android] Combined #630  combinedFPS≈28,0  (2 workers)
+(2780):[PCam][Android] Combined #660  combinedFPS≈27,3  (2 workers)
+(2783):[PCam][Android] Combined #690  combinedFPS≈29,0  (2 workers)
+(2784):[PCam][Android] Combined #720  combinedFPS≈27,3  (2 workers)
+(2787):[PCam][Android] Combined #750  combinedFPS≈26,5  (2 workers)

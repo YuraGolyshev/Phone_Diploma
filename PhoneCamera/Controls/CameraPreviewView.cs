@@ -89,6 +89,19 @@ public class CameraPreviewView : View
         set => _h264NalReady = value;
     }
 
+    /// <summary>
+    /// Раз в окно (~CameraSettings.ADAPTIVE_WINDOW_MS) сюда приходит статистика
+    /// "сколько раз отправка в Channel блокировалась" / "сколько всего попыток".
+    /// Подписывается H.264-веткой handler'а на ObserveBackpressure pipeline'а.
+    /// MainPage прокидывает сюда событие CameraStreamingService.OnBackpressureWindow.
+    /// </summary>
+    private volatile Action<int, int>? _backpressureWindowReady;
+    public Action<int, int>? BackpressureWindowReady
+    {
+        get => _backpressureWindowReady;
+        set => _backpressureWindowReady = value;
+    }
+
     /// <summary>Вызывается, когда найден QR-код (передаётся его текст).</summary>
     public Action<string>? QrCodeDetected { get; set; }
 

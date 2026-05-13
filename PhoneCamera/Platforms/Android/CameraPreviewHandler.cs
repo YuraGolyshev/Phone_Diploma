@@ -347,6 +347,14 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
         _h264.OnError = (msg) =>
             System.Diagnostics.Debug.WriteLine($"[PCam][Android] H264 pipeline error: {msg}");
 
+        // AIMD-контроллер: подписываем pipeline на статистику от CameraStreamingService
+        // (MainPage прокидывает Service.OnBackpressureWindow → View.BackpressureWindowReady).
+        // Тик прилетает ~раз в 2 сек, pipeline сам решает менять ли битрейт MediaCodec'а.
+        VirtualView.BackpressureWindowReady = (blocked, total) =>
+        {
+            try { _h264?.ObserveBackpressure(blocked, total); } catch { }
+        };
+
         // Preview: рисуем 640×480 ARGB Bitmap прямо в наш ImageView через Post().
         // Вызывается с camera-thread'а; Post переводит в UI-thread.
         var preview = PlatformView;
@@ -396,6 +404,11 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
     {
         if (_h264 == null) return;
         System.Diagnostics.Debug.WriteLine("[PCam][Android] StopH264");
+
+        // Отписываем AIMD-callback ДО Stop/Dispose, чтобы запоздавший tick
+        // от Service не позвал ObserveBackpressure на освобождённом pipeline'е.
+        try { if (VirtualView != null) VirtualView.BackpressureWindowReady = null; } catch { }
+
         try { _h264.Stop(); } catch { }
         try { _h264.Dispose(); } catch { }
         _h264 = null;

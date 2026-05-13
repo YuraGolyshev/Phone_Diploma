@@ -1,6 +1,7 @@
 using System.Buffers;
 using System.Diagnostics;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Channels;
 
 namespace PhoneCamera.Services;
@@ -24,6 +25,10 @@ public sealed class CameraStreamingService : IDisposable
     private const byte E0 = 0x04, E1 = 0x03, E2 = 0x02, E3 = 0x01;
     private const int  FrameOverhead = 12; // 4 start + 4 size + 4 end
 
+    // Период замера заполненности Channel (backpressure stats).
+    // Должно совпадать с CameraSettings.ADAPTIVE_WINDOW_MS на стороне Android.
+    private const int  BackpressureWindowMs = 2000;
+
     private TcpClient?     _client;
     private NetworkStream? _stream;
     private Channel<(byte[] Packet, int Length)>? _channel;
@@ -35,6 +40,21 @@ public sealed class CameraStreamingService : IDisposable
     // запрещён, очередь больше + FullMode=Wait → natural backpressure через MediaCodec
     // к Camera2 sensor'у. JPEG (самодостаточные кадры) — drop-oldest безопасен.
     private bool _useBackpressure;
+
+    // ── Адаптивная подстройка битрейта: статистика по заполненности Channel ──
+    // Каждый EnqueueFrame в backpressure-режиме инкрементит _writeTotal, а если
+    // TryWrite вернул false (канал занят, сеть отстаёт) — ещё и _writeBlocked.
+    // Раз в ADAPTIVE_WINDOW_MS тик-таймер собирает счётчики, сбрасывает их в 0
+    // и зовёт OnBackpressureWindow(blocked, total). Подписчик (H.264 pipeline)
+    // решает поднимать или опускать битрейт.
+    private long _writeTotal;
+    private long _writeBlocked;
+    private System.Threading.Timer? _bpTimer;
+    /// <summary>Тиковая статистика блокировок отправки. Аргументы: (blocked, total)
+    /// за прошедшее окно. Подписывается в MainPage → CameraPreviewView → handler →
+    /// H264EncoderPipeline.ObserveBackpressure. Фиксированный intervalMs задаётся
+    /// в CameraSettings.ADAPTIVE_WINDOW_MS, по умолчанию 2000 ms.</summary>
+    public System.Action<int, int>? OnBackpressureWindow;
 
     public bool    IsConnected => _client?.Connected == true && _stream != null;
     public string? ServerIp    { get; private set; }
@@ -97,6 +117,17 @@ public sealed class CameraStreamingService : IDisposable
             });
             _sendTask = Task.Run(() => SendLoopAsync(_sendCts.Token));
 
+            // Таймер замеров backpressure: только в H.264/H.265 режиме (для JPEG
+            // drop-oldest нет смысла адаптировать битрейт). Tick'ает каждые
+            // BackpressureWindowMs, читает счётчики, зовёт OnBackpressureWindow.
+            if (_useBackpressure)
+            {
+                _writeTotal = 0;
+                _writeBlocked = 0;
+                _bpTimer = new System.Threading.Timer(BpTimerTick, null,
+                    BackpressureWindowMs, BackpressureWindowMs);
+            }
+
             Debug.WriteLine($"[PCam][Stream] Connected to {ip}:{port}");
             return true;
         }
@@ -114,6 +145,9 @@ public sealed class CameraStreamingService : IDisposable
         _channel = null;
         ch?.Writer.TryComplete();
 
+        try { _bpTimer?.Dispose(); } catch { }
+        _bpTimer = null;
+
         _sendCts?.Cancel();
         try { _sendTask?.Wait(1000); } catch { }
         _sendCts?.Dispose();
@@ -125,6 +159,16 @@ public sealed class CameraStreamingService : IDisposable
         _stream = null;
         _client = null;
         Debug.WriteLine("[PCam][Stream] Disconnected");
+    }
+
+    private void BpTimerTick(object? _)
+    {
+        int total   = (int)Interlocked.Exchange(ref _writeTotal,   0L);
+        int blocked = (int)Interlocked.Exchange(ref _writeBlocked, 0L);
+        if (total <= 0) return;
+        double pct = 100.0 * blocked / total;
+        Debug.WriteLine($"[PCam][Stream] BW window: {total} frames, blocked={blocked} ({pct:F1}%)");
+        try { OnBackpressureWindow?.Invoke(blocked, total); } catch { }
     }
 
     /// <summary>
@@ -175,10 +219,15 @@ public sealed class CameraStreamingService : IDisposable
             // встала на 500ms — drop'аем NAL chunk и продолжаем, output-thread
             // может корректно выйти на Stop.
             const int writeTimeoutMs = 500;
+            Interlocked.Increment(ref _writeTotal);
             try
             {
                 if (!ch.Writer.TryWrite((packet, packetLen)))
                 {
+                    // Канал занят — сеть не успевает. Это сигнал для AIMD-контроллера
+                    // снизить битрейт. Сам пакет всё равно пытаемся протолкнуть
+                    // (с таймаутом) — Wait-режим даёт честный backpressure.
+                    Interlocked.Increment(ref _writeBlocked);
                     using var ctsTimeout = new CancellationTokenSource(writeTimeoutMs);
                     ch.Writer.WriteAsync((packet, packetLen), ctsTimeout.Token).AsTask().Wait();
                 }

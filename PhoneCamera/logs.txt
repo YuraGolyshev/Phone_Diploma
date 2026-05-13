@@ -1,1208 +1,433 @@
 
-(396):[PCam][UI] OnAppearing — camera permission: Granted
-(397):[PCam][Android] ConnectHandler — handler attached
-(398):[PCam][Android] MapIsRunning → IsRunning=False
-(399):[PCam][Android] StopCamera
-(400):[PCam][Android] QueryConfigs starting...
-(401):[PCam][Android] MapSelectedConfig → config=none, running=False
-(402):[PCam][Android] MapFormat → format=Jpeg, scanning=False, running=False
-(403):[PCam][Android] MapPreviewEnabled → PreviewEnabled=True
-(404):[PCam][Android] QueryConfigs AE FPS ranges: [5, 15], [15, 15], [15, 20], [20, 20], [24, 24], [5, 30], [30, 30], [15, 60], [60, 60]
-(405):[PCam][Android] HighSpeed: 2 size(s) advertised:
-(406):[PCam][Android]   HS 1280×720 → ranges: [[30, 120], [120, 120], [30, 240], [240, 240]]
-(407):[PCam][Android]   HS 1920×1080 → ranges: [[30, 120], [120, 120], [30, 240], [240, 240]]
-(408):[PCam][Android] HighSpeed: union FPS ranges: [[120, 120], [240, 240], [30, 240], [30, 120]]
-(409):[PCam][Android] QueryConfigs done: 204 configs, default=1920×1080   30 fps
-(479):[PCam][Android] MapSelectedConfig → config=1920×1080   30 fps, running=False
-(480):[PCam][UI] ConfigurationsReady: 204 configs, resolutions=67, default=1920×1080 @ 30 fps, format=H264
-(481):[PCam][UI] OnConfigurationsReady — autostart preview
-(482):[PCam][Android] MapIsRunning → IsRunning=True
-(484):[PCam][Android] StartCamera → config=1920×1080   30 fps, targetRotation=1 (landscape)
-(486):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
-(487):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
-(488):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(489):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(490):[PCam][Android] StartCamera ✓ camera bound successfully
-(857):[PCam][Android] Combined #30  combinedFPS≈19,4  (2 workers)
-(1126):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=61ms  copy=8ms  encode=14ms  → workerFPS≈16
-(1127):[PCam][Android] Combined #60  combinedFPS≈28,1  (2 workers)
-(1128):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=68ms  copy=8ms  encode=16ms  → workerFPS≈14
-(1210):[PCam][UI] QR detected: cam://192.168.0.106:8888
-(1211):[PCam][Stream] Disconnected
-(1272):[PCam][Android] Combined #90  combinedFPS≈20,4  (2 workers)
-(1496):[PCam][Android] Combined #120  combinedFPS≈26,4  (2 workers)
-(1529):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=66ms  copy=10ms  encode=29ms  → workerFPS≈15
-(1530):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=67ms  copy=10ms  encode=18ms  → workerFPS≈14
-(1677):[PCam][Android] Combined #150  combinedFPS≈26,5  (2 workers)
-(1898):[PCam][Android] Combined #180  combinedFPS≈25,8  (2 workers)
-(1971):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=56ms  copy=10ms  encode=17ms  → workerFPS≈17
-(1972):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=68ms  copy=10ms  encode=16ms  → workerFPS≈14
-(2083):[PCam][Android] Combined #210  combinedFPS≈25,6  (2 workers)
-(2114):[PCam][Stream] Connect failed: The operation has timed out.
-(2115):[PCam][Stream] Disconnected
-(2295):[PCam][Android] Combined #240  combinedFPS≈17,3  (2 workers)
-(2362):[PCam][Android] Frame #120  1920×1080  rot=0°  gap=188ms  copy=11ms  encode=28ms  → workerFPS≈5
-(2363):[PCam][Android] Frame #120  1920×1080  rot=0°  gap=102ms  copy=16ms  encode=16ms  → workerFPS≈9
-(2510):[PCam][Android] Combined #270  combinedFPS≈25,6  (2 workers)
-(2701):[PCam][Android] Combined #300  combinedFPS≈25,7  (2 workers)
-(2784):[PCam][Android] Frame #150  1920×1080  rot=0°  gap=66ms  copy=9ms  encode=17ms  → workerFPS≈15
-(2785):[PCam][Android] Frame #150  1920×1080  rot=0°  gap=67ms  copy=11ms  encode=16ms  → workerFPS≈14
-(2942):[PCam][Android] Combined #330  combinedFPS≈26,5  (2 workers)
-(3193):[PCam][Android] Combined #360  combinedFPS≈25,7  (2 workers)
-(3249):[PCam][Android] Frame #180  1920×1080  rot=0°  gap=65ms  copy=10ms  encode=16ms  → workerFPS≈15
-(3290):[PCam][Android] Frame #180  1920×1080  rot=0°  gap=177ms  copy=10ms  encode=16ms  → workerFPS≈5
-(3456):[PCam][UI] QR detected: cam://192.168.0.106:8888
-(3457):[PCam][Stream] Disconnected
-(3458):[PCam][Android] Combined #420  combinedFPS≈12,7  (2 workers)
-(3583):[PCam][Android] Frame #210  1920×1080  rot=0°  gap=68ms  copy=10ms  encode=15ms  → workerFPS≈14
-(3681):[PCam][UI] QR detected: cam://192.168.0.106:8888
-(3682):[PCam][UI] QR debounced (duplicate within 2s): cam://192.168.0.106:8888
-(3683):[PCam][Android] Frame #210  1920×1080  rot=0°  gap=67ms  copy=11ms  encode=15ms  → workerFPS≈14
-(3696):[PCam][UI] QR detected: cam://192.168.0.106:8888
-(3697):[PCam][UI] QR debounced (duplicate within 2s): cam://192.168.0.106:8888
-(3708):[PCam][UI] QR detected: cam://192.168.0.106:8888
-(3709):[PCam][Stream] Disconnected
-(3710):[PCam][Stream] Connect failed: Operation Canceled
-(3712):[PCam][Stream] Disconnected
-(3713):[PCam][Stream] Connect failed: Cannot access a disposed object.
-(3715):[PCam][Stream] Disconnected
-(3820):[PCam][Android] Combined #480  combinedFPS≈8,4  (2 workers)
-(4019):[PCam][Android] Combined #510  combinedFPS≈26,5  (2 workers)
-(4096):[PCam][Android] Frame #240  1920×1080  rot=0°  gap=66ms  copy=10ms  encode=57ms  → workerFPS≈15
-(4147):[PCam][Android] Frame #240  1920×1080  rot=0°  gap=69ms  copy=10ms  encode=16ms  → workerFPS≈14
-(4222):[PCam][Android] Combined #540  combinedFPS≈26,5  (2 workers)
-(4379):[PCam][Android] Combined #570  combinedFPS≈26,4  (2 workers)
-(4474):[PCam][Android] Frame #270  1920×1080  rot=0°  gap=68ms  copy=10ms  encode=15ms  → workerFPS≈14
-(4519):[PCam][Android] Frame #270  1920×1080  rot=0°  gap=67ms  copy=10ms  encode=15ms  → workerFPS≈14
-(4624):[PCam][Android] Combined #600  combinedFPS≈25,8  (2 workers)
-(4789):[PCam][Android] Combined #630  combinedFPS≈26,1  (2 workers)
-(4878):[PCam][Android] Frame #300  1920×1080  rot=0°  gap=67ms  copy=10ms  encode=15ms  → workerFPS≈14
-(4931):[PCam][Android] Frame #300  1920×1080  rot=0°  gap=78ms  copy=10ms  encode=16ms  → workerFPS≈12
-(4972):[PCam][Android] Combined #660  combinedFPS≈29,4  (2 workers)
-(5211):[PCam][Android] Combined #690  combinedFPS≈26,4  (2 workers)
-(5286):[PCam][Android] Frame #330  1920×1080  rot=0°  gap=66ms  copy=10ms  encode=15ms  → workerFPS≈15
-(5319):[PCam][Android] Frame #330  1920×1080  rot=0°  gap=66ms  copy=10ms  encode=16ms  → workerFPS≈15
-(5422):[PCam][Android] Combined #720  combinedFPS≈26,6  (2 workers)
-(5532):[PCam][UI] QR detected: cam://192.168.0.106:8888
-(5533):[PCam][Stream] Disconnected
-(5594):[PCam][Stream] Connected to 192.168.0.106:8888
-(5595):[PCam][Android] Combined #750  combinedFPS≈24,2  (2 workers)
-(5742):[PCam][Android] Frame #360  1920×1080  rot=0°  gap=69ms  copy=10ms  encode=16ms  → workerFPS≈14
-(5743):[PCam][Android] Frame #360  1920×1080  rot=0°  gap=73ms  copy=9ms  encode=14ms  → workerFPS≈13
-(5836):[PCam][Android] Combined #780  combinedFPS≈25,7  (2 workers)
-(6007):[PCam][Android] Combined #810  combinedFPS≈26,5  (2 workers)
-(6122):[PCam][Android] Frame #390  1920×1080  rot=0°  gap=63ms  copy=10ms  encode=16ms  → workerFPS≈15
-(6123):[PCam][Android] Frame #390  1920×1080  rot=0°  gap=77ms  copy=10ms  encode=16ms  → workerFPS≈12
-(6206):[PCam][Android] Combined #840  combinedFPS≈27,2  (2 workers)
-(6407):[PCam][Android] Combined #870  combinedFPS≈26,1  (2 workers)
-(6542):[PCam][Android] Frame #420  1920×1080  rot=0°  gap=49ms  copy=10ms  encode=16ms  → workerFPS≈20
-(6543):[PCam][Android] Frame #420  1920×1080  rot=0°  gap=63ms  copy=10ms  encode=16ms  → workerFPS≈15
-(6636):[PCam][Android] Combined #900  combinedFPS≈28,6  (2 workers)
-(6827):[PCam][Android] Combined #930  combinedFPS≈25,5  (2 workers)
-(6944):[PCam][Android] Frame #450  1920×1080  rot=0°  gap=74ms  copy=11ms  encode=15ms  → workerFPS≈13
-(6945):[PCam][Android] Frame #450  1920×1080  rot=0°  gap=68ms  copy=10ms  encode=16ms  → workerFPS≈14
-(7028):[PCam][Android] Combined #960  combinedFPS≈26,5  (2 workers)
-(7326):[PCam][UI] Camera permission status: Granted
-(7327):[PCam][UI] Start → 1920×1080 @ 30 fps, format=H264
-(7328):[PCam][Android] MapFormat → format=H264, scanning=False, running=True
-(7329):[PCam][Android] StopCamera
-(7331):[PCam][Android] StartH264 → cam=0 1920x1080@30fps codec=AVC
-(7332):[PCam][H264] Encoder configured: codec=AVC (video/avc) 1920x1080@30fps
-(7333):[PCam][H264] Start requested: 1920x1080@30fps
-(7334):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(7335):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(7336):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(7452):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(7487):[PCam][H264] Encoded fps≈21,2  keys=1  bitrate≈4,74 Mbps
-(7497):[PCam][H264] Camera real fps≈14,6  sensorFrameDuration=33,35ms  AE=[30, 30]
-(7498):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(7531):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈6,44 Mbps
-(7542):[PCam][H264] Camera real fps≈16,7  sensorFrameDuration=33,35ms  AE=[30, 30]
-(7543):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(7576):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈6,35 Mbps
-(7583):[PCam][H264] Camera real fps≈15,3  sensorFrameDuration=33,35ms  AE=[30, 30]
-(7584):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(7594):[PCam][UI] Preview: disabled
-(7595):[PCam][Android] MapPreviewEnabled → PreviewEnabled=False
-(7596):[PCam][Android] StopCamera
-(7597):[PCam][Android] StopH264
-(7852):[PCam][Android] StartH264 → cam=0 1920x1080@30fps codec=AVC
-(7853):[PCam][H264] Encoder configured: codec=AVC (video/avc) 1920x1080@30fps
-(7854):[PCam][H264] Start requested: 1920x1080@30fps
-(7855):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(7856):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(7857):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(7858):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(7953):[PCam][H264] Encoded fps≈23,4  keys=1  bitrate≈4,81 Mbps
-(7954):[PCam][H264] Camera real fps≈24,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(7955):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(7980):[PCam][H264] Encoded fps≈29,7  keys=1  bitrate≈6,34 Mbps
-(7981):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(7982):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(8011):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈6,37 Mbps
-(8012):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(8013):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(8046):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈5,96 Mbps
-(8047):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(8048):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(8075):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈6,11 Mbps
-(8076):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(8077):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(8113):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈6,07 Mbps
-(8114):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(8115):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(8240):[PCam][UI] Camera permission status: Granted
-(8241):[PCam][UI] Stop → 1920×1080 @ 30 fps, format=H264
-(8242):[PCam][Android] MapFormat → format=Jpeg, scanning=False, running=True
-(8243):[PCam][Android] StopCamera
-(8244):[PCam][Android] StopH264
-(8246):[PCam][Android] StartCamera → config=1920×1080   30 fps, targetRotation=1 (landscape)
-(8248):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
-(8249):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
-(8250):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(8251):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(8252):[PCam][Android] StartCamera ✓ camera bound successfully
-(8274):[PCam][UI] Format selected: H264
-(8275):[PCam][Android] Combined #30  combinedFPS≈22,6  (2 workers)
-(8284):[PCam][UI] Format selected: H265
-(8287):[PCam][Android] Combined #60  combinedFPS≈29,0  (2 workers)
-(8300):[PCam][UI] Camera permission status: Granted
-(8301):[PCam][UI] Start → 1920×1080 @ 30 fps, format=H265
-(8302):[PCam][UI] Format changed H264 → H265, reconnecting to 192.168.0.106:8888
-(8360):[PCam][Stream] Disconnected
-(8361):[PCam][Stream] Disconnected
-(8362):[PCam][Stream] Connected to 192.168.0.106:8888
-(8363):[PCam][Android] MapFormat → format=H265, scanning=False, running=True
-(8364):[PCam][Android] StopCamera
-(8365):[PCam][Android] StartH264 → cam=0 1920x1080@30fps codec=HEVC
-(8623):[PCam][H264] Encoder configured: codec=HEVC (video/hevc) 1920x1080@30fps
-(8624):[PCam][H264] Start requested: 1920x1080@30fps
-(8625):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(8626):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(8627):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(8628):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(8711):[PCam][H264] Encoded fps≈20,9  keys=1  bitrate≈3,77 Mbps
-(8719):[PCam][H264] Camera real fps≈25,3  sensorFrameDuration=33,35ms  AE=[30, 30]
-(8720):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(8758):[PCam][H264] Encoded fps≈29,3  keys=1  bitrate≈5,25 Mbps
-(8759):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(8760):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(8790):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈5,49 Mbps
-(8791):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(8792):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(8822):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈5,49 Mbps
-(8823):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(8824):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(8848):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈5,42 Mbps
-(8856):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(8857):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(8879):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈5,36 Mbps
-(8887):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(8888):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(8899):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈5,43 Mbps
-(8921):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(8922):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(8943):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈5,61 Mbps
-(8952):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(8953):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(8975):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈5,36 Mbps
-(8981):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(8982):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(9010):[PCam][H264] Encoded fps≈28,4  keys=1  bitrate≈5,29 Mbps
-(9019):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(9020):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(9043):[PCam][H264] Encoded fps≈31,8  keys=1  bitrate≈5,72 Mbps
-(9051):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(9052):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(9073):[PCam][UI] Camera permission status: Granted
-(9074):[PCam][UI] Stop → 1920×1080 @ 30 fps, format=H265
-(9075):[PCam][Android] MapFormat → format=Jpeg, scanning=False, running=True
-(9076):[PCam][Android] StopCamera
-(9077):[PCam][Android] StopH264
-(9207):[PCam][Android] StartCamera → config=1920×1080   30 fps, targetRotation=1 (landscape)
-(9208):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
-(9209):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
-(9210):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(9211):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(9212):[PCam][Android] StartCamera ✓ camera bound successfully
-(9237):[PCam][Android] Combined #30  combinedFPS≈22,4  (2 workers)
-(9257):[PCam][Android] Combined #60  combinedFPS≈29,0  (2 workers)
-(9268):[PCam][Android] Combined #90  combinedFPS≈26,3  (2 workers)
-(9277):[PCam][Android] Combined #120  combinedFPS≈27,3  (2 workers)
-(9328):[PCam][Android] Combined #150  combinedFPS≈27,2  (2 workers)
-(9329):[PCam][UI] Resolution selected: 2560×1440
-(9330):[PCam][Android] MapSelectedConfig → config=2560×1440   30 fps, running=True
-(9331):[PCam][Android] StartCamera → config=2560×1440   30 fps, targetRotation=1 (landscape)
-(9332):[PCam][Android] StartCamera resRequest=2560×1440 (sensor landscape)
-(9333):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
-(9334):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(9336):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(9337):[PCam][Android] StartCamera ✓ camera bound successfully
-(9474):[PCam][UI] Format selected: H264
-(9475):[PCam][Android] Combined #30  combinedFPS≈20,5  (2 workers)
-(9751):[PCam][UI] Camera permission status: Granted
-(9752):[PCam][UI] Start → 2560×1440 @ 30 fps, format=H264
-(9753):[PCam][UI] Format changed H265 → H264, reconnecting to 192.168.0.106:8888
-(9754):[PCam][Stream] Disconnected
-(9755):[PCam][Stream] Disconnected
-(9756):[PCam][Stream] Connected to 192.168.0.106:8888
-(9757):[PCam][Android] MapFormat → format=H264, scanning=False, running=True
-(9758):[PCam][Android] StopCamera
-(9759):[PCam][Android] StartH264 → cam=0 2560x1440@30fps codec=AVC
-(9761):[PCam][H264] Encoder configured: codec=AVC (video/avc) 2560x1440@30fps
-(9762):[PCam][H264] Start requested: 2560x1440@30fps
-(9763):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(9764):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(9765):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(9766):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(9859):[PCam][H264] Encoded fps≈20,8  keys=1  bitrate≈7,54 Mbps
-(9860):[PCam][H264] Camera real fps≈24,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(9861):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(9891):[PCam][H264] Encoded fps≈29,4  keys=1  bitrate≈9,99 Mbps
-(9892):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(9893):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(9922):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈9,64 Mbps
-(9923):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(9924):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(9950):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈10,10 Mbps
-(9951):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(9952):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(9982):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈10,67 Mbps
-(9983):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(9984):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10016):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈10,09 Mbps
-(10017):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10018):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10051):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈10,60 Mbps
-(10052):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10053):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10083):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈10,35 Mbps
-(10084):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10085):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10114):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈10,87 Mbps
-(10115):[PCam][H264] Camera real fps≈29,6  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10116):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10152):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,77 Mbps
-(10153):[PCam][UI] Camera permission status: Granted
-(10154):[PCam][UI] Stop → 2560×1440 @ 30 fps, format=H264
-(10155):[PCam][Android] MapFormat → format=Jpeg, scanning=False, running=True
-(10156):[PCam][Android] StopCamera
-(10157):[PCam][Android] StopH264
-(10289):[PCam][Android] StartCamera → config=2560×1440   30 fps, targetRotation=1 (landscape)
-(10290):[PCam][Android] StartCamera resRequest=2560×1440 (sensor landscape)
-(10291):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
-(10292):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(10293):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(10294):[PCam][Android] StartCamera ✓ camera bound successfully
-(10311):[PCam][UI] Format selected: H265
-(10312):[PCam][Android] Combined #30  combinedFPS≈22,8  (2 workers)
-(10426):[PCam][UI] Camera permission status: Granted
-(10427):[PCam][UI] Start → 2560×1440 @ 30 fps, format=H265
-(10428):[PCam][UI] Format changed H264 → H265, reconnecting to 192.168.0.106:8888
-(10429):[PCam][Stream] Disconnected
-(10430):[PCam][Stream] Disconnected
-(10431):[PCam][Stream] Connected to 192.168.0.106:8888
-(10432):[PCam][Android] MapFormat → format=H265, scanning=False, running=True
-(10433):[PCam][Android] StopCamera
-(10434):[PCam][Android] StartH264 → cam=0 2560x1440@30fps codec=HEVC
-(10436):[PCam][H264] Encoder configured: codec=HEVC (video/hevc) 2560x1440@30fps
-(10616):[PCam][H264] Start requested: 2560x1440@30fps
-(10617):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(10618):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(10619):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(10620):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(10701):[PCam][H264] Encoded fps≈20,8  keys=1  bitrate≈6,38 Mbps
-(10708):[PCam][H264] Camera real fps≈24,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10709):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10734):[PCam][H264] Encoded fps≈29,4  keys=1  bitrate≈9,69 Mbps
-(10742):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10743):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10767):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,87 Mbps
-(10773):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10774):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10796):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,44 Mbps
-(10804):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10805):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10831):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈10,02 Mbps
-(10832):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10833):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10858):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈10,01 Mbps
-(10864):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10865):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10892):[PCam][H264] Encoded fps≈30,3  keys=1  bitrate≈9,24 Mbps
-(10893):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10894):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10925):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,98 Mbps
-(10926):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10927):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10949):[PCam][H264] Encoded fps≈29,7  keys=1  bitrate≈9,14 Mbps
-(10958):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10959):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(10986):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈9,26 Mbps
-(10987):[PCam][H264] Camera real fps≈30,3  sensorFrameDuration=33,35ms  AE=[30, 30]
-(10988):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11019):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈10,03 Mbps
-(11020):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11021):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11052):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈9,68 Mbps
-(11053):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11054):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11080):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈10,71 Mbps
-(11082):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11083):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11111):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,30 Mbps
-(11112):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11113):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11146):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈8,62 Mbps
-(11147):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11148):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11159):[PCam][UI] Preview: enabled
-(11160):[PCam][Android] MapPreviewEnabled → PreviewEnabled=True
-(11161):[PCam][Android] StopCamera
-(11162):[PCam][Android] StopH264
-(11165):[PCam][Android] StartH264 → cam=0 2560x1440@30fps codec=HEVC
-(11420):[PCam][H264] Encoder configured: codec=HEVC (video/hevc) 2560x1440@30fps
-(11421):[PCam][H264] Start requested: 2560x1440@30fps
-(11422):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(11423):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(11424):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(11425):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(11531):[PCam][H264] Encoded fps≈23,1  keys=1  bitrate≈6,49 Mbps
-(11532):[PCam][H264] Camera real fps≈13,5  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11533):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11570):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈10,56 Mbps
-(11579):[PCam][H264] Camera real fps≈15,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11580):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11614):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈10,15 Mbps
-(11626):[PCam][H264] Camera real fps≈14,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11627):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11657):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈10,74 Mbps
-(11667):[PCam][H264] Camera real fps≈14,4  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11668):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11697):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,67 Mbps
-(11710):[PCam][H264] Camera real fps≈14,3  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11711):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11739):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,95 Mbps
-(11752):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11753):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11780):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,31 Mbps
-(11793):[PCam][H264] Camera real fps≈14,4  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11794):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11824):[PCam][H264] Encoded fps≈29,2  keys=1  bitrate≈10,11 Mbps
-(11833):[PCam][H264] Camera real fps≈15,4  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11834):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11866):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈9,94 Mbps
-(11874):[PCam][H264] Camera real fps≈14,3  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11875):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11911):[PCam][H264] Encoded fps≈31,2  keys=1  bitrate≈8,92 Mbps
-(11917):[PCam][H264] Camera real fps≈14,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11918):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11953):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,35 Mbps
-(11965):[PCam][H264] Camera real fps≈14,4  sensorFrameDuration=33,35ms  AE=[30, 30]
-(11966):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(11997):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,68 Mbps
-(12015):[PCam][H264] Camera real fps≈14,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(12016):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(12039):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈9,93 Mbps
-(12055):[PCam][H264] Camera real fps≈14,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(12056):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(12079):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈9,61 Mbps
-(12101):[PCam][H264] Camera real fps≈14,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(12102):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(12126):[PCam][H264] Encoded fps≈30,1  keys=2  bitrate≈10,12 Mbps
-(12145):[PCam][H264] Camera real fps≈15,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(12146):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(12165):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,17 Mbps
-(12187):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(12188):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(12208):[PCam][UI] Preview: disabled
-(12209):[PCam][Android] MapPreviewEnabled → PreviewEnabled=False
-(12210):[PCam][Android] StopCamera
-(12211):[PCam][Android] StopH264
-(12470):[PCam][Android] StartH264 → cam=0 2560x1440@30fps codec=HEVC
-(12471):[PCam][H264] Encoder configured: codec=HEVC (video/hevc) 2560x1440@30fps
-(12473):[PCam][H264] Start requested: 2560x1440@30fps
-(12474):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(12475):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(12476):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(12477):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(12566):[PCam][H264] Encoded fps≈23,2  keys=1  bitrate≈6,59 Mbps
-(12567):[PCam][H264] Camera real fps≈24,6  sensorFrameDuration=33,35ms  AE=[30, 30]
-(12568):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(12595):[PCam][H264] Encoded fps≈29,7  keys=1  bitrate≈9,82 Mbps
-(12596):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(12597):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(12627):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈10,30 Mbps
-(12628):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(12629):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(12659):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,36 Mbps
-(12660):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(12661):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(12690):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈9,18 Mbps
-(12691):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(12692):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(12704):[PCam][UI] Camera permission status: Granted
-(12705):[PCam][UI] Stop → 2560×1440 @ 30 fps, format=H265
-(12706):[PCam][Android] MapFormat → format=Jpeg, scanning=False, running=True
-(12707):[PCam][Android] StopCamera
-(12708):[PCam][Android] StopH264
-(12711):[PCam][Android] StartCamera → config=2560×1440   30 fps, targetRotation=1 (landscape)
-(12835):[PCam][Android] StartCamera resRequest=2560×1440 (sensor landscape)
-(12836):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
-(12837):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(12838):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(12839):[PCam][Android] StartCamera ✓ camera bound successfully
-(12856):[PCam][Android] Combined #30  combinedFPS≈22,2  (2 workers)
-(12871):[PCam][Android] Combined #60  combinedFPS≈25,8  (2 workers)
-(12875):[PCam][Android] Combined #90  combinedFPS≈26,4  (2 workers)
-(12889):[PCam][Android] Combined #120  combinedFPS≈28,2  (2 workers)
-(12892):[PCam][Android] Combined #150  combinedFPS≈25,8  (2 workers)
-(12896):[PCam][Android] Combined #180  combinedFPS≈28,8  (2 workers)
-(12905):[PCam][Android] Combined #210  combinedFPS≈27,4  (2 workers)
-(12915):[PCam][Android] Combined #240  combinedFPS≈27,3  (2 workers)
-(12918):[PCam][Android] Combined #270  combinedFPS≈27,2  (2 workers)
-(12944):[PCam][Android] Combined #300  combinedFPS≈27,2  (2 workers)
-(12953):[PCam][Android] Combined #330  combinedFPS≈26,6  (2 workers)
-(12958):[PCam][Android] Combined #360  combinedFPS≈26,4  (2 workers)
-(12967):[PCam][Android] Combined #390  combinedFPS≈27,3  (2 workers)
-(12974):[PCam][Android] Combined #420  combinedFPS≈26,8  (2 workers)
-(12979):[PCam][Android] Combined #450  combinedFPS≈29,6  (2 workers)
-(12989):[PCam][Android] Combined #480  combinedFPS≈26,5  (2 workers)
-(12992):[PCam][Android] Combined #510  combinedFPS≈27,3  (2 workers)
-(12999):[PCam][Android] Combined #540  combinedFPS≈26,4  (2 workers)
-(13150):[PCam][UI] Resolution selected: 3840×2160
-(13151):[PCam][Android] MapSelectedConfig → config=3840×2160   30 fps, running=True
-(13152):[PCam][Android] StartCamera → config=3840×2160   30 fps, targetRotation=1 (landscape)
-(13153):[PCam][Android] StartCamera resRequest=3840×2160 (sensor landscape)
-(13154):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
-(13155):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(13156):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(13158):[PCam][Android] StartCamera ✓ camera bound successfully
-(13183):[PCam][Android] Combined #30  combinedFPS≈21,1  (2 workers)
-(13184):[PCam][Android] Combined #60  combinedFPS≈27,2  (2 workers)
-(13187):[PCam][Android] Combined #90  combinedFPS≈27,2  (2 workers)
-(13188):[PCam][Android] Combined #120  combinedFPS≈29,0  (2 workers)
-(13413):[PCam][UI] Camera permission status: Granted
-(13414):[PCam][UI] Start → 3840×2160 @ 30 fps, format=H265
-(13415):[PCam][Android] MapFormat → format=H265, scanning=False, running=True
-(13416):[PCam][Android] StopCamera
-(13417):[PCam][Android] StartH264 → cam=0 3840x2160@30fps codec=HEVC
-(13419):[PCam][H264] Encoder configured: codec=HEVC (video/hevc) 3840x2160@30fps
-(13480):[PCam][H264] Start requested: 3840x2160@30fps
-(13481):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(13482):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(13483):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(13484):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(13575):[PCam][H264] Encoded fps≈20,5  keys=1  bitrate≈22,48 Mbps
-(13583):[PCam][H264] Camera real fps≈24,5  sensorFrameDuration=33,35ms  AE=[30, 30]
-(13584):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(13608):[PCam][H264] Encoded fps≈29,4  keys=1  bitrate≈18,15 Mbps
-(13616):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(13617):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(13638):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈24,29 Mbps
-(13644):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(13645):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(13669):[PCam][H264] Encoded fps≈29,5  keys=1  bitrate≈22,08 Mbps
-(13680):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(13681):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(13706):[PCam][H264] Encoded fps≈30,3  keys=1  bitrate≈23,71 Mbps
-(13719):[PCam][H264] Camera real fps≈30,3  sensorFrameDuration=33,35ms  AE=[30, 30]
-(13720):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(13764):[PCam][H264] Encoded fps≈10,8  keys=1  bitrate≈9,40 Mbps
-(13765):[PCam][H264] Camera real fps≈26,5  sensorFrameDuration=33,35ms  AE=[30, 30]
-(13766):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(13801):[PCam][H264] Camera real fps≈33,6  sensorFrameDuration=33,35ms  AE=[30, 30]
-(13802):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(13804):[PCam][H264] Encoded fps≈16,6  keys=0  bitrate≈10,93 Mbps
-(13842):[PCam][H264] Camera real fps≈14,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(13843):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(13863):[PCam][H264] Encoded fps≈21,7  keys=1  bitrate≈16,90 Mbps
-(13887):[PCam][H264] Camera real fps≈23,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(13888):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(13893):[PCam][H264] Encoded fps≈15,7  keys=1  bitrate≈18,80 Mbps
-(13926):[PCam][H264] Camera real fps≈12,7  sensorFrameDuration=33,35ms  AE=[30, 30]
-(13927):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(13944):[PCam][H264] Encoded fps≈19,9  keys=1  bitrate≈12,38 Mbps
-(13969):[PCam][H264] Camera real fps≈16,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(13970):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(13997):[PCam][H264] Encoded fps≈13,1  keys=0  bitrate≈12,34 Mbps
-(14014):[PCam][H264] Camera real fps≈12,6  sensorFrameDuration=33,35ms  AE=[30, 30]
-(14015):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(14064):[PCam][UI] Camera permission status: Granted
-(14065):[PCam][UI] Stop → 3840×2160 @ 30 fps, format=H265
-(14066):[PCam][Android] MapFormat → format=Jpeg, scanning=False, running=True
-(14067):[PCam][Android] StopCamera
-(14068):[PCam][Android] StopH264
-(14069):[PCam][H264] Encoded fps≈30,4  keys=2  bitrate≈32,42 Mbps
-(14194):[PCam][Android] StartCamera → config=3840×2160   30 fps, targetRotation=1 (landscape)
-(14195):[PCam][Android] StartCamera resRequest=3840×2160 (sensor landscape)
-(14196):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
-(14197):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(14198):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(14199):[PCam][Android] StartCamera ✓ camera bound successfully
-(14215):[PCam][Android] Combined #30  combinedFPS≈21,7  (2 workers)
-(14260):[PCam][UI] FPS selected: 15
-(14261):[PCam][Android] MapSelectedConfig → config=3840×2160   15 fps, running=True
-(14262):[PCam][Android] StartCamera → config=3840×2160   15 fps, targetRotation=1 (landscape)
-(14263):[PCam][Android] StartCamera resRequest=3840×2160 (sensor landscape)
-(14264):[PCam][Android] StartCamera fps=15 (JPEG path: minimal extender — AE FPS only)
-(14266):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(14267):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(14268):[PCam][Android] StartCamera ✓ camera bound successfully
-(14400):[PCam][Android] Combined #30  combinedFPS≈12,0  (2 workers)
-(14645):[PCam][UI] Camera permission status: Granted
-(14646):[PCam][UI] Start → 3840×2160 @ 15 fps, format=H265
-(14647):[PCam][Android] MapFormat → format=H265, scanning=False, running=True
-(14648):[PCam][Android] StopCamera
-(14650):[PCam][Android] StartH264 → cam=0 3840x2160@15fps codec=HEVC
-(14651):[PCam][H264] Encoder configured: codec=HEVC (video/hevc) 3840x2160@15fps
-(14652):[PCam][H264] Start requested: 3840x2160@15fps
-(14694):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(14695):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[15,15])
-(14696):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(14697):[PCam][H264] Capture session running @ 15fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(14774):[PCam][H264] Encoded fps≈9,5  keys=1  bitrate≈13,26 Mbps
-(14778):[PCam][H264] Camera real fps≈11,4  sensorFrameDuration=66,70ms  AE=[15, 15]
-(14779):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(14794):[PCam][H264] Encoded fps≈14,5  keys=1  bitrate≈11,73 Mbps
-(14799):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=66,70ms  AE=[15, 15]
-(14800):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(14812):[PCam][H264] Encoded fps≈14,9  keys=1  bitrate≈12,03 Mbps
-(14817):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(14818):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(14831):[PCam][H264] Encoded fps≈15,0  keys=1  bitrate≈11,82 Mbps
-(14836):[PCam][H264] Camera real fps≈15,2  sensorFrameDuration=66,70ms  AE=[15, 15]
-(14837):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(14851):[PCam][H264] Encoded fps≈15,0  keys=1  bitrate≈11,63 Mbps
-(14856):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=66,70ms  AE=[15, 15]
-(14857):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(14869):[PCam][H264] Encoded fps≈15,0  keys=1  bitrate≈11,79 Mbps
-(14874):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(14875):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(14886):[PCam][H264] Encoded fps≈15,1  keys=1  bitrate≈14,29 Mbps
-(14890):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(14891):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(14911):[PCam][H264] Encoded fps≈14,3  keys=1  bitrate≈9,68 Mbps
-(14917):[PCam][H264] Camera real fps≈15,1  sensorFrameDuration=66,70ms  AE=[15, 15]
-(14918):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(14928):[PCam][H264] Encoded fps≈15,8  keys=1  bitrate≈15,75 Mbps
-(14932):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(14933):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(14944):[PCam][H264] Encoded fps≈15,0  keys=1  bitrate≈11,85 Mbps
-(14947):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=66,70ms  AE=[15, 15]
-(14948):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(14962):[PCam][H264] Encoded fps≈15,0  keys=1  bitrate≈10,74 Mbps
-(14967):[PCam][H264] Camera real fps≈15,1  sensorFrameDuration=66,70ms  AE=[15, 15]
-(14968):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(14983):[PCam][H264] Encoded fps≈15,0  keys=1  bitrate≈13,24 Mbps
-(14984):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(14985):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15000):[PCam][H264] Encoded fps≈14,9  keys=2  bitrate≈12,02 Mbps
-(15001):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15002):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15020):[PCam][H264] Encoded fps≈15,1  keys=1  bitrate≈12,66 Mbps
-(15021):[PCam][H264] Camera real fps≈15,1  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15022):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15038):[PCam][H264] Encoded fps≈15,1  keys=1  bitrate≈12,83 Mbps
-(15039):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15040):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15055):[PCam][H264] Encoded fps≈14,9  keys=1  bitrate≈11,54 Mbps
-(15056):[PCam][H264] Camera real fps≈15,3  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15057):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15075):[PCam][H264] Encoded fps≈15,0  keys=1  bitrate≈11,97 Mbps
-(15076):[PCam][H264] Camera real fps≈14,8  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15077):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15090):[PCam][H264] Encoded fps≈15,0  keys=1  bitrate≈10,09 Mbps
-(15091):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15092):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15108):[PCam][H264] Encoded fps≈15,0  keys=1  bitrate≈12,85 Mbps
-(15111):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15112):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15130):[PCam][H264] Encoded fps≈15,2  keys=1  bitrate≈15,73 Mbps
-(15134):[PCam][H264] Camera real fps≈15,1  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15135):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15148):[PCam][H264] Encoded fps≈15,0  keys=1  bitrate≈13,09 Mbps
-(15153):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15154):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15163):[PCam][UI] Camera permission status: Granted
-(15164):[PCam][UI] Stop → 3840×2160 @ 15 fps, format=H265
-(15165):[PCam][Android] MapFormat → format=Jpeg, scanning=False, running=True
-(15166):[PCam][Android] StopCamera
-(15167):[PCam][Android] StopH264
-(15170):[PCam][Android] StartCamera → config=3840×2160   15 fps, targetRotation=1 (landscape)
-(15171):[PCam][Android] StartCamera resRequest=3840×2160 (sensor landscape)
-(15172):[PCam][Android] StartCamera fps=15 (JPEG path: minimal extender — AE FPS only)
-(15173):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(15174):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(15175):[PCam][Android] StartCamera ✓ camera bound successfully
-(15320):[PCam][UI] Format selected: H264
-(15321):[PCam][UI] Camera permission status: Granted
-(15322):[PCam][UI] Start → 3840×2160 @ 15 fps, format=H264
-(15323):[PCam][UI] Format changed H265 → H264, reconnecting to 192.168.0.106:8888
-(15324):[PCam][Stream] Disconnected
-(15325):[PCam][Stream] Disconnected
-(15603):[PCam][Stream] Connected to 192.168.0.106:8888
-(15604):[PCam][Android] MapFormat → format=H264, scanning=False, running=True
-(15605):[PCam][Android] StopCamera
-(15606):[PCam][Android] StartH264 → cam=0 3840x2160@15fps codec=AVC
-(15607):[PCam][Android] Combined #30  combinedFPS≈12,3  (2 workers)
-(15609):[PCam][H264] Encoder configured: codec=AVC (video/avc) 3840x2160@15fps
-(15610):[PCam][H264] Start requested: 3840x2160@15fps
-(15611):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(15612):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[15,15])
-(15613):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(15614):[PCam][H264] Capture session running @ 15fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(15698):[PCam][H264] Encoded fps≈9,5  keys=1  bitrate≈15,95 Mbps
-(15699):[PCam][H264] Camera real fps≈11,4  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15700):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15714):[PCam][H264] Encoded fps≈14,4  keys=1  bitrate≈8,67 Mbps
-(15715):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15716):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15731):[PCam][H264] Encoded fps≈15,2  keys=1  bitrate≈10,60 Mbps
-(15735):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15736):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15746):[PCam][H264] Encoded fps≈14,9  keys=1  bitrate≈9,77 Mbps
-(15751):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15752):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15763):[PCam][H264] Encoded fps≈15,1  keys=1  bitrate≈11,86 Mbps
-(15767):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15768):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15780):[PCam][H264] Encoded fps≈15,0  keys=1  bitrate≈11,42 Mbps
-(15786):[PCam][H264] Camera real fps≈15,2  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15787):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15803):[PCam][H264] Encoded fps≈15,1  keys=1  bitrate≈12,32 Mbps
-(15807):[PCam][H264] Camera real fps≈14,8  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15808):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15820):[PCam][H264] Encoded fps≈14,9  keys=1  bitrate≈11,89 Mbps
-(15824):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15825):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15841):[PCam][H264] Encoded fps≈15,1  keys=1  bitrate≈11,10 Mbps
-(15842):[PCam][H264] Camera real fps≈15,1  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15843):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15860):[PCam][H264] Encoded fps≈14,9  keys=1  bitrate≈12,91 Mbps
-(15861):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15862):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15879):[PCam][H264] Encoded fps≈14,9  keys=1  bitrate≈13,42 Mbps
-(15880):[PCam][H264] Camera real fps≈15,1  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15881):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15894):[PCam][H264] Encoded fps≈15,0  keys=2  bitrate≈13,03 Mbps
-(15895):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15896):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15915):[PCam][H264] Encoded fps≈15,2  keys=1  bitrate≈11,62 Mbps
-(15916):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15917):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15931):[PCam][H264] Encoded fps≈14,9  keys=1  bitrate≈14,17 Mbps
-(15932):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15933):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15947):[PCam][H264] Encoded fps≈15,0  keys=1  bitrate≈10,74 Mbps
-(15948):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15949):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15965):[PCam][H264] Encoded fps≈14,9  keys=1  bitrate≈12,13 Mbps
-(15970):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15971):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(15986):[PCam][H264] Encoded fps≈15,1  keys=1  bitrate≈12,00 Mbps
-(15987):[PCam][H264] Camera real fps≈15,2  sensorFrameDuration=66,70ms  AE=[15, 15]
-(15988):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(16004):[PCam][H264] Encoded fps≈15,0  keys=1  bitrate≈11,74 Mbps
-(16005):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=66,70ms  AE=[15, 15]
-(16006):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(16026):[PCam][UI] Camera permission status: Granted
-(16027):[PCam][UI] Stop → 3840×2160 @ 15 fps, format=H264
-(16028):[PCam][Android] MapFormat → format=Jpeg, scanning=False, running=True
-(16029):[PCam][Android] StopCamera
-(16030):[PCam][Android] StopH264
-(16033):[PCam][Android] StartCamera → config=3840×2160   15 fps, targetRotation=1 (landscape)
-(16034):[PCam][Android] StartCamera resRequest=3840×2160 (sensor landscape)
-(16035):[PCam][Android] StartCamera fps=15 (JPEG path: minimal extender — AE FPS only)
-(16036):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(16037):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(16038):[PCam][Android] StartCamera ✓ camera bound successfully
-(16198):[PCam][Android] Combined #30  combinedFPS≈12,9  (2 workers)
-(16210):[PCam][Android] Combined #60  combinedFPS≈15,0  (2 workers)
-(16226):[PCam][Android] Combined #90  combinedFPS≈14,5  (2 workers)
-(16398):[PCam][UI] Resolution selected: 2560×1440
-(16399):[PCam][Android] MapSelectedConfig → config=2560×1440   15 fps, running=True
-(16400):[PCam][Android] StartCamera → config=2560×1440   15 fps, targetRotation=1 (landscape)
-(16401):[PCam][Android] StartCamera resRequest=2560×1440 (sensor landscape)
-(16402):[PCam][Android] StartCamera fps=15 (JPEG path: minimal extender — AE FPS only)
-(16404):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(16405):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(16406):[PCam][Android] StartCamera ✓ camera bound successfully
-(16655):[PCam][UI] Camera permission status: Granted
-(16656):[PCam][UI] Start → 2560×1440 @ 15 fps, format=H264
-(16657):[PCam][Android] MapFormat → format=H264, scanning=False, running=True
-(16658):[PCam][Android] StopCamera
-(16659):[PCam][Android] StartH264 → cam=0 2560x1440@15fps codec=AVC
-(16661):[PCam][H264] Encoder configured: codec=AVC (video/avc) 2560x1440@15fps
-(16662):[PCam][H264] Start requested: 2560x1440@15fps
-(16663):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(16664):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[15,15])
-(16706):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(16707):[PCam][H264] Capture session running @ 15fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(16780):[PCam][H264] Encoded fps≈9,6  keys=1  bitrate≈5,02 Mbps
-(16784):[PCam][H264] Camera real fps≈11,5  sensorFrameDuration=66,70ms  AE=[15, 15]
-(16785):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(16799):[PCam][H264] Encoded fps≈14,7  keys=1  bitrate≈4,10 Mbps
-(16805):[PCam][H264] Camera real fps≈15,0  sensorFrameDuration=66,70ms  AE=[15, 15]
-(16806):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(16818):[PCam][H264] Encoded fps≈14,9  keys=1  bitrate≈5,30 Mbps
-(16823):[PCam][H264] Camera real fps≈14,9  sensorFrameDuration=66,70ms  AE=[15, 15]
-(16824):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(16839):[PCam][H264] Encoded fps≈15,1  keys=1  bitrate≈4,58 Mbps
-(16845):[PCam][H264] Camera real fps≈15,2  sensorFrameDuration=66,70ms  AE=[15, 15]
-(16846):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(16852):[PCam][UI] FPS selected: 30
-(16853):[PCam][Android] MapSelectedConfig → config=2560×1440   30 fps, running=True
-(16854):[PCam][Android] StopH264
-(17100):[PCam][Android] StartH264 → cam=0 2560x1440@30fps codec=AVC
-(17101):[PCam][H264] Encoder configured: codec=AVC (video/avc) 2560x1440@30fps
-(17102):[PCam][H264] Start requested: 2560x1440@30fps
-(17103):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(17104):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(17105):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(17106):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(17197):[PCam][H264] Encoded fps≈23,5  keys=1  bitrate≈8,19 Mbps
-(17198):[PCam][H264] Camera real fps≈24,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(17199):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(17233):[PCam][H264] Encoded fps≈29,4  keys=1  bitrate≈10,63 Mbps
-(17234):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(17235):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(17262):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈10,89 Mbps
-(17263):[PCam][H264] Camera real fps≈30,3  sensorFrameDuration=33,35ms  AE=[30, 30]
-(17264):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(17295):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈11,07 Mbps
-(17296):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(17297):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(17325):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈10,14 Mbps
-(17326):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(17327):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(17359):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈10,81 Mbps
-(17360):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(17361):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(17388):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈11,01 Mbps
-(17389):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(17390):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(17420):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,69 Mbps
-(17421):[PCam][H264] Camera real fps≈29,7  sensorFrameDuration=33,35ms  AE=[30, 30]
-(17422):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(17442):[PCam][UI] Camera permission status: Granted
-(17443):[PCam][UI] Stop → 2560×1440 @ 30 fps, format=H264
-(17444):[PCam][Android] MapFormat → format=Jpeg, scanning=False, running=True
-(17445):[PCam][Android] StopCamera
-(17446):[PCam][Android] StopH264
-(17578):[PCam][Android] StartCamera → config=2560×1440   30 fps, targetRotation=1 (landscape)
-(17580):[PCam][Android] StartCamera resRequest=2560×1440 (sensor landscape)
-(17581):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
-(17582):[PCam][Android] DispatchingAnalyzer created with 2 workers
-(17583):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
-(17584):[PCam][Android] StartCamera ✓ camera bound successfully
-(17609):[PCam][UI] Format selected: H265
-(17610):[PCam][Android] Combined #30  combinedFPS≈23,3  (2 workers)
-(17611):[PCam][UI] Camera permission status: Granted
-(17612):[PCam][UI] Start → 2560×1440 @ 30 fps, format=H265
-(17613):[PCam][UI] Format changed H264 → H265, reconnecting to 192.168.0.106:8888
-(17614):[PCam][Stream] Disconnected
-(17615):[PCam][Stream] Disconnected
-(17900):[PCam][Stream] Connected to 192.168.0.106:8888
-(17901):[PCam][Android] MapFormat → format=H265, scanning=False, running=True
-(17902):[PCam][Android] StopCamera
-(17903):[PCam][Android] StartH264 → cam=0 2560x1440@30fps codec=HEVC
-(17905):[PCam][H264] Encoder configured: codec=HEVC (video/hevc) 2560x1440@30fps
-(17906):[PCam][H264] Start requested: 2560x1440@30fps
-(17907):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(17908):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(17909):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(17910):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(18005):[PCam][H264] Encoded fps≈20,8  keys=1  bitrate≈6,14 Mbps
-(18006):[PCam][H264] Camera real fps≈25,3  sensorFrameDuration=33,35ms  AE=[30, 30]
-(18007):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(18035):[PCam][H264] Encoded fps≈29,4  keys=1  bitrate≈9,57 Mbps
-(18036):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(18037):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(18068):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈10,78 Mbps
-(18069):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(18070):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(18098):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈10,04 Mbps
-(18099):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(18100):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(18130):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈10,90 Mbps
-(18131):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(18132):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(18166):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,95 Mbps
-(18167):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(18168):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(18194):[PCam][Android] MapSelectedConfig → config=1440×2560   30 fps, running=True
-(18195):[PCam][Android] StopH264
-(18458):[PCam][Android] StartH264 → cam=0 2560x1440@30fps codec=HEVC
-(18459):[PCam][H264] Encoder configured: codec=HEVC (video/hevc) 2560x1440@30fps
-(18460):[PCam][H264] Start requested: 2560x1440@30fps
-(18461):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(18462):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(18463):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(18464):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(18552):[PCam][H264] Encoded fps≈23,1  keys=1  bitrate≈7,56 Mbps
-(18553):[PCam][H264] Camera real fps≈25,3  sensorFrameDuration=33,35ms  AE=[30, 30]
-(18554):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(18582):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈10,13 Mbps
-(18583):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(18584):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(18616):[PCam][H264] Encoded fps≈29,6  keys=1  bitrate≈8,97 Mbps
-(18617):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(18618):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(18643):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈11,43 Mbps
-(18644):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(18645):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(18913):[PCam][Android] MapSelectedConfig → config=2560×1440   30 fps, running=True
-(18914):[PCam][Android] StopH264
-(18917):[PCam][Android] StartH264 → cam=0 2560x1440@30fps codec=HEVC
-(18918):[PCam][H264] Encoder configured: codec=HEVC (video/hevc) 2560x1440@30fps
-(18919):[PCam][H264] Start requested: 2560x1440@30fps
-(18920):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(18921):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(18922):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(18923):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(19014):[PCam][H264] Encoded fps≈23,4  keys=1  bitrate≈9,16 Mbps
-(19015):[PCam][H264] Camera real fps≈24,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(19016):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(19052):[PCam][H264] Encoded fps≈29,6  keys=1  bitrate≈9,32 Mbps
-(19053):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(19054):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(19080):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈10,10 Mbps
-(19339):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(19340):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(19341):[PCam][Android] MapSelectedConfig → config=1440×2560   30 fps, running=True
-(19342):[PCam][Android] StopH264
-(19345):[PCam][Android] StartH264 → cam=0 2560x1440@30fps codec=HEVC
-(19346):[PCam][H264] Encoder configured: codec=HEVC (video/hevc) 2560x1440@30fps
-(19347):[PCam][H264] Start requested: 2560x1440@30fps
-(19348):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(19349):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(19350):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(19351):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(19442):[PCam][H264] Encoded fps≈23,6  keys=1  bitrate≈6,95 Mbps
-(19443):[PCam][H264] Camera real fps≈25,4  sensorFrameDuration=33,35ms  AE=[30, 30]
-(19444):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(19474):[PCam][H264] Encoded fps≈29,3  keys=1  bitrate≈9,34 Mbps
-(19475):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(19476):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(19508):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈10,36 Mbps
-(19509):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(19510):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(19760):[PCam][Android] MapSelectedConfig → config=2560×1440   30 fps, running=True
-(19761):[PCam][Android] StopH264
-(19764):[PCam][Android] StartH264 → cam=0 2560x1440@30fps codec=HEVC
-(19765):[PCam][H264] Encoder configured: codec=HEVC (video/hevc) 2560x1440@30fps
-(19766):[PCam][H264] Start requested: 2560x1440@30fps
-(19767):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
-(19768):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
-(19791):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
-(19792):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
-(19875):[PCam][H264] Encoded fps≈23,1  keys=1  bitrate≈6,75 Mbps
-(19883):[PCam][H264] Camera real fps≈25,6  sensorFrameDuration=33,35ms  AE=[30, 30]
-(19884):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(19913):[PCam][H264] Encoded fps≈29,7  keys=1  bitrate≈9,60 Mbps
-(19922):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(19923):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(19947):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,97 Mbps
-(19954):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(19955):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(19975):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈9,18 Mbps
-(19985):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(19986):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20006):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,18 Mbps
-(20014):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20015):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20038):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈8,89 Mbps
-(20046):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20047):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20071):[PCam][H264] Encoded fps≈29,2  keys=1  bitrate≈8,94 Mbps
-(20076):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20077):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20097):[PCam][H264] Encoded fps≈30,9  keys=1  bitrate≈9,45 Mbps
-(20104):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20105):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20134):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈8,95 Mbps
-(20142):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20143):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20161):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,04 Mbps
-(20169):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20170):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20191):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈8,86 Mbps
-(20200):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20201):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20222):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,18 Mbps
-(20230):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20231):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20253):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,29 Mbps
-(20261):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20262):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20283):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,09 Mbps
-(20292):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20293):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20317):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,00 Mbps
-(20327):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20328):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20352):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈9,10 Mbps
-(20359):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20360):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20382):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈8,84 Mbps
-(20391):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20392):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20415):[PCam][H264] Encoded fps≈30,0  keys=2  bitrate≈10,08 Mbps
-(20424):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20425):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20448):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,15 Mbps
-(20456):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20457):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20478):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,21 Mbps
-(20483):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20484):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20508):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈8,98 Mbps
-(20515):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20516):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20535):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈8,83 Mbps
-(20543):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20544):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20571):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,24 Mbps
-(20576):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20577):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20598):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,19 Mbps
-(20606):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20607):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20630):[PCam][H264] Encoded fps≈30,3  keys=1  bitrate≈9,15 Mbps
-(20638):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20639):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20658):[PCam][H264] Encoded fps≈29,6  keys=1  bitrate≈8,94 Mbps
-(20667):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20668):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20692):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈8,99 Mbps
-(20700):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20701):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20723):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,07 Mbps
-(20729):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20730):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20755):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,03 Mbps
-(20764):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20765):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20788):[PCam][H264] Encoded fps≈30,5  keys=1  bitrate≈9,21 Mbps
-(20796):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20797):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20818):[PCam][H264] Encoded fps≈29,6  keys=1  bitrate≈9,03 Mbps
-(20825):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20826):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20845):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈8,90 Mbps
-(20855):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20856):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20879):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,22 Mbps
-(20887):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20888):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20911):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,21 Mbps
-(20918):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20919):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20942):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈9,17 Mbps
-(20950):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20951):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(20975):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈8,96 Mbps
-(20982):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(20983):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21009):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,02 Mbps
-(21015):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21016):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21038):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈8,97 Mbps
-(21046):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21047):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21070):[PCam][H264] Encoded fps≈29,7  keys=1  bitrate≈8,80 Mbps
-(21078):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21079):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21101):[PCam][H264] Encoded fps≈30,3  keys=1  bitrate≈9,47 Mbps
-(21107):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21108):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21127):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,00 Mbps
-(21135):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21136):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21159):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈8,89 Mbps
-(21167):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21168):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21193):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,20 Mbps
-(21201):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21202):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21235):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈8,84 Mbps
-(21236):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21237):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21259):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,16 Mbps
-(21266):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21267):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21289):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,37 Mbps
-(21298):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21299):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21321):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈8,86 Mbps
-(21328):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21329):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21350):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,22 Mbps
-(21359):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21360):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21382):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈9,25 Mbps
-(21392):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21393):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21412):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈8,90 Mbps
-(21420):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21421):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21447):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈9,95 Mbps
-(21456):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21457):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21477):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈3,94 Mbps
-(21485):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21486):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21506):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈4,01 Mbps
-(21511):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21512):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21537):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈4,21 Mbps
-(21546):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21547):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21570):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,25 Mbps
-(21579):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21580):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21604):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,25 Mbps
-(21611):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21612):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21637):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈4,21 Mbps
-(21644):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21645):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21670):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈4,20 Mbps
-(21675):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21676):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21697):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,22 Mbps
-(21709):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21710):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21731):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈4,37 Mbps
-(21739):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21740):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21766):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,27 Mbps
-(21774):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21775):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21799):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,21 Mbps
-(21807):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21808):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21831):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,18 Mbps
-(21837):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21838):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21858):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈4,19 Mbps
-(21867):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21868):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21887):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈4,24 Mbps
-(21896):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21897):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21922):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,27 Mbps
-(21929):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21930):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21951):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈4,23 Mbps
-(21960):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21961):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(21984):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈4,25 Mbps
-(21992):[PCam][H264] Camera real fps≈29,3  sensorFrameDuration=33,35ms  AE=[30, 30]
-(21993):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22022):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈4,24 Mbps
-(22023):[PCam][H264] Camera real fps≈30,7  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22024):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22056):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,23 Mbps
-(22065):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22066):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22086):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,17 Mbps
-(22092):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22093):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22118):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈4,22 Mbps
-(22125):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22126):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22149):[PCam][H264] Encoded fps≈29,7  keys=1  bitrate≈4,13 Mbps
-(22158):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22159):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22181):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈4,22 Mbps
-(22190):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22191):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22211):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈4,30 Mbps
-(22220):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22221):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22241):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈4,20 Mbps
-(22250):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22251):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22271):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,21 Mbps
-(22279):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22280):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22310):[PCam][H264] Encoded fps≈30,0  keys=2  bitrate≈4,38 Mbps
-(22311):[PCam][H264] Camera real fps≈30,3  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22312):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22344):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,21 Mbps
-(22345):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22346):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22376):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,18 Mbps
-(22377):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22378):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22401):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈4,23 Mbps
-(22408):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22409):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22442):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈4,20 Mbps
-(22443):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22444):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22465):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,14 Mbps
-(22476):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22477):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22497):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈4,09 Mbps
-(22504):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22505):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22530):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,15 Mbps
-(22538):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22539):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22560):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈4,25 Mbps
-(22569):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22570):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22593):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈4,21 Mbps
-(22599):[PCam][H264] Camera real fps≈29,7  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22600):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22624):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈4,20 Mbps
-(22633):[PCam][H264] Camera real fps≈30,3  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22634):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22665):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,18 Mbps
-(22666):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22667):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22697):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈4,12 Mbps
-(22698):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22699):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22730):[PCam][H264] Encoded fps≈30,4  keys=1  bitrate≈4,19 Mbps
-(22731):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22732):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22762):[PCam][H264] Encoded fps≈29,7  keys=1  bitrate≈4,17 Mbps
-(22763):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22764):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22792):[PCam][H264] Encoded fps≈30,3  keys=1  bitrate≈4,29 Mbps
-(22793):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22794):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22825):[PCam][H264] Encoded fps≈29,7  keys=1  bitrate≈4,21 Mbps
-(22826):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22827):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22856):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈4,24 Mbps
-(22857):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22858):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22886):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,17 Mbps
-(22887):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22888):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22914):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,19 Mbps
-(22915):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22916):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22951):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈4,23 Mbps
-(22952):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22953):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(22981):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈4,16 Mbps
-(22982):[PCam][H264] Camera real fps≈30,3  sensorFrameDuration=33,35ms  AE=[30, 30]
-(22983):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(23022):[PCam][H264] Encoded fps≈29,5  keys=1  bitrate≈4,21 Mbps
-(23023):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
-(23024):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(23082):[PCam][H264] Encoded fps≈30,9  keys=1  bitrate≈4,36 Mbps
-(23083):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
-(23084):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(23119):[PCam][H264] Encoded fps≈29,7  keys=1  bitrate≈4,12 Mbps
-(23120):[PCam][H264] Camera real fps≈29,7  sensorFrameDuration=33,35ms  AE=[30, 30]
-(23121):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
-(23148):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈4,27 Mbps
-(23149):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
-
+(100):[PCam][UI] OnAppearing — camera permission: Granted
+(101):[PCam][Android] ConnectHandler — handler attached
+(102):[PCam][Android] MapIsRunning → IsRunning=False
+(103):[PCam][Android] StopCamera
+(104):[PCam][Android] QueryConfigs starting...
+(105):[PCam][Android] MapSelectedConfig → config=none, running=False
+(106):[PCam][Android] MapFormat → format=Jpeg, scanning=False, running=False
+(107):[PCam][Android] MapPreviewEnabled → PreviewEnabled=True
+(108):[PCam][Android] QueryConfigs AE FPS ranges: [5, 15], [15, 15], [15, 20], [20, 20], [24, 24], [5, 30], [30, 30], [15, 60], [60, 60]
+(109):[PCam][Android] HighSpeed: 2 size(s) advertised:
+(110):[PCam][Android]   HS 1280×720 → ranges: [[30, 120], [120, 120], [30, 240], [240, 240]]
+(111):[PCam][Android]   HS 1920×1080 → ranges: [[30, 120], [120, 120], [30, 240], [240, 240]]
+(112):[PCam][Android] HighSpeed: union FPS ranges: [[120, 120], [240, 240], [30, 240], [30, 120]]
+(113):[PCam][Android] QueryConfigs done: 204 configs, default=1920×1080   30 fps
+(114):[PCam][Android] MapSelectedConfig → config=1920×1080   30 fps, running=False
+(115):[PCam][UI] ConfigurationsReady: 204 configs, resolutions=67, default=1920×1080 @ 30 fps, format=H264
+(116):[PCam][UI] OnConfigurationsReady — autostart preview
+(117):[PCam][Android] MapIsRunning → IsRunning=True
+(119):[PCam][Android] StartCamera → config=1920×1080   30 fps, targetRotation=1 (landscape)
+(121):[PCam][Android] StartCamera resRequest=1920×1080 (sensor landscape)
+(122):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
+(123):[PCam][Android] DispatchingAnalyzer created with 2 workers
+(124):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
+(125):[PCam][Android] StartCamera ✓ camera bound successfully
+(126):[PCam][Android] Combined #30  combinedFPS≈18,8  (2 workers)
+(127):[PCam][Android] Combined #60  combinedFPS≈23,7  (2 workers)
+(128):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=66ms  copy=9ms  encode=18ms  → workerFPS≈15
+(129):[PCam][Android] Frame #30  1920×1080  rot=0°  gap=68ms  copy=9ms  encode=18ms  → workerFPS≈14
+(130):[PCam][UI] Format selected: H265
+(131):[PCam][Android] Combined #90  combinedFPS≈23,6  (2 workers)
+(132):[PCam][Android] Combined #120  combinedFPS≈24,4  (2 workers)
+(133):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=67ms  copy=10ms  encode=19ms  → workerFPS≈14
+(134):[PCam][Android] Frame #60  1920×1080  rot=0°  gap=64ms  copy=10ms  encode=21ms  → workerFPS≈15
+(135):[PCam][Android] Combined #150  combinedFPS≈24,3  (2 workers)
+(136):[PCam][Android] Combined #180  combinedFPS≈24,3  (2 workers)
+(137):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=75ms  copy=10ms  encode=20ms  → workerFPS≈13
+(138):[PCam][UI] Resolution selected: 3840×2160
+(139):[PCam][Android] MapSelectedConfig → config=3840×2160   30 fps, running=True
+(140):[PCam][Android] StartCamera → config=3840×2160   30 fps, targetRotation=1 (landscape)
+(141):[PCam][Android] Frame #90  1920×1080  rot=0°  gap=67ms  copy=9ms  encode=18ms  → workerFPS≈14
+(142):[PCam][Android] StartCamera resRequest=3840×2160 (sensor landscape)
+(143):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
+(145):[PCam][Android] DispatchingAnalyzer created with 2 workers
+(146):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
+(147):[PCam][Android] StartCamera ✓ camera bound successfully
+(148):[PCam][UI] Lock: locked
+(149):[PCam][Android] Combined #90  combinedFPS≈7,0  (2 workers)
+(150):[PCam][UI] Camera permission status: Granted
+(151):[PCam][UI] Start → 3840×2160 @ 30 fps, format=H265
+(152):[PCam][Android] MapIsRunning → IsRunning=False
+(153):[PCam][Android] StopCamera
+(154):[PCam][Android] MapIsRunning → IsRunning=True
+(156):[PCam][Android] StartCamera → config=3840×2160   30 fps, targetRotation=1 (landscape)
+(157):[PCam][Android] StartCamera resRequest=3840×2160 (sensor landscape)
+(158):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
+(159):[PCam][Android] DispatchingAnalyzer created with 2 workers
+(160):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
+(161):[PCam][Android] StartCamera ✓ camera bound successfully
+(162):[PCam][UI] Camera permission status: Granted
+(163):[PCam][UI] Stop → 3840×2160 @ 30 fps, format=H265
+(165):[PCam][UI] QR detected: cam://192.168.0.106:8888
+(166):[PCam][Stream] Disconnected
+(167):[PCam][Stream] Connected to 192.168.0.106:8888
+(168):[PCam][UI] QR detected: cam://192.168.0.106:8888
+(169):[PCam][UI] QR debounced (duplicate within 2s): cam://192.168.0.106:8888
+(170):[PCam][UI] Camera permission status: Granted
+(171):[PCam][UI] Start → 3840×2160 @ 30 fps, format=H265
+(172):[PCam][Android] MapFormat → format=H265, scanning=False, running=True
+(173):[PCam][Android] StopCamera
+(174):[PCam][Android] StartH264 → cam=0 3840x2160@30fps codec=HEVC
+(176):[PCam][H264] Encoder configured: codec=HEVC (video/hevc) 3840x2160@30fps bitrate=20,65 Mbps (ceiling, adaptive=True)
+(177):[PCam][H264] Start requested: 3840x2160@30fps
+(178):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
+(179):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
+(180):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
+(181):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
+(182):[PCam][Stream] BW window: 7 frames, blocked=0 (0,0%)
+(183):[PCam][UI] Preview: disabled
+(184):[PCam][Android] MapPreviewEnabled → PreviewEnabled=False
+(185):[PCam][Android] StopCamera
+(186):[PCam][Android] StopH264
+(189):[PCam][Android] StartH264 → cam=0 3840x2160@30fps codec=HEVC
+(190):[PCam][H264] Encoder configured: codec=HEVC (video/hevc) 3840x2160@30fps bitrate=20,65 Mbps (ceiling, adaptive=True)
+(191):[PCam][H264] Start requested: 3840x2160@30fps
+(192):[PCam][H264] Device supports stream use cases: [0x0, 0x1, 0x2, 0x3, 0x4, 0x5] (length=6)
+(193):[PCam][H264] Session parameters set (template=Preview, 3A=AUTO, AE_RANGE=[30,30])
+(194):[PCam][H264] Capture session requested with STREAM_USE_CASE_VIDEO_RECORD
+(195):[PCam][H264] Capture session running @ 30fps  (template=Preview, 3A=AUTO, EIS=OFF, NR=1/Edge=1/TM=1)
+(196):[PCam][H264] Encoded fps≈22,5  keys=1  bitrate≈24,06 Mbps
+(197):[PCam][H264] Camera real fps≈24,2  sensorFrameDuration=33,35ms  AE=[30, 30]
+(198):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(199):[PCam][Stream] BW window: 47 frames, blocked=0 (0,0%)
+(200):[PCam][H264] Encoded fps≈29,3  keys=1  bitrate≈19,08 Mbps
+(201):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(202):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(203):[PCam][H264] Encoded fps≈30,4  keys=1  bitrate≈22,29 Mbps
+(204):[PCam][H264] Camera real fps≈30,3  sensorFrameDuration=33,35ms  AE=[30, 30]
+(205):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(206):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(207):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈23,35 Mbps
+(208):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(209):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(210):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈26,24 Mbps
+(211):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(212):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(213):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(215):[PCam][H264] Encoded fps≈20,0  keys=1  bitrate≈13,66 Mbps
+(216):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(217):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(218):[PCam][H264] Camera real fps≈26,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(219):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(220):[PCam][H264] Encoded fps≈20,0  keys=1  bitrate≈13,96 Mbps
+(221):[PCam][Stream] BW window: 59 frames, blocked=3 (5,1%)
+(222):[PCam][H264] AIMD ↓ backpressure 5,1% (3/59)
+(223):[PCam][H264] Bitrate adjust: 20,65 → 17,56 Mbps (ceiling 20,65 Mbps)
+(224):[PCam][H264] Camera real fps≈32,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(225):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(226):[PCam][H264] Encoded fps≈22,4  keys=1  bitrate≈15,55 Mbps
+(227):[PCam][H264] Camera real fps≈24,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(228):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(229):[PCam][Stream] BW window: 29 frames, blocked=3 (10,3%)
+(230):[PCam][H264] AIMD ↓ backpressure 10,3% (3/29)
+(231):[PCam][H264] Bitrate adjust: 17,56 → 14,92 Mbps (ceiling 20,65 Mbps)
+(232):[PCam][H264] Encoded fps≈19,8  keys=1  bitrate≈11,96 Mbps
+(233):[PCam][H264] Camera real fps≈16,8  sensorFrameDuration=33,35ms  AE=[30, 30]
+(234):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(235):[PCam][H264] Encoded fps≈17,3  keys=1  bitrate≈10,84 Mbps
+(236):[PCam][Stream] BW window: 30 frames, blocked=3 (10,0%)
+(237):[PCam][H264] AIMD ↓ backpressure 10,0% (3/30)
+(238):[PCam][H264] Bitrate adjust: 14,92 → 12,68 Mbps (ceiling 20,65 Mbps)
+(239):[PCam][H264] Camera real fps≈16,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(240):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(241):[PCam][H264] Encoded fps≈14,5  keys=0  bitrate≈13,77 Mbps
+(242):[PCam][H264] Camera real fps≈14,3  sensorFrameDuration=33,35ms  AE=[30, 30]
+(243):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(244):[PCam][Stream] BW window: 39 frames, blocked=3 (7,7%)
+(245):[PCam][H264] AIMD ↓ backpressure 7,7% (3/39)
+(246):[PCam][H264] Bitrate adjust: 12,68 → 10,78 Mbps (ceiling 20,65 Mbps)
+(247):[PCam][H264] Encoded fps≈16,2  keys=1  bitrate≈11,87 Mbps
+(248):[PCam][H264] Camera real fps≈16,3  sensorFrameDuration=33,35ms  AE=[30, 30]
+(249):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(250):[PCam][Stream] BW window: 29 frames, blocked=4 (13,8%)
+(251):[PCam][H264] AIMD ↓ backpressure 13,8% (4/29)
+(252):[PCam][H264] Bitrate adjust: 10,78 → 9,16 Mbps (ceiling 20,65 Mbps)
+(253):[PCam][H264] Encoded fps≈18,6  keys=1  bitrate≈10,40 Mbps
+(254):[PCam][H264] Camera real fps≈19,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(255):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(256):[PCam][H264] Encoded fps≈41,7  keys=1  bitrate≈17,96 Mbps
+(257):[PCam][H264] Camera real fps≈27,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(258):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(259):[PCam][Stream] BW window: 75 frames, blocked=2 (2,7%)
+(260):[PCam][H264] Encoded fps≈43,3  keys=2  bitrate≈12,39 Mbps
+(261):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
+(262):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(263):[PCam][H264] Encoded fps≈30,3  keys=1  bitrate≈10,60 Mbps
+(264):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
+(265):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(266):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(267):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈9,98 Mbps
+(268):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(269):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(270):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈12,60 Mbps
+(271):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[30, 30]
+(272):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(273):[PCam][Stream] BW window: 51 frames, blocked=1 (2,0%)
+(274):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(275):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(276):[PCam][H264] Encoded fps≈6,3  keys=0  bitrate≈2,54 Mbps
+(277):[PCam][H264] Camera real fps≈20,5  sensorFrameDuration=33,35ms  AE=[30, 30]
+(278):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(279):[PCam][Stream] BW window: 46 frames, blocked=3 (6,5%)
+(280):[PCam][H264] AIMD ↓ backpressure 6,5% (3/46)
+(281):[PCam][H264] Bitrate adjust: 9,16 → 7,79 Mbps (ceiling 20,65 Mbps)
+(282):[PCam][H264] Encoded fps≈35,7  keys=2  bitrate≈12,77 Mbps
+(283):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(284):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(285):[PCam][H264] Encoded fps≈1,5  keys=0  bitrate≈0,24 Mbps
+(286):[PCam][H264] Camera real fps≈1,7  sensorFrameDuration=33,35ms  AE=[30, 30]
+(287):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(288):[PCam][Stream] BW window: 42 frames, blocked=2 (4,8%)
+(289):[PCam][H264] Encoded fps≈36,9  keys=1  bitrate≈14,30 Mbps
+(290):[PCam][H264] Camera real fps≈32,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(291):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(292):[PCam][Stream] BW window: 6 frames, blocked=3 (50,0%)
+(293):[PCam][H264] AIMD ↓ backpressure 50,0% (3/6)
+(294):[PCam][H264] Encoded fps≈1,4  keys=0  bitrate≈0,30 Mbps
+(295):[PCam][H264] Bitrate adjust: 7,79 → 6,62 Mbps (ceiling 20,65 Mbps)
+(296):[PCam][H264] Camera real fps≈9,1  sensorFrameDuration=33,35ms  AE=[30, 30]
+(297):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(298):[PCam][H264] Encoded fps≈36,3  keys=2  bitrate≈13,28 Mbps
+(299):[PCam][H264] Camera real fps≈27,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(300):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(301):[PCam][Stream] BW window: 48 frames, blocked=2 (4,2%)
+(302):[PCam][H264] Encoded fps≈38,0  keys=1  bitrate≈10,80 Mbps
+(303):[PCam][H264] Camera real fps≈22,5  sensorFrameDuration=33,35ms  AE=[30, 30]
+(304):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(305):[PCam][H264] Camera real fps≈29,7  sensorFrameDuration=33,35ms  AE=[30, 30]
+(306):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(307):[PCam][H264] Encoded fps≈15,3  keys=1  bitrate≈4,98 Mbps
+(308):[PCam][Stream] BW window: 59 frames, blocked=2 (3,4%)
+(309):[PCam][H264] Camera real fps≈19,2  sensorFrameDuration=33,35ms  AE=[30, 30]
+(310):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(311):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈7,61 Mbps
+(312):[PCam][H264] Camera real fps≈26,3  sensorFrameDuration=33,35ms  AE=[30, 30]
+(313):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(314):[PCam][H264] Encoded fps≈32,9  keys=1  bitrate≈9,38 Mbps
+(315):[PCam][Stream] BW window: 66 frames, blocked=1 (1,5%)
+(316):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(317):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(318):[PCam][H264] Encoded fps≈17,8  keys=1  bitrate≈4,56 Mbps
+(319):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(320):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(321):[PCam][Stream] BW window: 60 frames, blocked=2 (3,3%)
+(322):[PCam][H264] Encoded fps≈48,0  keys=1  bitrate≈11,07 Mbps
+(323):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(324):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(325):[PCam][H264] Encoded fps≈13,9  keys=1  bitrate≈4,47 Mbps
+(326):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(327):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(328):[PCam][Stream] BW window: 31 frames, blocked=2 (6,5%)
+(329):[PCam][H264] AIMD ↓ backpressure 6,5% (2/31)
+(330):[PCam][H264] Bitrate adjust: 6,62 → 5,63 Mbps (ceiling 20,65 Mbps)
+(331):[PCam][H264] Encoded fps≈26,9  keys=1  bitrate≈8,62 Mbps
+(332):[PCam][H264] Camera real fps≈12,6  sensorFrameDuration=33,35ms  AE=[30, 30]
+(333):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(334):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(335):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(336):[PCam][H264] Encoded fps≈19,3  keys=1  bitrate≈6,36 Mbps
+(337):[PCam][Stream] BW window: 53 frames, blocked=2 (3,8%)
+(338):[PCam][H264] Camera real fps≈18,1  sensorFrameDuration=33,35ms  AE=[30, 30]
+(339):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(340):[PCam][H264] Encoded fps≈1,4  keys=0  bitrate≈0,26 Mbps
+(341):[PCam][H264] Camera real fps≈10,8  sensorFrameDuration=33,35ms  AE=[30, 30]
+(342):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(343):[PCam][Stream] BW window: 46 frames, blocked=3 (6,5%)
+(344):[PCam][H264] AIMD ↓ backpressure 6,5% (3/46)
+(345):[PCam][H264] Bitrate adjust: 5,63 → 4,78 Mbps (ceiling 20,65 Mbps)
+(346):[PCam][H264] Encoded fps≈57,1  keys=2  bitrate≈15,15 Mbps
+(347):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(348):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(349):[PCam][H264] Encoded fps≈4,6  keys=0  bitrate≈0,81 Mbps
+(350):[PCam][Stream] BW window: 22 frames, blocked=3 (13,6%)
+(351):[PCam][H264] AIMD ↓ backpressure 13,6% (3/22)
+(352):[PCam][H264] Bitrate adjust: 4,78 → 4,07 Mbps (ceiling 20,65 Mbps)
+(353):[PCam][H264] Camera real fps≈19,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(354):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(355):[PCam][H264] Encoded fps≈44,6  keys=2  bitrate≈11,53 Mbps
+(356):[PCam][H264] Camera real fps≈19,4  sensorFrameDuration=33,35ms  AE=[30, 30]
+(357):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(358):[PCam][Stream] BW window: 72 frames, blocked=1 (1,4%)
+(359):[PCam][H264] Camera real fps≈29,7  sensorFrameDuration=33,35ms  AE=[30, 30]
+(360):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(361):[PCam][H264] Encoded fps≈17,3  keys=0  bitrate≈4,17 Mbps
+(362):[PCam][H264] Camera real fps≈19,4  sensorFrameDuration=33,35ms  AE=[30, 30]
+(363):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(364):[PCam][H264] Encoded fps≈36,7  keys=2  bitrate≈10,63 Mbps
+(365):[PCam][Stream] BW window: 49 frames, blocked=2 (4,1%)
+(366):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(367):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(368):[PCam][H264] Encoded fps≈18,0  keys=1  bitrate≈3,25 Mbps
+(369):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
+(370):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(371):[PCam][Stream] BW window: 20 frames, blocked=3 (15,0%)
+(372):[PCam][H264] AIMD ↓ backpressure 15,0% (3/20)
+(373):[PCam][H264] Bitrate adjust: 4,07 → 3,46 Mbps (ceiling 20,65 Mbps)
+(374):[PCam][H264] Encoded fps≈1,9  keys=0  bitrate≈0,29 Mbps
+(375):[PCam][H264] Camera real fps≈9,7  sensorFrameDuration=33,35ms  AE=[30, 30]
+(376):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(377):[PCam][H264] Encoded fps≈57,2  keys=2  bitrate≈10,76 Mbps
+(378):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(379):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(380):[PCam][Stream] BW window: 79 frames, blocked=0 (0,0%)
+(381):[PCam][H264] Encoded fps≈30,3  keys=1  bitrate≈4,65 Mbps
+(382):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(383):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(384):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈5,03 Mbps
+(385):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(386):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(387):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(388):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈10,36 Mbps
+(389):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
+(390):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(391):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[30, 30]
+(392):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(393):[PCam][H264] Encoded fps≈5,7  keys=0  bitrate≈1,32 Mbps
+(394):[PCam][Stream] BW window: 22 frames, blocked=3 (13,6%)
+(395):[PCam][H264] AIMD ↓ backpressure 13,6% (3/22)
+(396):[PCam][H264] Bitrate adjust: 3,46 → 2,94 Mbps (ceiling 20,65 Mbps)
+(397):[PCam][H264] Camera real fps≈12,6  sensorFrameDuration=33,35ms  AE=[30, 30]
+(398):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(399):[PCam][H264] Encoded fps≈49,9  keys=2  bitrate≈11,44 Mbps
+(400):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(401):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(402):[PCam][Stream] BW window: 80 frames, blocked=0 (0,0%)
+(403):[PCam][H264] Encoded fps≈18,6  keys=1  bitrate≈3,01 Mbps
+(404):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(405):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(406):[PCam][Stream] BW window: 3 frames, blocked=3 (100,0%)
+(407):[PCam][H264] Encoded fps≈1,4  keys=0  bitrate≈0,21 Mbps
+(408):[PCam][H264] AIMD ↓ backpressure 100,0% (3/3)
+(409):[PCam][H264] Bitrate adjust: 2,94 → 2,50 Mbps (ceiling 20,65 Mbps)
+(410):[PCam][H264] Camera real fps≈8,5  sensorFrameDuration=33,35ms  AE=[30, 30]
+(411):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(412):[PCam][H264] Encoded fps≈51,5  keys=2  bitrate≈11,98 Mbps
+(413):[PCam][H264] Camera real fps≈26,2  sensorFrameDuration=33,35ms  AE=[30, 30]
+(414):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(415):[PCam][Stream] BW window: 80 frames, blocked=1 (1,2%)
+(416):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈2,17 Mbps
+(417):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(418):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(419):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈1,60 Mbps
+(420):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(421):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(422):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(423):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈1,76 Mbps
+(424):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(425):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(426):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈1,95 Mbps
+(427):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
+(428):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(429):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(430):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈2,73 Mbps
+(431):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
+(432):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(433):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈2,95 Mbps
+(434):[PCam][H264] Camera real fps≈29,7  sensorFrameDuration=33,35ms  AE=[30, 30]
+(435):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(436):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(437):[PCam][H264] AIMD ↑ clear 3 windows (last 0,00%, 0/60)
+(438):[PCam][H264] Bitrate adjust: 2,50 → 2,75 Mbps (ceiling 20,65 Mbps)
+(439):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈2,75 Mbps
+(440):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
+(441):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(442):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈3,17 Mbps
+(443):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(444):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(445):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(446):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈3,30 Mbps
+(447):[PCam][H264] Camera real fps≈29,3  sensorFrameDuration=33,35ms  AE=[30, 30]
+(448):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(449):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈3,34 Mbps
+(450):[PCam][H264] Camera real fps≈30,6  sensorFrameDuration=33,35ms  AE=[30, 30]
+(451):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(452):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(453):[PCam][H264] Encoded fps≈29,8  keys=1  bitrate≈3,11 Mbps
+(454):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(455):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(456):[PCam][H264] Encoded fps≈29,7  keys=1  bitrate≈3,19 Mbps
+(457):[PCam][H264] Camera real fps≈30,2  sensorFrameDuration=33,35ms  AE=[30, 30]
+(458):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(459):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(460):[PCam][H264] AIMD ↑ clear 3 windows (last 0,00%, 0/60)
+(461):[PCam][H264] Bitrate adjust: 2,75 → 3,02 Mbps (ceiling 20,65 Mbps)
+(462):[PCam][H264] Encoded fps≈30,4  keys=1  bitrate≈3,47 Mbps
+(463):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(464):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(465):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈3,50 Mbps
+(466):[PCam][H264] Camera real fps≈29,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(467):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(468):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(469):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈3,53 Mbps
+(470):[PCam][H264] Camera real fps≈30,3  sensorFrameDuration=33,35ms  AE=[30, 30]
+(471):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(472):[PCam][H264] Encoded fps≈29,9  keys=1  bitrate≈3,80 Mbps
+(473):[PCam][H264] Camera real fps≈29,8  sensorFrameDuration=33,35ms  AE=[30, 30]
+(474):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(475):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(476):[PCam][H264] Encoded fps≈30,3  keys=1  bitrate≈3,36 Mbps
+(477):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
+(478):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(479):[PCam][H264] Encoded fps≈29,7  keys=1  bitrate≈3,45 Mbps
+(480):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
+(481):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(482):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(483):[PCam][H264] AIMD ↑ clear 3 windows (last 0,00%, 0/60)
+(484):[PCam][H264] Bitrate adjust: 3,02 → 3,32 Mbps (ceiling 20,65 Mbps)
+(485):[PCam][H264] Encoded fps≈30,1  keys=1  bitrate≈4,01 Mbps
+(486):[PCam][H264] Camera real fps≈29,4  sensorFrameDuration=33,35ms  AE=[30, 30]
+(487):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(488):[PCam][H264] Encoded fps≈30,0  keys=1  bitrate≈3,62 Mbps
+(489):[PCam][H264] Camera real fps≈30,8  sensorFrameDuration=33,35ms  AE=[30, 30]
+(490):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(491):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(492):[PCam][H264] Encoded fps≈30,3  keys=1  bitrate≈3,83 Mbps
+(493):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(494):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(495):[PCam][H264] Encoded fps≈29,4  keys=1  bitrate≈3,84 Mbps
+(496):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(497):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(498):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(499):[PCam][H264] Encoded fps≈30,5  keys=1  bitrate≈4,08 Mbps
+(500):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(501):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(502):[PCam][H264] Encoded fps≈30,2  keys=1  bitrate≈3,68 Mbps
+(503):[PCam][H264] Camera real fps≈30,0  sensorFrameDuration=33,35ms  AE=[30, 30]
+(504):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(505):[PCam][Stream] BW window: 60 frames, blocked=0 (0,0%)
+(506):[PCam][H264] AIMD ↑ clear 3 windows (last 0,00%, 0/60)
+(507):[PCam][H264] Bitrate adjust: 3,32 → 3,66 Mbps (ceiling 20,65 Mbps)
+(508):[PCam][H264] Encoded fps≈15,1  keys=1  bitrate≈2,31 Mbps
+(509):[PCam][H264] Camera real fps≈30,1  sensorFrameDuration=33,35ms  AE=[30, 30]
+(510):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(511):[PCam][H264] Encoded fps≈1,8  keys=0  bitrate≈0,17 Mbps
+(512):[PCam][H264] Camera real fps≈9,8  sensorFrameDuration=33,35ms  AE=[30, 30]
+(513):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(514):[PCam][Stream] BW window: 7 frames, blocked=4 (57,1%)
+(515):[PCam][H264] AIMD ↓ backpressure 57,1% (4/7)
+(516):[PCam][H264] Bitrate adjust: 3,66 → 3,11 Mbps (ceiling 20,65 Mbps)
+(517):[PCam][H264] Encoded fps≈1,8  keys=0  bitrate≈0,18 Mbps
+(518):[PCam][H264] Camera real fps≈1,7  sensorFrameDuration=33,35ms  AE=[30, 30]
+(519):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(520):[PCam][H264] Encoded fps≈8,0  keys=0  bitrate≈0,66 Mbps
+(521):[PCam][Stream] BW window: 22 frames, blocked=3 (13,6%)
+(522):[PCam][H264] AIMD ↓ backpressure 13,6% (3/22)
+(523):[PCam][H264] Bitrate adjust: 3,11 → 2,64 Mbps (ceiling 20,65 Mbps)
+(524):[PCam][H264] Camera real fps≈4,9  sensorFrameDuration=33,35ms  AE=[30, 30]
+(525):[PCam][H264]   modes: CTRL=1 NR=1 EDGE=1 TM=1 STAB=0 SCENE=0
+(526):[PCam][UI] Camera permission status: Granted
+(527):[PCam][UI] Stop → 3840×2160 @ 30 fps, format=H265
+(528):[PCam][Android] MapFormat → format=Jpeg, scanning=False, running=True
+(529):[PCam][Android] StopCamera
+(530):[PCam][Android] StopH264
+(532):[PCam][Android] StartCamera → config=3840×2160   30 fps, targetRotation=1 (landscape)
+(534):[PCam][Android] StartCamera resRequest=3840×2160 (sensor landscape)
+(535):[PCam][Android] StartCamera fps=30 (JPEG path: minimal extender — AE FPS only)
+(536):[PCam][Android] DispatchingAnalyzer created with 2 workers
+(537):[PCam][Android] StartCamera using 2-worker DispatchingAnalyzer
+(538):[PCam][Android] StartCamera ✓ camera bound successfully
+(539):[PCam][Stream] BW window: 26 frames, blocked=0 (0,0%)
+(540):[PCam][Android] Combined #30  combinedFPS≈22,4  (2 workers)
+(541):[PCam][Android] Combined #60  combinedFPS≈27,1  (2 workers)
+(542):[PCam][Android] Combined #90  combinedFPS≈26,6  (2 workers)
