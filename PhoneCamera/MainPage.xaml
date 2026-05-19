@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:PhoneCamera.Controls"
              x:Class="PhoneCamera.MainPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             Padding="0">
 
     <ContentPage.Resources>
         <!-- Общий шаблон элемента списка: Label, привязка к свойству DisplayName.
@@ -33,7 +34,7 @@
         </DataTemplate>
     </ContentPage.Resources>
 
-    <Grid>
+    <Grid IgnoreSafeArea="True">
 
         <!-- Camera preview: платформенный ImageView, кадры ставятся через SetImageBitmap() -->
         <controls:CameraPreviewView
@@ -41,6 +42,17 @@
             HorizontalOptions="Fill"
             VerticalOptions="Fill"
             BackgroundColor="Black" />
+
+        <!-- Status bar backdrop: перекрывает зону системной шторки тёмным цветом
+             #CC000000, чтобы прозрачная системная шторка визуально была окрашена
+             в цвет наших шторок. Высота задаётся динамически из code-behind
+             (MainActivity.StatusBarHeightDp). -->
+        <BoxView x:Name="StatusBarBackdrop"
+                 VerticalOptions="Start"
+                 HorizontalOptions="Fill"
+                 HeightRequest="28"
+                 BackgroundColor="#CC000000"
+                 InputTransparent="True" />
 
         <!-- Top overlay: три отдельные шторки (Разрешение / FPS / Формат).
              Grid с переменной раскладкой:

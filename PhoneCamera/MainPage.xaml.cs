@@ -41,6 +41,16 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         InitializeComponent();
+
+#if ANDROID
+        // Подставляем РЕАЛЬНУЮ высоту системной шторки (вычислена в MainActivity)
+        // в backdrop и поднимаем TopOverlayLayout на эту высоту, чтобы шторки
+        // не залезали под status bar.
+        int sbHeight = PhoneCamera.MainActivity.StatusBarHeightDp;
+        StatusBarBackdrop.HeightRequest = sbHeight;
+        TopOverlayLayout.Margin = new Thickness(0, sbHeight, 0, 0);
+#endif
+
         CameraPreview.ConfigurationsReady = OnConfigurationsReady;
         CameraPreview.QrCodeDetected = OnQrCodeDetected;
 
