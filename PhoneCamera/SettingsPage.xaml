@@ -93,7 +93,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Режим экспозиции" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Автоматическое управление экспозицией, балансом белого и фокусом. Без него картинка тёмная и нерезкая — выключай только если нужны фиксированные значения сенсора."
+                        <Label Text="Автоматическое управление экспозицией, балансом белого и фокусом. Без него картинка тёмная и нерезкая — выключать только если нужны фиксированные значения сенсора."
                                Style="{StaticResource SettingDesc}" />
                     </VerticalStackLayout>
                     <Picker x:Name="pExposureMode" Grid.Column="1" Style="{StaticResource SettingPicker}" SelectedIndexChanged="OnExposureModeChanged">
@@ -107,7 +107,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Компенсация экспозиции (EV)" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Сдвиг автоэкспозиции «темнее ↔ светлее». Активно только в авто-режиме."
+                        <Label Text="Сдвиг автоэкспозиции. Активно только в авто-режиме."
                                Style="{StaticResource SettingDesc}" />
                     </VerticalStackLayout>
                     <Picker x:Name="pEvCompensation" Grid.Column="1" Style="{StaticResource SettingPicker}">
@@ -206,7 +206,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Режим" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Цветовая температура сцены. Авто справляется в большинстве случаев; ручные пресеты — при смешанном освещении когда авто «гуляет»."
+                        <Label Text="Цветовая температура сцены. Авто справляется в большинстве случаев. Ручные пресеты — при смешанном освещении когда авто «гуляет»."
                                Style="{StaticResource SettingDesc}" />
                     </VerticalStackLayout>
                     <Picker x:Name="pWhiteBalance" Grid.Column="1" Style="{StaticResource SettingPicker}">
@@ -288,7 +288,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Шумоподавление" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Уровень внутри-HAL подавления шума. Быстрое оптимально для всех режимов; Качественное может снизить fps, особенно в JPEG-режиме на ряде устройств."
+                        <Label Text="Уровень подавления шума. Быстрое оптимально для всех режимов. Качественное может снизить fps, особенно в JPEG-режиме."
                                Style="{StaticResource SettingDesc}" />
                     </VerticalStackLayout>
                     <Picker x:Name="pNoiseReduction" Grid.Column="1" Style="{StaticResource SettingPicker}">
@@ -304,7 +304,7 @@
 
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
-                        <Label Text="Резкость (edge)" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Резкость" Style="{StaticResource SettingTitle}" />
                         <Label Text="Усиление контуров. Та же история с fps что у шумоподавления."
                                Style="{StaticResource SettingDesc}" />
                     </VerticalStackLayout>
@@ -321,7 +321,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Тонмаппинг" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Преобразование RAW → 8 бит с динамическим диапазоном. Качественное может снизить fps."
+                        <Label Text="Преобразование RAW -&gt; 8 бит с динамическим диапазоном. Качественное может снизить fps."
                                Style="{StaticResource SettingDesc}" />
                     </VerticalStackLayout>
                     <Picker x:Name="pTonemap" Grid.Column="1" Style="{StaticResource SettingPicker}">
@@ -365,7 +365,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Видеостабилизация (EIS)" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Электронная стабилизация. Включай если кадр трясёт. На многих устройствах режет fps до 30."
+                        <Label Text="Электронная стабилизация. Следует включить если кадр трясёт. На некоторых устройствах может снижать fps до 30."
                                Style="{StaticResource SettingDesc}" />
                     </VerticalStackLayout>
                     <Switch x:Name="swVideoStabilization" Grid.Column="1" Style="{StaticResource SettingSwitch}" />
@@ -380,7 +380,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Цифровой зум" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Программное увеличение через crop сенсора. Максимум зависит от устройства; Android 11+ нужен для CONTROL_ZOOM_RATIO."
+                        <Label Text="Программное увеличение через crop сенсора. Максимум зависит от устройства."
                                Style="{StaticResource SettingDesc}" />
                     </VerticalStackLayout>
                     <Picker x:Name="pZoom" Grid.Column="1" Style="{StaticResource SettingPicker}" SelectedIndexChanged="OnZoomChanged">
@@ -409,7 +409,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Режим" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Управление LED-вспышкой. «Фонарик» — постоянный свет для подсветки сцены."
+                        <Label Text="Управление LED-вспышкой. «Фонарик» — постоянный свет."
                                Style="{StaticResource SettingDesc}" />
                     </VerticalStackLayout>
                     <Picker x:Name="pFlash" Grid.Column="1" Style="{StaticResource SettingPicker}">
@@ -434,7 +434,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Качество JPEG" Style="{StaticResource SettingTitle}" />
-                        <Label Text="1..100. Выше — меньше артефактов и крупнее размер кадра. На 1080p@30 разница между 25 и 80 — это ~3-4× по битрейту. Низкие значения (10-25) подойдут для live preview по локальной сети."
+                        <Label Text="Значения от 1 до 100. Выше — меньше артефактов и крупнее размер кадра. На 1080p 30 fps разница между 25 и 80 — это  примерно в 3-4 раза по битрейту. Низкие значения (10-25) оптимальны для передачи изображения по локальной сети в реальном времени."
                                Style="{StaticResource SettingDesc}" />
                         <Label Style="{StaticResource EncodedMark}" Text="Только JPEG" />
                     </VerticalStackLayout>
@@ -458,7 +458,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Применять настройки камеры к JPEG режиму" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Если включено — все параметры из разделов выше (3A, фокус, баланс белого, обработка и т.д.) применяются и к JPEG. Влияет на превью и может вызывать лаги: в авто-режиме CameraX работает лучше потому что HAL сам подбирает оптимальные настройки на лету. По умолчанию выключено — к JPEG применяются только разрешение и fps, остальное на усмотрение CameraX."
+                        <Label Text="Если включено — все параметры из разделов выше (3A, фокус, баланс белого, обработка и т.д.) применяются и к JPEG. Влияет на превью и может вызывать лаги, в авто-режиме CameraX работает лучше, так как устройство само подбирает оптимальные настройки на лету. По умолчанию выключено — к JPEG применяются только разрешение и fps, остальное на усмотрение CameraX."
                                Style="{StaticResource SettingDesc}" />
                         <Label Style="{StaticResource EncodedMark}" Text="Только JPEG" />
                     </VerticalStackLayout>
@@ -474,7 +474,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Авто-отключение превью при старте стрима" Style="{StaticResource SettingTitle}" />
-                        <Label Text="При нажатии «Start» галка «Показать превью» снимается автоматически — превью прекращает рисоваться, ImageView освобождает Bitmap-память, нагрузка на устройство снижается. Включено по умолчанию: при стриме на ПК телефонное превью обычно не нужно (картинку видно на сервере)."
+                        <Label Text="При нажатии «Start» галочка с «Показать превью» снимается автоматически — превью прекращает рисоваться, нагрузка на устройство снижается. Включено по умолчанию, так как при стриме на ПК телефонное превью больше не нужно."
                                Style="{StaticResource SettingDesc}" />
                     </VerticalStackLayout>
                     <Switch x:Name="swAutoDisablePreviewOnStream" Grid.Column="1" Style="{StaticResource SettingSwitch}" />
@@ -483,7 +483,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Показывать все разрешения камеры" Style="{StaticResource SettingTitle}" />
-                        <Label Text="По умолчанию выключено — в шторке «Разрешение» показаны только те разрешения, которые умеет принимать виртуальная DirectShow-камера на ПК (3840×2160, 2560×1440, 1920×1080, 1280×720, 960×540, 854×480, 640×480), причём из них — только те, которые поддерживает сама камера телефона. Если включить — список расширится до всех разрешений, поддерживаемых камерой. Учти: при выборе разрешения вне списка VCam-совместимых на стороне ПК виртуальная камера будет fallback'ить или пересжимать (Discord/OBS/Zoom могут не получить native-разрешение)."
+                        <Label Text="По умолчанию выключено — в шторке «Разрешение» показаны только те разрешения, которые умеет принимать виртуальная DirectShow-камера на ПК (3840×2160, 2560×1440, 1920×1080, 1280×720, 960×540, 854×480, 640×480), причём из них — только те, которые поддерживает сама камера телефона. Если включить — список расширится до всех разрешений, поддерживаемых камерой. При выборе разрешения вне списка VCam-совместимых на стороне ПК виртуальная камера будет масштабировать до подходящего разрешения."
                                Style="{StaticResource SettingDesc}" />
                     </VerticalStackLayout>
                     <Switch x:Name="swShowAllResolutions" Grid.Column="1" Style="{StaticResource SettingSwitch}" />
@@ -501,7 +501,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Шаблон захвата" Style="{StaticResource SettingTitle}" />
-                        <Label Text="HAL hint для выбора sensor-pipeline. Preview — лёгкий путь, часто разблокирует 60 fps. Record — качественнее, но может лочить 30 fps."
+                        <Label Text="Подсказка устройству для выбора sensor-pipeline. Preview — лёгкий путь. Record — качественнее, но может лочить 30 fps."
                                Style="{StaticResource SettingDesc}" />
                         <Label Style="{StaticResource EncodedMark}" />
                     </VerticalStackLayout>
@@ -535,7 +535,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Битрейт H.264 (бит/пиксель)" Style="{StaticResource SettingTitle}" />
-                        <Label Text="bps = ширина × высота × fps × bpp. 0.083 даёт 1080p@30 ≈ 5.4 Mbps. Выше — качественнее и больше трафика."
+                        <Label Text="bps = ширина × высота × fps × bpp. 0.083 даёт при 1080p 30 fps ≈ 5.4 Mbps. Выше — качественнее и больше трафика."
                                Style="{StaticResource SettingDesc}" />
                         <Label Style="{StaticResource EncodedMark}" Text="Только H.264" />
                     </VerticalStackLayout>
@@ -559,7 +559,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Битрейт H.265 (бит/пиксель)" Style="{StaticResource SettingTitle}" />
-                        <Label Text="HEVC при равном качестве жмёт ~50-60 % от AVC. Для экономии сети ставь 0.05."
+                        <Label Text="HEVC при равном качестве жмёт ~50-60 % от AVC."
                                Style="{StaticResource SettingDesc}" />
                         <Label Style="{StaticResource EncodedMark}" Text="Только H.265" />
                     </VerticalStackLayout>
@@ -581,8 +581,8 @@
 
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
-                        <Label Text="Потолок битрейта" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Верхняя граница формулы — выше битрейт не уйдёт. Защита от слишком тяжёлого 4K-стрима."
+                        <Label Text="Верхняя граница битрейта" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Верхняя граница формулы — выше битрейт не уйдёт."
                                Style="{StaticResource SettingDesc}" />
                         <Label Style="{StaticResource EncodedMark}" />
                     </VerticalStackLayout>
@@ -604,8 +604,8 @@
 
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
-                        <Label Text="Пол битрейта" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Нижняя граница для адаптивного контроллера. Ниже не опустится — картинка не превращается в кашу даже при плохой сети."
+                        <Label Text="Нижняя граница битрейта" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Нижняя граница для адаптивного битрейта. Ниже не опустится — картинка не превращается в кашу даже при плохой сети."
                                Style="{StaticResource SettingDesc}" />
                         <Label Style="{StaticResource EncodedMark}" />
                     </VerticalStackLayout>
@@ -628,7 +628,7 @@
                 <!-- ─── Адаптивный битрейт ──────────────────────────── -->
                 <!-- ════════════════════════════════════════════════════ -->
                 <Label Text="АДАПТИВНЫЙ БИТРЕЙТ" Style="{StaticResource SectionTitle}" />
-                <Label Text="Применяется при стриме в H.264 / H.265."
+                <Label Text="Применяется при стриме в H.264 / H.265. В JPEG-режиме не используется."
                        FontSize="11" TextColor="#FFB74D" FontAttributes="Italic"
                        Margin="16,0,16,2" />
                 <BoxView Style="{StaticResource SectionDivider}" />
@@ -636,7 +636,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Адаптивный битрейт" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Автоматически подстраивает битрейт под реальную пропускную способность Wi-Fi. Выключи если хочешь фиксированное значение из формулы."
+                        <Label Text="Автоматически подстраивает битрейт под реальную пропускную способность Wi-Fi."
                                Style="{StaticResource SettingDesc}" />
                         <Label Style="{StaticResource EncodedMark}" />
                     </VerticalStackLayout>
@@ -682,7 +682,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Порог чистого окна" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Доля блокировок, ниже которой окно считается «чистым» (без затыков)."
+                        <Label Text="Доля блокировок, ниже которой окно считается чистым."
                                Style="{StaticResource SettingDesc}" />
                         <Label Style="{StaticResource EncodedMark}" />
                     </VerticalStackLayout>
@@ -718,7 +718,7 @@
                 <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="3">
                         <Label Text="Коэффициент снижения" Style="{StaticResource SettingTitle}" />
-                        <Label Text="Множитель битрейта при затыке. Меньше — резче падение."
+                        <Label Text="Множитель битрейта при блокировке. Меньше — быстрее падение."
                                Style="{StaticResource SettingDesc}" />
                         <Label Style="{StaticResource EncodedMark}" />
                     </VerticalStackLayout>
@@ -765,7 +765,7 @@
                     Padding="14,8"
                     Clicked="OnResetClicked" />
             <Button Grid.Column="1"
-                    Text="Применить и закрыть"
+                    Text="Применить"
                     BackgroundColor="#4FC3F7"
                     TextColor="Black"
                     FontAttributes="Bold"
