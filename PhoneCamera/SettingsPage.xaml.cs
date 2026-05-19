@@ -97,6 +97,9 @@ public partial class SettingsPage : ContentPage
 
         // ── JPEG ───────────────────────────────────────────────────────────
         SelectJpegQuality(CS.JpegQuality);
+        swApplySettingsToJpeg.IsToggled       = CS.ApplySettingsToJpeg;
+        swAutoDisablePreviewOnStream.IsToggled = CS.AutoDisablePreviewOnStream;
+        swShowAllResolutions.IsToggled        = CS.ShowAllResolutions;
 
         // ── Кодирование ────────────────────────────────────────────────────
         pCaptureTemplate.SelectedIndex = (int)CS.CaptureTemplate;
@@ -180,6 +183,9 @@ public partial class SettingsPage : ContentPage
 
         // ── JPEG ───────────────────────────────────────────────────────────
         CS.JpegQuality = ReadJpegQualityUi();
+        CS.ApplySettingsToJpeg        = swApplySettingsToJpeg.IsToggled;
+        CS.AutoDisablePreviewOnStream = swAutoDisablePreviewOnStream.IsToggled;
+        CS.ShowAllResolutions         = swShowAllResolutions.IsToggled;
 
         // ── Кодирование ────────────────────────────────────────────────────
         CS.CaptureTemplate       = (CaptureTemplateSetting)Math.Max(0, pCaptureTemplate.SelectedIndex);

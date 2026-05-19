@@ -455,6 +455,40 @@
                        Placeholder="качество 1..100 (например 40)"
                        IsVisible="False" />
 
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Применять настройки камеры к JPEG режиму" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Если включено — все параметры из разделов выше (3A, фокус, баланс белого, обработка и т.д.) применяются и к JPEG. Влияет на превью и может вызывать лаги: в авто-режиме CameraX работает лучше потому что HAL сам подбирает оптимальные настройки на лету. По умолчанию выключено — к JPEG применяются только разрешение и fps, остальное на усмотрение CameraX."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" Text="Только JPEG" />
+                    </VerticalStackLayout>
+                    <Switch x:Name="swApplySettingsToJpeg" Grid.Column="1" Style="{StaticResource SettingSwitch}" />
+                </Grid>
+
+                <!-- ════════════════════════════════════════════════════ -->
+                <!-- ─── Превью ──────────────────────────────────────── -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <Label Text="ПРЕВЬЮ" Style="{StaticResource SectionTitle}" />
+                <BoxView Style="{StaticResource SectionDivider}" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Авто-отключение превью при старте стрима" Style="{StaticResource SettingTitle}" />
+                        <Label Text="При нажатии «Start» галка «Показать превью» снимается автоматически — превью прекращает рисоваться, ImageView освобождает Bitmap-память, нагрузка на устройство снижается. Включено по умолчанию: при стриме на ПК телефонное превью обычно не нужно (картинку видно на сервере)."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Switch x:Name="swAutoDisablePreviewOnStream" Grid.Column="1" Style="{StaticResource SettingSwitch}" />
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Показывать все разрешения камеры" Style="{StaticResource SettingTitle}" />
+                        <Label Text="По умолчанию выключено — в шторке «Разрешение» показаны только те разрешения, которые умеет принимать виртуальная DirectShow-камера на ПК (3840×2160, 2560×1440, 1920×1080, 1280×720, 960×540, 854×480, 640×480), причём из них — только те, которые поддерживает сама камера телефона. Если включить — список расширится до всех разрешений, поддерживаемых камерой. Учти: при выборе разрешения вне списка VCam-совместимых на стороне ПК виртуальная камера будет fallback'ить или пересжимать (Discord/OBS/Zoom могут не получить native-разрешение)."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Switch x:Name="swShowAllResolutions" Grid.Column="1" Style="{StaticResource SettingSwitch}" />
+                </Grid>
+
                 <!-- ════════════════════════════════════════════════════ -->
                 <!-- ─── Кодирование видео ───────────────────────────── -->
                 <!-- ════════════════════════════════════════════════════ -->

@@ -29,6 +29,9 @@ public partial class MainPage : ContentPage
     // Управляет отправкой как для JPEG (через FrameReady), так и для H.264 (через H264NalReady).
     // Stop переводит в false; Start — в true. Connect/Disconnect это поле НЕ трогают.
     private volatile bool _streamingActive;
+    // Защита от двойного открытия SettingsPage при быстрых тапах — без неё
+    // PushModalAsync успевает встать в очередь второй раз пока первый ещё идёт.
+    private bool _settingsOpening;
 
     // Формат, с которым последний раз был отправлен handshake серверу.
     // Если при следующем Start пользователь выбрал другой формат — TCP-сессию надо
@@ -121,10 +124,12 @@ public partial class MainPage : ContentPage
             Grid.SetRow(FormatSlot,     0); Grid.SetColumn(FormatSlot,     2); Grid.SetColumnSpan(FormatSlot,     1);
             Grid.SetRow(SettingsSlot,   0); Grid.SetColumn(SettingsSlot,   3); Grid.SetColumnSpan(SettingsSlot,   1);
 
-            // Заполняем строку целиком, чтобы фон шторки SettingsSlot был такой же
-            // высоты как у соседних — у них VerticalOptions=Fill по умолчанию.
+            // Landscape: НЕ растягиваем по высоте. Иначе при открытии любой из
+            // соседних шторок (Resolution/FPS/Format) их dropdown увеличивает
+            // высоту строки, и SettingsSlot тянется вместе с ней. Здесь нам это
+            // не нужно — кнопка должна оставаться квадратной/компактной.
             SettingsSlot.HorizontalOptions = LayoutOptions.Fill;
-            SettingsSlot.VerticalOptions   = LayoutOptions.Fill;
+            SettingsSlot.VerticalOptions   = LayoutOptions.Start;
         }
         else
         {
@@ -145,6 +150,73 @@ public partial class MainPage : ContentPage
             SettingsSlot.HorizontalOptions = LayoutOptions.Fill;
             SettingsSlot.VerticalOptions   = LayoutOptions.Fill;
         }
+
+        // Чекбоксы внизу: в portrait одна группа уходит за правые кнопки → ставим
+        // вертикально (друг под другом). В landscape места хватает → бок о бок.
+        if (CheckboxRow != null)
+        {
+            CheckboxRow.Orientation = landscape ? StackOrientation.Horizontal : StackOrientation.Vertical;
+            CheckboxRow.Spacing     = landscape ? 20 : 4;
+        }
+    }
+
+    // Разрешения, которые умеет принимать VirtualCamFilter (DirectShow, native).
+    // Должно совпадать с kSupportedSizes в C:\cwl\VirtualCamFilter\VirtualCamFilter.cpp.
+    // По умолчанию список разрешений в UI фильтруется этим набором — иначе можно
+    // выбрать формат, который VCam не сможет передать в Discord/OBS/Zoom напрямую.
+    private static readonly (int W, int H)[] VCamSupportedSizes = new[]
+    {
+        (3840, 2160),
+        (2560, 1440),
+        (1920, 1080),
+        (1280, 720),
+        (960,  540),
+        (854,  480),
+        (640,  480),
+    };
+
+    // Перестраивает список разрешений в шторке на основе _allConfigs.
+    // Если CameraSettings.ShowAllResolutions=false (по умолчанию) — фильтрует
+    // до пересечения с VCamSupportedSizes. Иначе — все разрешения камеры.
+    private void RebuildResolutionList()
+    {
+        if (_allConfigs == null) { ResolutionList.ItemsSource = new List<ResolutionOption>(); return; }
+
+        // Уникальные разрешения (landscape canon: max×min), отсортированные по убыванию площади.
+        var all = _allConfigs
+            .Select(c => new ResolutionOption(Math.Max(c.Width, c.Height), Math.Min(c.Width, c.Height)))
+            .Distinct()
+            .ToList();
+
+#if ANDROID
+        bool showAll = PhoneCamera.Platforms.Android.CameraSettings.ShowAllResolutions;
+#else
+        bool showAll = true;
+#endif
+
+        IReadOnlyList<ResolutionOption> filtered;
+        if (showAll)
+        {
+            filtered = all.OrderByDescending(r => (long)r.Width * r.Height).ToList();
+        }
+        else
+        {
+            // Оставляем только те, что VCam умеет принимать.
+            var vcamSet = new HashSet<(int, int)>();
+            foreach (var (w, h) in VCamSupportedSizes) vcamSet.Add((w, h));
+
+            filtered = all
+                .Where(r => vcamSet.Contains((r.Width, r.Height)))
+                .OrderByDescending(r => (long)r.Width * r.Height)
+                .ToList();
+
+            // Если пересечение пустое (камера не умеет ни одного VCam-разрешения) —
+            // лучше показать весь список целиком, чем оставить пустой выбор.
+            if (filtered.Count == 0)
+                filtered = all.OrderByDescending(r => (long)r.Width * r.Height).ToList();
+        }
+
+        ResolutionList.ItemsSource = filtered;
     }
 
     private void OnConfigurationsReady(IReadOnlyList<CameraConfig> configs)
@@ -153,13 +225,8 @@ public partial class MainPage : ContentPage
         _isCurrentlyLandscape =
             DeviceDisplay.Current.MainDisplayInfo.Orientation == DisplayOrientation.Landscape;
 
-        // Уникальные разрешения (landscape canon: max×min), отсортированные по убыванию площади.
-        var resolutions = configs
-            .Select(c => new ResolutionOption(Math.Max(c.Width, c.Height), Math.Min(c.Width, c.Height)))
-            .Distinct()
-            .OrderByDescending(r => (long)r.Width * r.Height)
-            .ToList();
-        ResolutionList.ItemsSource = resolutions;
+        RebuildResolutionList();
+        var resolutions = (IReadOnlyList<ResolutionOption>)ResolutionList.ItemsSource;
 
         // Дефолт — 1920×1080 если есть, иначе ближайший по площади
         var defRes = resolutions.FirstOrDefault(r => r.Width == 1920 && r.Height == 1080)
@@ -359,21 +426,59 @@ public partial class MainPage : ContentPage
             System.Diagnostics.Debug.WriteLine("[PCam][UI] Settings blocked (streaming active)");
             return;
         }
-        // Закрываем все открытые шторки и открываем модал настроек.
-        SetDropdownOpen(false, false, false);
+        // Защита от двойного открытия: PushModalAsync конструирует страницу
+        // долго (~100-500 мс из-за большого XAML), и быстрый второй тап успевает
+        // запустить второй PushModalAsync до того как первая страница успеет
+        // подняться — две страницы оверлеем поверх друг друга, обе требуют Pop.
+        if (_settingsOpening) return;
+        _settingsOpening = true;
+        SettingsSlot.Opacity = 0.4; // визуальный feedback пока инициализируется
 
-        var page = new SettingsPage
+        try
         {
-            OnApplied = OnSettingsApplied,
-        };
-        await Navigation.PushModalAsync(page);
+            // Закрываем все открытые шторки и открываем модал настроек.
+            SetDropdownOpen(false, false, false);
+
+            var page = new SettingsPage
+            {
+                OnApplied = OnSettingsApplied,
+            };
+            await Navigation.PushModalAsync(page);
+        }
+        finally
+        {
+            _settingsOpening = false;
+            SettingsSlot.Opacity = _streamingActive ? 0.4 : 1.0;
+        }
     }
 
     private void OnSettingsApplied()
     {
+        // Перестраиваем список разрешений с учётом нового ShowAllResolutions.
+        // Если текущее выбранное разрешение выпало из отфильтрованного списка —
+        // переключаемся на 1920×1080 (или первое доступное).
+        RebuildResolutionList();
+        if (ResolutionList.ItemsSource is IReadOnlyList<ResolutionOption> resolutions)
+        {
+            bool stillThere = resolutions.Any(r => r.Width == _curW && r.Height == _curH);
+            if (!stillThere && resolutions.Count > 0)
+            {
+                var def = resolutions.FirstOrDefault(r => r.Width == 1920 && r.Height == 1080)
+                       ?? resolutions[0];
+                _curW = def.Width;
+                _curH = def.Height;
+                RefreshFpsList();
+                var fpsOpts = AvailableFpsFor(_curW, _curH);
+                _curFps = fpsOpts.Contains(_curFps) ? _curFps
+                        : fpsOpts.Contains(30)     ? 30
+                        : fpsOpts.Count > 0        ? fpsOpts[0]
+                        : 30;
+                UpdateLabels();
+                ApplyConfigToCamera();
+            }
+        }
+
         // Перезапускаем камеру чтобы новые настройки попали в CaptureRequest.
-        // Простой путь: toggle CameraPreview.IsRunning — handler внутри пересоздаст
-        // session с актуальным CameraSettings.ApplyToBuilder / ApplyJpegFull.
         System.Diagnostics.Debug.WriteLine("[PCam][UI] Settings applied — restarting camera");
         try
         {
@@ -435,6 +540,17 @@ public partial class MainPage : ContentPage
             // Включаем gate — JPEG-кадры и H.264 NAL-чанки пойдут на сервер.
             _streamingActive = true;
             UpdateFormatHeaderEnabled();
+
+            // Авто-снять «Показать превью» при старте стрима, если опция включена.
+            // Снимаем через IsChecked — это вызовет OnPreviewCheckedChanged, который
+            // сам прокинет PreviewEnabled=false в нативную камеру. Если галка уже
+            // снята вручную — ничего не меняем.
+#if ANDROID
+            if (PhoneCamera.Platforms.Android.CameraSettings.AutoDisablePreviewOnStream && PreviewCheckBox.IsChecked)
+            {
+                PreviewCheckBox.IsChecked = false;
+            }
+#endif
 
             // Без software-throttle: камера сама задаёт fps через AE FPS range.
             // Раньше тут стоял "if now - last < 1000/fps return", но при реальных

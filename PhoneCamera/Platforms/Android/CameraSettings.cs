@@ -55,6 +55,9 @@ public static class CameraSettings
     private const string K_AdaptiveDecreaseFactor   = "cs_adaptive_decrease";
     private const string K_AdaptiveIncreaseFactor   = "cs_adaptive_increase";
     private const string K_JpegQuality              = "cs_jpeg_quality";
+    private const string K_ApplySettingsToJpeg      = "cs_apply_settings_to_jpeg";
+    private const string K_AutoDisablePreviewOnStream = "cs_auto_disable_preview_on_stream";
+    private const string K_ShowAllResolutions       = "cs_show_all_resolutions";
 
     // ── Defaults (стартовые значения «из коробки») ─────────────────────────
     public const ExposureModeSetting     DEF_ExposureMode              = ExposureModeSetting.Auto;
@@ -89,6 +92,9 @@ public static class CameraSettings
     public const double                  DEF_AdaptiveDecreaseFactor    = 0.85;
     public const double                  DEF_AdaptiveIncreaseFactor    = 1.10;
     public const int                     DEF_JpegQuality               = 25;
+    public const bool                    DEF_ApplySettingsToJpeg       = false; // авто-режим CameraX работает лучше
+    public const bool                    DEF_AutoDisablePreviewOnStream = true;
+    public const bool                    DEF_ShowAllResolutions        = false;
 
     // ── Свойства (читают/пишут Preferences) ────────────────────────────────
     // ── Экспозиция и сенсор ────────────────────────────────────────────────
@@ -272,6 +278,34 @@ public static class CameraSettings
     {
         get => Preferences.Get(K_JpegQuality, DEF_JpegQuality);
         set => Preferences.Set(K_JpegQuality, System.Math.Clamp(value, 1, 100));
+    }
+
+    /// <summary>Применять настройки 3A/обработки/фокуса и т.п. к JPEG-режиму.
+    /// По умолчанию false: CameraX в авто-режиме обычно даёт более стабильное
+    /// превью без лагов. Включается осознанно, если хочется точного контроля.</summary>
+    public static bool ApplySettingsToJpeg
+    {
+        get => Preferences.Get(K_ApplySettingsToJpeg, DEF_ApplySettingsToJpeg);
+        set => Preferences.Set(K_ApplySettingsToJpeg, value);
+    }
+
+    /// <summary>Автоматически снимать галку «Показать превью» при старте стрима.
+    /// Снижает нагрузку на телефон в фоне. По умолчанию true.</summary>
+    public static bool AutoDisablePreviewOnStream
+    {
+        get => Preferences.Get(K_AutoDisablePreviewOnStream, DEF_AutoDisablePreviewOnStream);
+        set => Preferences.Set(K_AutoDisablePreviewOnStream, value);
+    }
+
+    /// <summary>Показывать ВСЕ разрешения камеры. По умолчанию false — список
+    /// фильтруется до разрешений, которые поддерживает VirtualCamFilter
+    /// (3840×2160 / 2560×1440 / 1920×1080 / 1280×720 / 960×540 / 854×480 /
+    /// 640×480). Включить если хочется снимать в нестандартном разрешении —
+    /// VCam тогда не сможет принять этот формат напрямую и будет fallback'ить.</summary>
+    public static bool ShowAllResolutions
+    {
+        get => Preferences.Get(K_ShowAllResolutions, DEF_ShowAllResolutions);
+        set => Preferences.Set(K_ShowAllResolutions, value);
     }
 
     // ── Сброс к значениям по умолчанию ─────────────────────────────────────
@@ -501,7 +535,21 @@ public static class CameraSettings
             new global::Android.Util.Range(Integer.ValueOf(fps), Integer.ValueOf(fps)));
     }
 
-    // Legacy alias: код вызывал ApplyJpegMinimal — теперь редиректится в ApplyJpegFull.
+    // Маршрутизирующий wrapper. Если ApplySettingsToJpeg=true — применяем
+    // полный набор как для H.264/H.265. Иначе — только разрешение/fps,
+    // остальное CameraX решает сам в auto-режиме (стабильнее, без лагов).
+    // Точка входа из CameraPreviewHandler.
     public static void ApplyJpegMinimal(Camera2Interop.Extender extender, int fps)
-        => ApplyJpegFull(extender, fps);
+    {
+        if (ApplySettingsToJpeg)
+        {
+            ApplyJpegFull(extender, fps);
+            return;
+        }
+
+        // Minimal: ничего кроме fps-range не выставляем. Разрешение уже задано
+        // отдельно на pipeline (Preview/ImageAnalysis.SetTargetResolution).
+        extender.SetCaptureRequestOption(CaptureRequest.ControlAeTargetFpsRange,
+            new global::Android.Util.Range(Integer.ValueOf(fps), Integer.ValueOf(fps)));
+    }
 }

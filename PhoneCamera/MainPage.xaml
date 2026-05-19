@@ -124,20 +124,20 @@
             </VerticalStackLayout>
 
             <!-- ── Кнопка настроек ─────────────────────────────────────────
-                 Padding=16,10 + Label FontSize=15 FontAttributes=Bold —
-                 в точности как у хедера шторок выше, чтобы высота совпала.
-                 Минимальная ширина задаёт «квадратность» (≈ высоте). -->
+                 Одна ячейка с фоном #CC000000 (как у заголовков шторок).
+                 Иконка с VerticalOptions=Start + Padding=16,10 — пришпилена
+                 к верху, не съезжает при растяжении slot'а в portrait. -->
             <Grid x:Name="SettingsSlot"
                   BackgroundColor="#CC000000"
-                  Padding="16,10"
                   MinimumWidthRequest="44">
                 <Label x:Name="SettingsIcon"
                        Text="⛭"
                        TextColor="White"
                        FontSize="15"
                        FontAttributes="Bold"
+                       Padding="16,10"
                        HorizontalOptions="Center"
-                       VerticalOptions="Center" />
+                       VerticalOptions="Start" />
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnSettingsTapped" />
                 </Grid.GestureRecognizers>
@@ -196,8 +196,10 @@
                        Text="Press Start"
                        TextColor="#CCFFFFFF"
                        FontSize="13" />
-                <!-- Чекбоксы -->
-                <HorizontalStackLayout Spacing="20">
+                <!-- Чекбоксы. Orientation переключается из code-behind:
+                     landscape → Horizontal (бок о бок), portrait → Vertical
+                     (друг под другом — чтобы не наезжать на правые кнопки). -->
+                <StackLayout x:Name="CheckboxRow" Orientation="Horizontal" Spacing="20">
                     <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
                         <CheckBox x:Name="LockCheckBox"
                       CheckedChanged="OnLockCheckedChanged"
@@ -217,7 +219,7 @@
                    FontSize="13"
                    VerticalOptions="Center" />
                     </HorizontalStackLayout>
-                </HorizontalStackLayout>
+                </StackLayout>
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="8">
