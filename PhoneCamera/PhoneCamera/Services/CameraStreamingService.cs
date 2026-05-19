@@ -26,8 +26,17 @@ public sealed class CameraStreamingService : IDisposable
     private const int  FrameOverhead = 12; // 4 start + 4 size + 4 end
 
     // Период замера заполненности Channel (backpressure stats).
-    // Должно совпадать с CameraSettings.ADAPTIVE_WINDOW_MS на стороне Android.
-    private const int  BackpressureWindowMs = 2000;
+    // Читается из Preferences (ключ "cs_adaptive_window_ms"), который пишет UI
+    // SettingsPage → CameraSettings.AdaptiveWindowMs. Дефолт 2000 ms совпадает
+    // с CameraSettings.DEF_AdaptiveWindowMs. Захватывается значение на момент
+    // ConnectAsync — менять окно «в полёте» нет смысла, оно становится актуальным
+    // при следующем подключении.
+    private const int  DefaultBackpressureWindowMs = 2000;
+    private static int CurrentBackpressureWindowMs()
+    {
+        try { return Microsoft.Maui.Storage.Preferences.Get("cs_adaptive_window_ms", DefaultBackpressureWindowMs); }
+        catch { return DefaultBackpressureWindowMs; }
+    }
 
     private TcpClient?     _client;
     private NetworkStream? _stream;
@@ -124,8 +133,8 @@ public sealed class CameraStreamingService : IDisposable
             {
                 _writeTotal = 0;
                 _writeBlocked = 0;
-                _bpTimer = new System.Threading.Timer(BpTimerTick, null,
-                    BackpressureWindowMs, BackpressureWindowMs);
+                int windowMs = CurrentBackpressureWindowMs();
+                _bpTimer = new System.Threading.Timer(BpTimerTick, null, windowMs, windowMs);
             }
 
             Debug.WriteLine($"[PCam][Stream] Connected to {ip}:{port}");

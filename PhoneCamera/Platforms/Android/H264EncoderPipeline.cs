@@ -201,9 +201,15 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
         // содержимое внутри chunk'ов — AVC NAL units vs HEVC NAL units. Серверная
         // ветка различает по handshake-байту в TCP, а не по контенту.
         string mime = _useHevc ? MediaFormat.MimetypeVideoHevc! : MediaFormat.MimetypeVideoAvc!;
+        // AVC: Main (как HEVC). Baseline не имеет CABAC и weighted prediction —
+        // на той же bpp заметно блочит на high-motion (4×4 transform не успевает за
+        // движением, видны границы 16×16 macroblock'ов). Main даёт CABAC + weighted
+        // prediction, qualитет догоняет HEVC при том же битрейте.
+        // B-frames в Main допустимы, но мы их явно глушим через max-bframes=0 ниже,
+        // чтобы не вносить frame-reorder latency (≥33 мс на 30 fps).
         int    profile = _useHevc
             ? (int)MediaCodecProfileType.Hevcprofilemain
-            : (int)MediaCodecProfileType.Avcprofilebaseline;
+            : (int)MediaCodecProfileType.Avcprofilemain;
         string codecLabel = _useHevc ? "HEVC" : "AVC";
 
         _encoder = MediaCodec.CreateEncoderByType(mime)
@@ -223,6 +229,14 @@ public sealed class H264EncoderPipeline : Java.Lang.Object
         fmt.SetInteger(MediaFormat.KeyFrameRate,      fps);
         fmt.SetInteger(MediaFormat.KeyIFrameInterval, CameraSettings.H264_I_FRAME_INTERVAL_SECONDS);
         fmt.SetInteger(MediaFormat.KeyProfile,        profile);
+
+        // Запрещаем B-frames — иначе при profile=Main encoder может вставить
+        // I-B-P-B-P последовательность, что добавляет latency reorder (≥1 кадр =
+        // 33 мс на 30 fps, до 66 мс на двух B). Низкая задержка важнее compression
+        // efficiency для real-time стрима. Большинство HW-энкодеров уважают
+        // KeyLowLatency ниже и сами выключают B, но не все (Snapdragon/Exynos
+        // расходятся в поведении), поэтому ставим явно.
+        try { fmt.SetInteger("max-bframes", 0); } catch { }
 
         // Hint'ы на low-latency и 60fps operating rate (новые API)
         if (AOS.Build.VERSION.SdkInt >= AOS.BuildVersionCodes.Q)

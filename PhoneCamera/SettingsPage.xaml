@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PhoneCamera.SettingsPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#121212">
+
+    <ContentPage.Resources>
+        <!-- Стили для повторяющихся элементов -->
+        <Style x:Key="SectionTitle" TargetType="Label">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="#4FC3F7" />
+            <Setter Property="Margin" Value="16,20,16,2" />
+        </Style>
+        <Style x:Key="SectionDivider" TargetType="BoxView">
+            <Setter Property="HeightRequest" Value="1" />
+            <Setter Property="Color" Value="#33FFFFFF" />
+            <Setter Property="Margin" Value="16,0,16,6" />
+        </Style>
+        <Style x:Key="SettingTitle" TargetType="Label">
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextColor" Value="White" />
+        </Style>
+        <Style x:Key="SettingDesc" TargetType="Label">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="TextColor" Value="#A0A0A0" />
+            <Setter Property="LineBreakMode" Value="WordWrap" />
+        </Style>
+        <Style x:Key="EncodedMark" TargetType="Label">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontAttributes" Value="Italic" />
+            <Setter Property="TextColor" Value="#FFB74D" />
+            <Setter Property="Text" Value="Только H.264 / H.265" />
+        </Style>
+        <Style x:Key="SettingPicker" TargetType="Picker">
+            <Setter Property="WidthRequest" Value="170" />
+            <Setter Property="BackgroundColor" Value="#1F1F1F" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="TitleColor" Value="White" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        <Style x:Key="SettingSwitch" TargetType="Switch">
+            <Setter Property="OnColor" Value="#4FC3F7" />
+            <Setter Property="ThumbColor" Value="White" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        <Style x:Key="SettingEntry" TargetType="Entry">
+            <Setter Property="BackgroundColor" Value="#1F1F1F" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="PlaceholderColor" Value="#666" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Margin" Value="16,4,16,8" />
+            <Setter Property="Keyboard" Value="Numeric" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- ── Header ─────────────────────────────────────────────────── -->
+        <Grid Grid.Row="0" Padding="16,14" BackgroundColor="#000" ColumnDefinitions="*,Auto">
+            <Label Text="Настройки"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   VerticalOptions="Center" />
+            <Label Grid.Column="1"
+                   Text="✕"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   VerticalOptions="Center"
+                   HorizontalOptions="End"
+                   Padding="12,4">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnCloseTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+
+        <!-- ── Scrollable content ─────────────────────────────────────── -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="2" Padding="0,8,0,20">
+
+                <!-- ════════════════════════════════════════════════════ -->
+                <!-- ─── Экспозиция и сенсор ─────────────────────────── -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <Label Text="ЭКСПОЗИЦИЯ И СЕНСОР" Style="{StaticResource SectionTitle}" />
+                <BoxView Style="{StaticResource SectionDivider}" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Режим экспозиции" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Автоматическое управление экспозицией, балансом белого и фокусом. Без него картинка тёмная и нерезкая — выключай только если нужны фиксированные значения сенсора."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pExposureMode" Grid.Column="1" Style="{StaticResource SettingPicker}" SelectedIndexChanged="OnExposureModeChanged">
+                        <Picker.Items>
+                            <x:String>Авто</x:String>
+                            <x:String>Вручную</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Компенсация экспозиции (EV)" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Сдвиг автоэкспозиции «темнее ↔ светлее». Активно только в авто-режиме."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pEvCompensation" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>-2.0 EV</x:String>
+                            <x:String>-1.5 EV</x:String>
+                            <x:String>-1.0 EV</x:String>
+                            <x:String>-0.5 EV</x:String>
+                            <x:String>0 EV</x:String>
+                            <x:String>+0.5 EV</x:String>
+                            <x:String>+1.0 EV</x:String>
+                            <x:String>+1.5 EV</x:String>
+                            <x:String>+2.0 EV</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Блокировка экспозиции" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Замораживает текущее значение AE. Полезно при стабильной сцене с движущимся источником света."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Switch x:Name="swAeLock" Grid.Column="1" Style="{StaticResource SettingSwitch}" />
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Выдержка" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Сколько сенсор экспонируется на кадр. Короче — меньше размытия, темнее. Длиннее — ярче, больше смаза. Активно только в ручном режиме."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pExposureTime" Grid.Column="1" Style="{StaticResource SettingPicker}" SelectedIndexChanged="OnExposureTimeChanged">
+                        <Picker.Items>
+                            <x:String>1/15 сек</x:String>
+                            <x:String>1/30 сек</x:String>
+                            <x:String>1/60 сек</x:String>
+                            <x:String>1/125 сек</x:String>
+                            <x:String>1/250 сек</x:String>
+                            <x:String>1/500 сек</x:String>
+                            <x:String>1/1000 сек</x:String>
+                            <x:String>Точное значение…</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+                <Entry x:Name="eExposureTime"
+                       Style="{StaticResource SettingEntry}"
+                       Placeholder="наносекунды (например 16666666 = 1/60)"
+                       IsVisible="False" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="ISO (чувствительность)" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Усиление сигнала сенсора. Выше — ярче в темноте, но больше цифрового шума. Активно только в ручном режиме."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pIso" Grid.Column="1" Style="{StaticResource SettingPicker}" SelectedIndexChanged="OnIsoChanged">
+                        <Picker.Items>
+                            <x:String>100</x:String>
+                            <x:String>200</x:String>
+                            <x:String>400</x:String>
+                            <x:String>800</x:String>
+                            <x:String>1600</x:String>
+                            <x:String>3200</x:String>
+                            <x:String>Точное значение…</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+                <Entry x:Name="eIso"
+                       Style="{StaticResource SettingEntry}"
+                       Placeholder="ISO (например 1250)"
+                       IsVisible="False" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Подавление мерцания" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Убирает горизонтальные полосы от LED и люминесцентных ламп. В РФ обычно 50 Гц."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pAntiBanding" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>Авто</x:String>
+                            <x:String>50 Гц</x:String>
+                            <x:String>60 Гц</x:String>
+                            <x:String>Выкл</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <!-- ════════════════════════════════════════════════════ -->
+                <!-- ─── Баланс белого ───────────────────────────────── -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <Label Text="БАЛАНС БЕЛОГО" Style="{StaticResource SectionTitle}" />
+                <BoxView Style="{StaticResource SectionDivider}" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Режим" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Цветовая температура сцены. Авто справляется в большинстве случаев; ручные пресеты — при смешанном освещении когда авто «гуляет»."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pWhiteBalance" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>Авто</x:String>
+                            <x:String>Дневной свет</x:String>
+                            <x:String>Облачно</x:String>
+                            <x:String>Тень</x:String>
+                            <x:String>Лампа накаливания</x:String>
+                            <x:String>Флуоресцент</x:String>
+                            <x:String>Тёплый флуоресцент</x:String>
+                            <x:String>Сумерки</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Блокировка" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Замораживает текущий баланс белого. Полезно при панорамировании, чтобы тон не плыл от кадра к кадру."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Switch x:Name="swAwbLock" Grid.Column="1" Style="{StaticResource SettingSwitch}" />
+                </Grid>
+
+                <!-- ════════════════════════════════════════════════════ -->
+                <!-- ─── Фокус ────────────────────────────────────────── -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <Label Text="ФОКУС" Style="{StaticResource SectionTitle}" />
+                <BoxView Style="{StaticResource SectionDivider}" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Режим автофокуса" Style="{StaticResource SettingTitle}" />
+                        <Label Text="«Непрерывный видео» — для стрима оптимально (быстрый, без рывков). «Непрерывный фото» — точнее, но дольше наводит."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pAfMode" Grid.Column="1" Style="{StaticResource SettingPicker}" SelectedIndexChanged="OnAfModeChanged">
+                        <Picker.Items>
+                            <x:String>Непрерывный (видео)</x:String>
+                            <x:String>Непрерывный (фото)</x:String>
+                            <x:String>Однократный</x:String>
+                            <x:String>Ручной</x:String>
+                            <x:String>Выключено</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Расстояние фокуса (диоптрии)" Style="{StaticResource SettingTitle}" />
+                        <Label Text="0 — бесконечность, выше — ближе к объективу. Активно только в ручном режиме фокуса."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pFocusDistance" Grid.Column="1" Style="{StaticResource SettingPicker}" SelectedIndexChanged="OnFocusDistanceChanged">
+                        <Picker.Items>
+                            <x:String>0 (бесконечность)</x:String>
+                            <x:String>0.5</x:String>
+                            <x:String>1.0</x:String>
+                            <x:String>2.0</x:String>
+                            <x:String>5.0</x:String>
+                            <x:String>10.0</x:String>
+                            <x:String>Точное значение…</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+                <Entry x:Name="eFocusDistance"
+                       Style="{StaticResource SettingEntry}"
+                       Placeholder="диоптрии (например 3.5)"
+                       Keyboard="Default"
+                       IsVisible="False" />
+
+                <!-- ════════════════════════════════════════════════════ -->
+                <!-- ─── Обработка изображения ───────────────────────── -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <Label Text="ОБРАБОТКА ИЗОБРАЖЕНИЯ" Style="{StaticResource SectionTitle}" />
+                <BoxView Style="{StaticResource SectionDivider}" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Шумоподавление" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Уровень внутри-HAL подавления шума. Быстрое оптимально для всех режимов; Качественное может снизить fps, особенно в JPEG-режиме на ряде устройств."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pNoiseReduction" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>Выкл</x:String>
+                            <x:String>Быстрое</x:String>
+                            <x:String>Качественное</x:String>
+                            <x:String>Минимальное</x:String>
+                            <x:String>ZSL</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Резкость (edge)" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Усиление контуров. Та же история с fps что у шумоподавления."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pEdge" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>Выкл</x:String>
+                            <x:String>Быстрое</x:String>
+                            <x:String>Качественное</x:String>
+                            <x:String>ZSL</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Тонмаппинг" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Преобразование RAW → 8 бит с динамическим диапазоном. Качественное может снизить fps."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pTonemap" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>Быстрое</x:String>
+                            <x:String>Качественное</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Коррекция хроматических аберраций" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Убирает цветные ореолы на резких контрастных границах."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pColorAberration" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>Выкл</x:String>
+                            <x:String>Быстрое</x:String>
+                            <x:String>Качественное</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Коррекция битых пикселей" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Маскирует «горячие» пиксели сенсора."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pHotPixel" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>Выкл</x:String>
+                            <x:String>Быстрое</x:String>
+                            <x:String>Качественное</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Видеостабилизация (EIS)" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Электронная стабилизация. Включай если кадр трясёт. На многих устройствах режет fps до 30."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Switch x:Name="swVideoStabilization" Grid.Column="1" Style="{StaticResource SettingSwitch}" />
+                </Grid>
+
+                <!-- ════════════════════════════════════════════════════ -->
+                <!-- ─── Кадр ─────────────────────────────────────────── -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <Label Text="КАДР" Style="{StaticResource SectionTitle}" />
+                <BoxView Style="{StaticResource SectionDivider}" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Цифровой зум" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Программное увеличение через crop сенсора. Максимум зависит от устройства; Android 11+ нужен для CONTROL_ZOOM_RATIO."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pZoom" Grid.Column="1" Style="{StaticResource SettingPicker}" SelectedIndexChanged="OnZoomChanged">
+                        <Picker.Items>
+                            <x:String>1.0×</x:String>
+                            <x:String>1.5×</x:String>
+                            <x:String>2.0×</x:String>
+                            <x:String>3.0×</x:String>
+                            <x:String>4.0×</x:String>
+                            <x:String>Точное значение…</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+                <Entry x:Name="eZoom"
+                       Style="{StaticResource SettingEntry}"
+                       Placeholder="множитель (например 2.5)"
+                       Keyboard="Default"
+                       IsVisible="False" />
+
+                <!-- ════════════════════════════════════════════════════ -->
+                <!-- ─── Вспышка ──────────────────────────────────────── -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <Label Text="ВСПЫШКА" Style="{StaticResource SectionTitle}" />
+                <BoxView Style="{StaticResource SectionDivider}" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Режим" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Управление LED-вспышкой. «Фонарик» — постоянный свет для подсветки сцены."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pFlash" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>Выкл</x:String>
+                            <x:String>Авто</x:String>
+                            <x:String>Принудительно на кадр</x:String>
+                            <x:String>Фонарик</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <!-- ════════════════════════════════════════════════════ -->
+                <!-- ─── JPEG-кодирование ────────────────────────────── -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <Label Text="JPEG-КОДИРОВАНИЕ" Style="{StaticResource SectionTitle}" />
+                <Label Text="Применяется только в режиме JPEG. В H.264 / H.265 не используется."
+                       FontSize="11" TextColor="#FFB74D" FontAttributes="Italic"
+                       Margin="16,0,16,2" />
+                <BoxView Style="{StaticResource SectionDivider}" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Качество JPEG" Style="{StaticResource SettingTitle}" />
+                        <Label Text="1..100. Выше — меньше артефактов и крупнее размер кадра. На 1080p@30 разница между 25 и 80 — это ~3-4× по битрейту. Низкие значения (10-25) подойдут для live preview по локальной сети."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" Text="Только JPEG" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pJpegQuality" Grid.Column="1" Style="{StaticResource SettingPicker}" SelectedIndexChanged="OnJpegQualityChanged">
+                        <Picker.Items>
+                            <x:String>10</x:String>
+                            <x:String>25</x:String>
+                            <x:String>50</x:String>
+                            <x:String>70</x:String>
+                            <x:String>85</x:String>
+                            <x:String>95</x:String>
+                            <x:String>Точное значение…</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+                <Entry x:Name="eJpegQuality"
+                       Style="{StaticResource SettingEntry}"
+                       Placeholder="качество 1..100 (например 40)"
+                       IsVisible="False" />
+
+                <!-- ════════════════════════════════════════════════════ -->
+                <!-- ─── Кодирование видео ───────────────────────────── -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <Label Text="КОДИРОВАНИЕ ВИДЕО" Style="{StaticResource SectionTitle}" />
+                <Label Text="Применяется при стриме в H.264 / H.265. В JPEG-режиме не используется."
+                       FontSize="11" TextColor="#FFB74D" FontAttributes="Italic"
+                       Margin="16,0,16,2" />
+                <BoxView Style="{StaticResource SectionDivider}" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Шаблон захвата" Style="{StaticResource SettingTitle}" />
+                        <Label Text="HAL hint для выбора sensor-pipeline. Preview — лёгкий путь, часто разблокирует 60 fps. Record — качественнее, но может лочить 30 fps."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pCaptureTemplate" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>Preview</x:String>
+                            <x:String>Record</x:String>
+                            <x:String>VideoSnapshot</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Интервал ключевых кадров" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Как часто encoder вставляет IDR-кадр. Меньше — быстрее восстановление при потерях. Больше — ниже битрейт. Для live-стрима оптимум 1-2 секунды."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pIFrameInterval" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>1 сек</x:String>
+                            <x:String>2 сек</x:String>
+                            <x:String>3 сек</x:String>
+                            <x:String>5 сек</x:String>
+                            <x:String>10 сек</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Битрейт H.264 (бит/пиксель)" Style="{StaticResource SettingTitle}" />
+                        <Label Text="bps = ширина × высота × fps × bpp. 0.083 даёт 1080p@30 ≈ 5.4 Mbps. Выше — качественнее и больше трафика."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" Text="Только H.264" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pH264Bpp" Grid.Column="1" Style="{StaticResource SettingPicker}" SelectedIndexChanged="OnH264BppChanged">
+                        <Picker.Items>
+                            <x:String>0.04</x:String>
+                            <x:String>0.06</x:String>
+                            <x:String>0.083</x:String>
+                            <x:String>0.10</x:String>
+                            <x:String>0.15</x:String>
+                            <x:String>Точное значение…</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+                <Entry x:Name="eH264Bpp"
+                       Style="{StaticResource SettingEntry}"
+                       Placeholder="бит/пиксель (например 0.075)"
+                       Keyboard="Default"
+                       IsVisible="False" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Битрейт H.265 (бит/пиксель)" Style="{StaticResource SettingTitle}" />
+                        <Label Text="HEVC при равном качестве жмёт ~50-60 % от AVC. Для экономии сети ставь 0.05."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" Text="Только H.265" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pH265Bpp" Grid.Column="1" Style="{StaticResource SettingPicker}" SelectedIndexChanged="OnH265BppChanged">
+                        <Picker.Items>
+                            <x:String>0.03</x:String>
+                            <x:String>0.05</x:String>
+                            <x:String>0.083</x:String>
+                            <x:String>0.10</x:String>
+                            <x:String>Точное значение…</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+                <Entry x:Name="eH265Bpp"
+                       Style="{StaticResource SettingEntry}"
+                       Placeholder="бит/пиксель (например 0.045)"
+                       Keyboard="Default"
+                       IsVisible="False" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Потолок битрейта" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Верхняя граница формулы — выше битрейт не уйдёт. Защита от слишком тяжёлого 4K-стрима."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pBitrateCap" Grid.Column="1" Style="{StaticResource SettingPicker}" SelectedIndexChanged="OnBitrateCapChanged">
+                        <Picker.Items>
+                            <x:String>5 Mbps</x:String>
+                            <x:String>10 Mbps</x:String>
+                            <x:String>15 Mbps</x:String>
+                            <x:String>25 Mbps</x:String>
+                            <x:String>40 Mbps</x:String>
+                            <x:String>Точное значение…</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+                <Entry x:Name="eBitrateCap"
+                       Style="{StaticResource SettingEntry}"
+                       Placeholder="бит/сек (например 20000000)"
+                       IsVisible="False" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Пол битрейта" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Нижняя граница для адаптивного контроллера. Ниже не опустится — картинка не превращается в кашу даже при плохой сети."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pBitrateMin" Grid.Column="1" Style="{StaticResource SettingPicker}" SelectedIndexChanged="OnBitrateMinChanged">
+                        <Picker.Items>
+                            <x:String>0.5 Mbps</x:String>
+                            <x:String>1 Mbps</x:String>
+                            <x:String>2 Mbps</x:String>
+                            <x:String>5 Mbps</x:String>
+                            <x:String>Точное значение…</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+                <Entry x:Name="eBitrateMin"
+                       Style="{StaticResource SettingEntry}"
+                       Placeholder="бит/сек (например 1500000)"
+                       IsVisible="False" />
+
+                <!-- ════════════════════════════════════════════════════ -->
+                <!-- ─── Адаптивный битрейт ──────────────────────────── -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <Label Text="АДАПТИВНЫЙ БИТРЕЙТ" Style="{StaticResource SectionTitle}" />
+                <Label Text="Применяется при стриме в H.264 / H.265."
+                       FontSize="11" TextColor="#FFB74D" FontAttributes="Italic"
+                       Margin="16,0,16,2" />
+                <BoxView Style="{StaticResource SectionDivider}" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Адаптивный битрейт" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Автоматически подстраивает битрейт под реальную пропускную способность Wi-Fi. Выключи если хочешь фиксированное значение из формулы."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" />
+                    </VerticalStackLayout>
+                    <Switch x:Name="swAdaptive" Grid.Column="1" Style="{StaticResource SettingSwitch}" />
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Окно замера" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Период оценки заполнения очереди отправки. Чаще — реакция быстрее, но шумнее."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pAdaptiveWindow" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>1 сек</x:String>
+                            <x:String>2 сек</x:String>
+                            <x:String>3 сек</x:String>
+                            <x:String>5 сек</x:String>
+                            <x:String>10 сек</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Порог снижения" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Доля блокировок отправки за окно, при которой битрейт начинает падать."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pAdaptiveBpThreshold" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>1 %</x:String>
+                            <x:String>3 %</x:String>
+                            <x:String>5 %</x:String>
+                            <x:String>10 %</x:String>
+                            <x:String>15 %</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Порог чистого окна" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Доля блокировок, ниже которой окно считается «чистым» (без затыков)."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pAdaptiveClearThreshold" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>0 %</x:String>
+                            <x:String>0.5 %</x:String>
+                            <x:String>1 %</x:String>
+                            <x:String>2 %</x:String>
+                            <x:String>5 %</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Чистых окон до подъёма" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Сколько подряд чистых окон нужно прежде чем контроллер рискнёт поднять битрейт."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pAdaptiveClearWindows" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>1</x:String>
+                            <x:String>2</x:String>
+                            <x:String>3</x:String>
+                            <x:String>5</x:String>
+                            <x:String>10</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Коэффициент снижения" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Множитель битрейта при затыке. Меньше — резче падение."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pAdaptiveDecreaseFactor" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>×0.70</x:String>
+                            <x:String>×0.80</x:String>
+                            <x:String>×0.85</x:String>
+                            <x:String>×0.90</x:String>
+                            <x:String>×0.95</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Grid Padding="16,10" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="Коэффициент повышения" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Множитель битрейта при чистых окнах. Больше — быстрее подъём, но риск снова откатиться."
+                               Style="{StaticResource SettingDesc}" />
+                        <Label Style="{StaticResource EncodedMark}" />
+                    </VerticalStackLayout>
+                    <Picker x:Name="pAdaptiveIncreaseFactor" Grid.Column="1" Style="{StaticResource SettingPicker}">
+                        <Picker.Items>
+                            <x:String>×1.05</x:String>
+                            <x:String>×1.10</x:String>
+                            <x:String>×1.20</x:String>
+                            <x:String>×1.30</x:String>
+                            <x:String>×1.50</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ── Bottom buttons ─────────────────────────────────────────── -->
+        <Grid Grid.Row="2" Padding="16,12" BackgroundColor="#000"
+              ColumnDefinitions="*,*" ColumnSpacing="12">
+            <Button Grid.Column="0"
+                    Text="По умолчанию"
+                    BackgroundColor="#424242"
+                    TextColor="White"
+                    FontSize="14"
+                    Padding="14,8"
+                    Clicked="OnResetClicked" />
+            <Button Grid.Column="1"
+                    Text="Применить и закрыть"
+                    BackgroundColor="#4FC3F7"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    FontSize="14"
+                    Padding="14,8"
+                    Clicked="OnApplyClicked" />
+        </Grid>
+    </Grid>
+
+</ContentPage>

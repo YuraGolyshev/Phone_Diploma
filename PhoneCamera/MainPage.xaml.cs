@@ -110,25 +110,40 @@ public partial class MainPage : ContentPage
 
         if (landscape)
         {
-            // 3 колонки одинаковой ширины, 1 строка
+            // 1 строка: [Resolution*] [Fps*] [Format*] [Settings Auto]
             TopOverlayLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             for (int i = 0; i < 3; i++)
                 TopOverlayLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            TopOverlayLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
-            Grid.SetRow(ResolutionSlot, 0); Grid.SetColumn(ResolutionSlot, 0);
-            Grid.SetRow(FpsSlot,        0); Grid.SetColumn(FpsSlot,        1);
-            Grid.SetRow(FormatSlot,     0); Grid.SetColumn(FormatSlot,     2);
+            Grid.SetRow(ResolutionSlot, 0); Grid.SetColumn(ResolutionSlot, 0); Grid.SetColumnSpan(ResolutionSlot, 1);
+            Grid.SetRow(FpsSlot,        0); Grid.SetColumn(FpsSlot,        1); Grid.SetColumnSpan(FpsSlot,        1);
+            Grid.SetRow(FormatSlot,     0); Grid.SetColumn(FormatSlot,     2); Grid.SetColumnSpan(FormatSlot,     1);
+            Grid.SetRow(SettingsSlot,   0); Grid.SetColumn(SettingsSlot,   3); Grid.SetColumnSpan(SettingsSlot,   1);
+
+            // Заполняем строку целиком, чтобы фон шторки SettingsSlot был такой же
+            // высоты как у соседних — у них VerticalOptions=Fill по умолчанию.
+            SettingsSlot.HorizontalOptions = LayoutOptions.Fill;
+            SettingsSlot.VerticalOptions   = LayoutOptions.Fill;
         }
         else
         {
-            // 1 колонка, 3 строки — каждая высотой по содержимому
+            // Portrait: первая строка — [Resolution*][Settings Auto]; ниже Fps и Format.
             for (int i = 0; i < 3; i++)
                 TopOverlayLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             TopOverlayLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            TopOverlayLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
-            Grid.SetRow(ResolutionSlot, 0); Grid.SetColumn(ResolutionSlot, 0);
-            Grid.SetRow(FpsSlot,        1); Grid.SetColumn(FpsSlot,        0);
-            Grid.SetRow(FormatSlot,     2); Grid.SetColumn(FormatSlot,     0);
+            Grid.SetRow(ResolutionSlot, 0); Grid.SetColumn(ResolutionSlot, 0); Grid.SetColumnSpan(ResolutionSlot, 1);
+            Grid.SetRow(SettingsSlot,   0); Grid.SetColumn(SettingsSlot,   1); Grid.SetColumnSpan(SettingsSlot,   1);
+
+            Grid.SetRow(FpsSlot,    1); Grid.SetColumn(FpsSlot,    0);
+            Grid.SetColumnSpan(FpsSlot, 2);
+            Grid.SetRow(FormatSlot, 2); Grid.SetColumn(FormatSlot, 0);
+            Grid.SetColumnSpan(FormatSlot, 2);
+
+            SettingsSlot.HorizontalOptions = LayoutOptions.Fill;
+            SettingsSlot.VerticalOptions   = LayoutOptions.Fill;
         }
     }
 
@@ -321,7 +336,7 @@ public partial class MainPage : ContentPage
 
     private void UpdateFormatHeaderEnabled()
     {
-        // Визуально «затемняем» шторку формата на время стрима.
+        // Визуально «затемняем» шторку формата и кнопку настроек на время стрима.
         FormatHeader.Opacity = _streamingActive ? 0.4 : 1.0;
         FormatLabel.Text =
             $"Формат: {FormatName(_selectedFormat)}" +
@@ -329,6 +344,49 @@ public partial class MainPage : ContentPage
         // Если на момент блокировки шторка была открыта — закрываем её.
         if (_streamingActive && _fmtDropdownOpen)
             SetDropdownOpen(_resDropdownOpen, _fpsDropdownOpen, false);
+
+        // Кнопка настроек: на время стрима затемнена, тапы игнорируются (см. OnSettingsTapped).
+        SettingsSlot.Opacity = _streamingActive ? 0.4 : 1.0;
+    }
+
+    // ── Настройки ──────────────────────────────────────────────────────────
+    private async void OnSettingsTapped(object? sender, TappedEventArgs e)
+    {
+        if (_streamingActive)
+        {
+            // Заблокировано на время стрима — менять параметры в полёте не имеет смысла,
+            // их пришлось бы применять рестартом камеры.
+            System.Diagnostics.Debug.WriteLine("[PCam][UI] Settings blocked (streaming active)");
+            return;
+        }
+        // Закрываем все открытые шторки и открываем модал настроек.
+        SetDropdownOpen(false, false, false);
+
+        var page = new SettingsPage
+        {
+            OnApplied = OnSettingsApplied,
+        };
+        await Navigation.PushModalAsync(page);
+    }
+
+    private void OnSettingsApplied()
+    {
+        // Перезапускаем камеру чтобы новые настройки попали в CaptureRequest.
+        // Простой путь: toggle CameraPreview.IsRunning — handler внутри пересоздаст
+        // session с актуальным CameraSettings.ApplyToBuilder / ApplyJpegFull.
+        System.Diagnostics.Debug.WriteLine("[PCam][UI] Settings applied — restarting camera");
+        try
+        {
+            if (CameraPreview.IsRunning)
+            {
+                CameraPreview.IsRunning = false;
+                CameraPreview.IsRunning = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[PCam][UI] Camera restart failed: {ex.Message}");
+        }
     }
 
     // ── Кнопки ──────────────────────────────────────────────────────────────

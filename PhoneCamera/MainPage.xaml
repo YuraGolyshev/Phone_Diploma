@@ -123,6 +123,26 @@
                                 ItemTemplate="{StaticResource DropdownItemTemplate}" />
             </VerticalStackLayout>
 
+            <!-- ── Кнопка настроек ─────────────────────────────────────────
+                 Padding=16,10 + Label FontSize=15 FontAttributes=Bold —
+                 в точности как у хедера шторок выше, чтобы высота совпала.
+                 Минимальная ширина задаёт «квадратность» (≈ высоте). -->
+            <Grid x:Name="SettingsSlot"
+                  BackgroundColor="#CC000000"
+                  Padding="16,10"
+                  MinimumWidthRequest="44">
+                <Label x:Name="SettingsIcon"
+                       Text="⛭"
+                       TextColor="White"
+                       FontSize="15"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnSettingsTapped" />
+                </Grid.GestureRecognizers>
+            </Grid>
+
             <!-- ── Шторка 3: Формат ─────────────────────────────────────── -->
             <VerticalStackLayout x:Name="FormatSlot">
                 <Grid x:Name="FormatHeader" BackgroundColor="#CC000000" Padding="16,10">

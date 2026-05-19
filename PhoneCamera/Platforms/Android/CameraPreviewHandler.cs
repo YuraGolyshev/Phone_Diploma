@@ -694,7 +694,7 @@ public class CameraPreviewHandler : ViewHandler<CameraPreviewView, ImageView>
                         return;
                     }
 
-                    int quality      = 25;
+                    int quality      = CameraSettings.JpegQuality;
                     int effectiveRot = wantStream ? 0 : imgRot;
                     long t1 = _diagSw.ElapsedMilliseconds;
                     bool ok = EncodeNv21ToJpeg(imgW, imgH, effectiveRot, quality);
