@@ -107,7 +107,7 @@ public partial class MainPage : ContentPage
         // сам разместит W/H в текущей ориентации перед публикацией в SelectedConfig.
         ApplyConfigToCamera();
         if (_isRunning)
-            StatusLabel.Text = $"Capturing  {_curW}×{_curH}, {_curFps} fps";
+            StatusLabel.Text = $"Захват  {_curW}×{_curH}, {_curFps} fps";
     }
 
     // Текущая раскладка — чтобы не пересобирать Grid каждый OnSizeAllocated впустую.
@@ -537,7 +537,7 @@ public partial class MainPage : ContentPage
 
         if (status != PermissionStatus.Granted)
         {
-            StatusLabel.Text = "Camera permission denied";
+            StatusLabel.Text = "Нет разрешения камеры";
             return;
         }
 
@@ -639,7 +639,7 @@ public partial class MainPage : ContentPage
 
         StartStopBtn.Text = _isRunning ? "Stop" : "Start";
         StatusLabel.Text  = _isRunning
-            ? $"Capturing  {_curW}×{_curH}, {_curFps} fps"
+            ? $"Захват  {_curW}×{_curH}, {_curFps} fps"
             : "Preview";
     }
 
@@ -651,8 +651,8 @@ public partial class MainPage : ContentPage
             CameraPreview.IsScanning = false;
             ConnectBtn.Text = "Подключиться";
             StatusLabel.Text = _isRunning
-                ? $"Capturing  {_curW}×{_curH}, {_curFps} fps"
-                : "Press Start";
+                ? $"Захват  {_curW}×{_curH}, {_curFps} fps"
+                : "Нажмите Start";
             return;
         }
 
@@ -693,8 +693,8 @@ public partial class MainPage : ContentPage
         CameraPreview.IsScanning = false;
         ConnectBtn.Text = "Подключиться";
         StatusLabel.Text = _isRunning
-            ? $"Capturing  {_curW}×{_curH}, {_curFps} fps"
-            : "Press Start";
+            ? $"Захват  {_curW}×{_curH}, {_curFps} fps"
+            : "Нажмите Start";
 
         if (!qrText.StartsWith("cam://"))
         {

@@ -205,7 +205,7 @@
                        TextColor="#CCFFFFFF"
                        FontSize="13" />
                 <Label x:Name="StatusLabel"
-                       Text="Press Start"
+                       Text="Нажмите Start"
                        TextColor="#CCFFFFFF"
                        FontSize="13" />
                 <!-- Чекбоксы. Orientation переключается из code-behind:
