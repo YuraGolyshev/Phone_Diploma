@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="PhoneCamera/PhoneCamera.csproj" />
+  <Project Path="PhoneCamera/PhoneCamera.csproj">
+    <Deploy />
+  </Project>
 </Solution>

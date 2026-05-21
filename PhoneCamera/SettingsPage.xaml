@@ -85,6 +85,47 @@
             <VerticalStackLayout Spacing="2" Padding="0,8,0,20">
 
                 <!-- ════════════════════════════════════════════════════ -->
+                <!-- ─── Ручное подключение к серверу ─────────────────── -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <Label Text="РУЧНОЕ ПОДКЛЮЧЕНИЕ К СЕРВЕРУ" Style="{StaticResource SectionTitle}" />
+                <BoxView Style="{StaticResource SectionDivider}" />
+
+                <Grid Padding="16,10" ColumnDefinitions="*">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label Text="IP и порт сервера" Style="{StaticResource SettingTitle}" />
+                        <Label Text="Альтернатива сканированию QR-кода. Введите IP-адрес и порт серверного приложения вручную, нажмите «Подключиться»."
+                               Style="{StaticResource SettingDesc}" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Grid Padding="16,4" ColumnDefinitions="*,Auto" ColumnSpacing="8" RowSpacing="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Entry x:Name="eManualIp"
+                           Grid.Row="0" Grid.Column="0"
+                           Style="{StaticResource SettingEntry}"
+                           Placeholder="IP сервера (например, 192.168.0.106)"
+                           Keyboard="Url" />
+                    <Entry x:Name="eManualPort"
+                           Grid.Row="1" Grid.Column="0"
+                           Style="{StaticResource SettingEntry}"
+                           Placeholder="Порт"
+                           Keyboard="Numeric"
+                           Text="8888" />
+                    <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                            Text="Подключиться"
+                            Clicked="OnManualConnectClicked"
+                            VerticalOptions="Center" />
+                </Grid>
+                <Label x:Name="lblManualStatus"
+                       FontSize="11"
+                       FontAttributes="Italic"
+                       TextColor="#FFB74D"
+                       Margin="16,0,16,8" />
+
+                <!-- ════════════════════════════════════════════════════ -->
                 <!-- ─── Экспозиция и сенсор ─────────────────────────── -->
                 <!-- ════════════════════════════════════════════════════ -->
                 <Label Text="ЭКСПОЗИЦИЯ И СЕНСОР" Style="{StaticResource SectionTitle}" />

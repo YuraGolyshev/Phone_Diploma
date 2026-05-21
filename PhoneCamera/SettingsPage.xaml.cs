@@ -28,6 +28,10 @@ public partial class SettingsPage : ContentPage
     /// MainPage подписывается чтобы перезапустить камеру с новыми настройками.</summary>
     public Action? OnApplied { get; set; }
 
+    // Колбек для ручного подключения. Вызывается при нажатии «Подключиться» в
+    // секции ручного подключения. MainPage передаёт сюда обёртку над ConnectToServer.
+    public Action<string, int>? OnManualConnect { get; set; }
+
     public SettingsPage()
     {
         InitializeComponent();
@@ -271,6 +275,36 @@ public partial class SettingsPage : ContentPage
     {
         SaveSettings();
         try { OnApplied?.Invoke(); } catch { }
+        await Navigation.PopModalAsync();
+    }
+
+    // Ручное подключение к серверу. Делает то же, что и обработчик QR-кода —
+    // вызывает MainPage.ConnectToServer(ip, port). Закрывает окно настроек,
+    // чтобы пользователь сразу видел статус подключения и мог начать стрим.
+    private async void OnManualConnectClicked(object? sender, EventArgs e)
+    {
+        string ipText   = eManualIp.Text?.Trim()   ?? "";
+        string portText = eManualPort.Text?.Trim() ?? "";
+
+        if (string.IsNullOrEmpty(ipText))
+        {
+            lblManualStatus.Text = "Введи IP-адрес";
+            return;
+        }
+        if (!int.TryParse(portText, out int port) || port <= 0 || port > 65535)
+        {
+            lblManualStatus.Text = "Неверный порт (нужно число 1..65535)";
+            return;
+        }
+        if (!System.Net.IPAddress.TryParse(ipText, out _))
+        {
+            // Не блокируем — может быть валидное hostname. Просто предупреждаем
+            // в логах. ConnectAsync сам зарезолвит/упадёт.
+            System.Diagnostics.Debug.WriteLine($"[PCam][UI] Manual connect: '{ipText}' не похож на IP, попробую как hostname");
+        }
+
+        lblManualStatus.Text = $"Подключение к {ipText}:{port}…";
+        try { OnManualConnect?.Invoke(ipText, port); } catch { }
         await Navigation.PopModalAsync();
     }
 

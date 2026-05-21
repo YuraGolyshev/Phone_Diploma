@@ -451,7 +451,8 @@ public partial class MainPage : ContentPage
 
             var page = new SettingsPage
             {
-                OnApplied = OnSettingsApplied,
+                OnApplied        = OnSettingsApplied,
+                OnManualConnect  = (ip, port) => ConnectToServer(ip, port),
             };
             await Navigation.PushModalAsync(page);
         }
@@ -710,7 +711,13 @@ public partial class MainPage : ContentPage
             return;
         }
 
-        string ip = parts[0];
+        ConnectToServer(parts[0], port);
+    }
+
+    // Подключается к серверу по указанным IP/порту. Вынесено из OnQrCodeDetected
+    // для повторного использования из SettingsPage (ручное подключение).
+    public void ConnectToServer(string ip, int port)
+    {
         bool wantEncoder = _selectedFormat == StreamFormat.H264 || _selectedFormat == StreamFormat.H265;
         byte handshake = HandshakeByteFor(_selectedFormat);
         string fmtName = FormatName(_selectedFormat);
