@@ -85,9 +85,9 @@
             <VerticalStackLayout Spacing="2" Padding="0,8,0,20">
 
                 <!-- ════════════════════════════════════════════════════ -->
-                <!-- ─── Ручное подключение к серверу ─────────────────── -->
+                <!-- ─── Ручное подключение  ──────────────────────────── -->
                 <!-- ════════════════════════════════════════════════════ -->
-                <Label Text="РУЧНОЕ ПОДКЛЮЧЕНИЕ К СЕРВЕРУ" Style="{StaticResource SectionTitle}" />
+                <Label Text="РУЧНОЕ ПОДКЛЮЧЕНИЕ" Style="{StaticResource SectionTitle}" />
                 <BoxView Style="{StaticResource SectionDivider}" />
 
                 <Grid Padding="16,10" ColumnDefinitions="*">
